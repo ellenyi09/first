@@ -232,46 +232,49 @@
     <div id="phase-connect" class="scene">
         <div id="prep-instruction">투약카드와 수액세트를 드래그하여 수액(N/S 1L)에 연결하세요.</div>
         
-        <div id="iv-pole" ondrop="dropOnPole(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
-        
-        <div id="prep-table">
-            <!-- 투약 카드 -->
-            <div id="item-card" class="drag-item med-card" draggable="true" ondragstart="drag(event, 'card')">
-                <div class="card-header">
-                    <div class="fake-qr"></div>
-                    <div style="margin-left: 55px;">
-                        2026-07-09<br>
-                        <strong style="font-size: 15px;">07-01 김이화</strong><br>
-                        12345678(1971-04-26)
-                    </div>
-                </div>
-                <div class="card-med">Normal saline inj (JW) [1000ml]</div>
-                <div class="card-details">
-                    ● 1BAG ★1일 2회, 지시 속도로<br>
-                    정맥내 점적주사<br><br>
-                    80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
-                </div>
-            </div>
+        <!-- 반응형 콘텐츠 배치용 래퍼 컨테이너 -->
+        <div class="connect-wrap">
+            <div id="iv-pole" ondrop="dropOnPole(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
             
-            <!-- 조절기 -->
-            <div id="item-regulator" class="drag-item" draggable="true" ondragstart="drag(event, 'regulator')"></div>
-            
-            <!-- 수액통 -->
-            <div id="item-ns1l" ondrop="dropOnNS(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
-                <div id="attached-card" class="med-card">
+            <div id="prep-table">
+                <!-- 투약 카드 -->
+                <div id="item-card" class="drag-item med-card" draggable="true" ondragstart="drag(event, 'card')">
                     <div class="card-header">
                         <div class="fake-qr"></div>
-                        <div style="margin-left: 55px; text-align: left;">
+                        <div style="margin-left: 55px;">
                             2026-07-09<br>
                             <strong style="font-size: 15px;">07-01 김이화</strong><br>
                             12345678(1971-04-26)
                         </div>
                     </div>
-                    <div class="card-med" style="text-align: left;">Normal saline inj (JW) [1000ml]</div>
-                    <div class="card-details" style="text-align: left;">
+                    <div class="card-med">Normal saline inj (JW) [1000ml]</div>
+                    <div class="card-details">
                         ● 1BAG ★1일 2회, 지시 속도로<br>
                         정맥내 점적주사<br><br>
                         80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
+                    </div>
+                </div>
+                
+                <!-- 조절기 -->
+                <div id="item-regulator" class="drag-item" draggable="true" ondragstart="drag(event, 'regulator')"></div>
+                
+                <!-- 수액통 -->
+                <div id="item-ns1l" ondrop="dropOnNS(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                    <div id="attached-card" class="med-card">
+                        <div class="card-header">
+                            <div class="fake-qr"></div>
+                            <div style="margin-left: 55px; text-align: left;">
+                                2026-07-09<br>
+                                <strong style="font-size: 15px;">07-01 김이화</strong><br>
+                                12345678(1971-04-26)
+                            </div>
+                        </div>
+                        <div class="card-med" style="text-align: left;">Normal saline inj (JW) [1000ml]</div>
+                        <div class="card-details" style="text-align: left;">
+                            ● 1BAG ★1일 2회, 지시 속도로<br>
+                            정맥내 점적주사<br><br>
+                            80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
+                        </div>
                     </div>
                 </div>
             </div>
@@ -365,10 +368,10 @@
             </div>
         </div>
 
-        <!-- 팔찌 이미지 하이라이트 (assets/로 경로 이동) -->
-        <div class="verify-item" style="background: transparent; box-shadow: none; padding: 0;">
-            <div style="position: relative; display: inline-block;">
-                <img src="assets/환자팔찌.jpg" style="width: 450px; border-radius: 10px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); display: block;">
+        <!-- 환자 팔찌 이미지 및 하이라이트 박스 영역 (반응형 래퍼 스타일) -->
+        <div class="verify-item" style="background: transparent; box-shadow: none; padding: 0; max-width: 450px; width: 100%;">
+            <div style="position: relative; display: block; width: 100%;">
+                <img src="assets/환자팔찌.jpg" style="width: 100%; border-radius: 10px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); display: block;">
                 
                 <!-- 팔찌 하이라이트 박스 -->
                 <div class="highlight-box hb-brace-name" id="hl-brace-name"></div>
@@ -376,8 +379,253 @@
             </div>
         </div>
         
-        <button id="btn-next-action" class="btn-submit" style="position:absolute; bottom:50px; width:300px; display:none; font-size: 22px; padding: 20px;" onclick="alert('환자 확인 완료! 투약 및 정맥천자 수행 기획을 계속하세요.')">환자 확인 완료</button>
+        <button id="btn-next-action" class="btn-submit" style="position:absolute; bottom:50px; width:300px; display:none; font-size: 22px; padding: 20px;" onclick="goToExplain()">환자 확인 완료</button>
     </div>
+
+    <!-- =================================================================
+         [6] Phase 10 ~ 11: 처방 설명 및 자세 취하기 & 정맥천자 준비
+    ================================================================== -->
+    <!-- Phase 10: 처방 설명 및 자세 취하기 -->
+    <div id="phase-prep-explain" class="scene">
+        <div class="med-card fixed-med-card" style="display:block; z-index: 10;">
+            <div class="card-header">
+                <div class="fake-qr"></div>
+                <div style="margin-left: 55px;">
+                    2026-07-09<br>
+                    <strong style="font-size: 15px;">07-01 김이화</strong><br>
+                    12345678(1971-04-26)
+                </div>
+            </div>
+            <div class="card-med">Normal saline inj (JW) [1000ml]</div>
+            <div class="card-details">
+                ● 1BAG ★1일 2회, 지시 속도로<br>
+                정맥내 점적주사<br><br>
+                80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
+            </div>
+        </div>
+        
+        <div id="explain-speech" class="speech-bubble nurse-bubble show" style="display:block; opacity:1;">안녕하세요 김이화님, 추가 처방된 수액(Normal Saline 1L) 주입의 목적과 주의사항을 설명드리겠습니다.</div>
+    </div>
+
+    <!-- 퀴즈 6 모달 (수행항목 11) -->
+    <div id="quiz6-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 6 (수행항목 11)</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">환자에게 설명할 내용으로 투약 설명 원칙에 가장 적합한 것은 무엇일까요?</p>
+            <button class="quiz-option" onclick="checkQuiz6(1)">① "이 수액은 수분을 공급하고 투약할 약물을 희석하기 위한 것으로, 주사 부위 통증이나 붓기가 있으면 즉시 알려주세요." (목적, 효과, 주의사항 설명)</button>
+            <button class="quiz-option" onclick="checkQuiz6(2)">② "처방이 나서 주사 놓으러 왔습니다. 그냥 편히 누워계시면 됩니다." (설명 생략)</button>
+            <button class="quiz-option" onclick="checkQuiz6(3)">③ "수액은 빨리 들어가는게 좋으니 제가 속도를 임의로 제일 빠르게 맞추겠습니다." (잘못된 속도 설명)</button>
+        </div>
+    </div>
+
+    <!-- Phase 11: 정맥천자 준비 -->
+    <div id="phase-vein-prep" class="scene">
+        <h2 style="color:white; margin-top: 20px;">정맥천자 부위 선정 및 소독</h2>
+        <div class="arm-container">
+            <img id="vein-prep-arm" src="assets/환자 팔(손바닥 위로, 팔찌적용).jpg" class="arm-image" alt="환자 팔">
+        </div>
+        
+        <div class="prep-tools">
+            <button id="btn-tie-tourniquet" class="tool-btn" onclick="tieTourniquet()">지혈대 묶기 (12~15cm 위)</button>
+            <button id="btn-sanitize-vein" class="tool-btn" style="display:none;" onclick="sanitizeHandsForVein()">손소독제 사용</button>
+            <button id="btn-clean-vein" class="tool-btn" style="display:none;" onclick="cleanVeinSite()">알코올 스왑 소독</button>
+        </div>
+        
+        <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="vein-prep-instruction">
+            먼저 지혈대를 적절한 위치에 묶어주세요.
+        </div>
+    </div>
+
+    <!-- 퀴즈 7 모달 (수행항목 14) -->
+    <div id="quiz7-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 7 (수행항목 14)</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">지혈대(Tourniquet)는 정맥 천자할 부위보다 얼마큼 위쪽에 묶어야 할까요?</p>
+            <button class="quiz-option" onclick="checkQuiz7(1)">① 천자 예정 부위 바로 위 (1~2cm)</button>
+            <button class="quiz-option" onclick="checkQuiz7(2)">② 천자 예정 부위보다 위쪽으로 12~15cm</button>
+            <button class="quiz-option" onclick="checkQuiz7(3)">③ 천자 예정 부위보다 위쪽으로 30cm 이상</button>
+        </div>
+    </div>
+
+    <!-- 퀴즈 8 모달 (수행항목 16) -->
+    <div id="quiz8-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 8 (수행항목 16)</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">소독솜으로 정맥천자 예정 부위를 닦는 올바른 방법은 무엇입니까?</p>
+            <button class="quiz-option" onclick="checkQuiz8(1)">① 안에서 밖으로 5~8cm 정도 둥글게 닦아낸다.</button>
+            <button class="quiz-option" onclick="checkQuiz8(2)">② 밖에서 안으로 원을 그리며 모아 닦는다.</button>
+            <button class="quiz-option" onclick="checkQuiz8(3)">③ 위아래로 강하게 쓱싹쓱싹 문지른다.</button>
+        </div>
+    </div>
+
+    <!-- =================================================================
+         [7] Phase 12 ~ 13: 정맥천자 삽입 및 탐침 제거 & 수액 연결/고정
+    ================================================================== -->
+    <!-- Phase 12: 정맥천자 삽입 및 탐침 제거 -->
+    <div id="phase-vein-insert" class="scene">
+        <h2 style="color:white; margin-top: 20px;">정맥천자 삽입 및 탐침 연결</h2>
+        <div class="arm-container">
+            <img id="vein-insert-arm" src="assets/토니켓적용(팔찌적용).jpg" class="arm-image" alt="토니켓 적용">
+        </div>
+        
+        <div id="flashback-area" class="flashback-indicator" style="display:none;">
+            💉 [알림] 카테터 허브에 혈액이 역류(Flashback)되었습니다!
+        </div>
+
+        <div class="prep-tools">
+            <button id="btn-insert-catheter" class="tool-btn" onclick="showQuiz9()">정맥천자 바늘 삽입</button>
+            <button id="btn-advance-catheter" class="tool-btn" style="display:none;" onclick="advanceCatheter()">탐침 빼기 및 카테터 밀어넣기</button>
+            <button id="btn-untie-tourniquet" class="tool-btn" style="display:none;" onclick="untieTourniquet()">지혈대 풀기</button>
+            <button id="btn-remove-stylus" class="tool-btn" style="display:none;" onclick="removeStylusAndConnect()">스타일렛(탐침) 제거 & 수액선 연결</button>
+        </div>
+        
+        <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="vein-insert-instruction">
+            정맥천자 바늘을 혈류 방향에 맞춰 삽입하세요.
+        </div>
+    </div>
+
+    <!-- 퀴즈 9 모달 (수행항목 17) -->
+    <div id="quiz9-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 9 (수행항목 17)</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">카테터를 삽입할 때 바늘의 사면(bevel) 방향과 적절한 진입 각도는 무엇입니까?</p>
+            <button class="quiz-option" onclick="checkQuiz9(1)">① 사면이 위로 오도록 하여, 15°~30° 각도로 삽입한다.</button>
+            <button class="quiz-option" onclick="checkQuiz9(2)">② 사면이 아래로 오도록 하여, 45° 각도로 삽입한다.</button>
+            <button class="quiz-option" onclick="checkQuiz9(3)">③ 사면의 방향은 무관하며, 90° 각도로 직각 삽입한다.</button>
+        </div>
+    </div>
+
+    <!-- Phase 13: 수액 주입 확인 및 고정 -->
+    <div id="phase-flow-secure" class="scene">
+        <h2 style="color:white; margin-top: 20px;">수액 주입 확인 및 고정</h2>
+        <div class="arm-container">
+            <img src="assets/주사삽입완료(팔찌적용).jpg" class="arm-image" alt="주사 삽입 완료">
+            <div id="tegaderm-overlay" class="tegaderm-overlay">Tegaderm 고정 완료</div>
+        </div>
+        
+        <div class="prep-tools">
+            <button id="btn-open-regulator" class="tool-btn" onclick="openRegulatorAndCheck()">조절기 열기 및 주입부 관찰</button>
+            <button id="btn-secure-catheter" class="tool-btn" style="display:none;" onclick="secureCatheter()">투명 드레싱(테가덤) 고정</button>
+            <button id="btn-adjust-speed" class="tool-btn" style="display:none;" onclick="showQuiz10()">수액 속도 조절</button>
+            <button id="btn-label-dressing" class="tool-btn" style="display:none;" onclick="labelDressing()">드레싱 라벨 작성</button>
+        </div>
+        
+        <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="flow-secure-instruction">
+            조절기를 풀어 수액이 정상적으로 흐르는지 확인하고 부위의 부종/통증 여부를 관찰하세요.
+        </div>
+    </div>
+
+    <!-- 퀴즈 10 모달 (수행항목 24) -->
+    <div id="quiz10-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 10 (수행항목 24)</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">처방(EMR)에 따른 정확한 주입 속도는 몇 cc/hr로 세팅해야 할까요?</p>
+            <button class="quiz-option" onclick="checkQuiz10(1)">① 120 cc/hr</button>
+            <button class="quiz-option" onclick="checkQuiz10(2)">② 80 cc/hr</button>
+            <button class="quiz-option" onclick="checkQuiz10(3)">③ 40 cc/hr</button>
+        </div>
+    </div>
+
+    <!-- =================================================================
+         [8] Phase 14 & 평가 결과: 정리, 기록 및 최종 스코어 보고
+    ================================================================== -->
+    <!-- Phase 14: 정리 및 간호기록지 작성 -->
+    <div id="phase-document" class="scene">
+        <h2>정리 및 수행 결과 기록</h2>
+        
+        <div class="document-layout">
+            <!-- 쓰레기 정리 (드래그 앤 드롭) -->
+            <div class="waste-cleanup-box">
+                <h3 style="margin-bottom: 10px;">🗑️ 의료폐기물 분리 배출 (드래그하여 배출)</h3>
+                <div class="waste-bins">
+                    <div id="bin-sharps" class="bin bin-sharps" ondrop="dropWaste(event, 'sharps')" ondragover="allowWasteDrop(event)" ondragleave="leaveWasteBin(event)">
+                        손상성 폐기물<br>(주사바늘 등)
+                    </div>
+                    <div id="bin-general" class="bin bin-general" ondrop="dropWaste(event, 'general')" ondragover="allowWasteDrop(event)" ondragleave="leaveWasteBin(event)">
+                        일반 의료폐기물<br>(소독솜/주사기 등)
+                    </div>
+                </div>
+                
+                <div class="waste-items">
+                    <div id="waste-needle" class="waste-item" draggable="true" ondragstart="dragWaste(event, 'needle')">📌 사용한 주사바늘</div>
+                    <div id="waste-swab" class="waste-item" draggable="true" ondragstart="dragWaste(event, 'swab')">🧻 알코올 소독솜</div>
+                    <div id="waste-syringe" class="waste-item" draggable="true" ondragstart="dragWaste(event, 'syringe')">💉 주사기 튜브 바디</div>
+                </div>
+                
+                <button id="btn-waste-complete" class="btn-submit" style="display:none; margin-top: 15px;" onclick="completeWasteAndShowChart()">폐기물 분리수거 완료</button>
+            </div>
+            
+            <!-- 간호 기록지 작성 -->
+            <div id="chart-area" class="chart-box" style="display:none;">
+                <h3>📝 간호기록 및 투약기록 작성 (5 Rights)</h3>
+                <table class="chart-table">
+                    <tr>
+                        <th>대상자명</th>
+                        <td><input type="text" id="chart-name" class="chart-input" placeholder="이름을 입력하세요"></td>
+                      </tr>
+                      <tr>
+                          <th>투여약물/수액</th>
+                          <td><input type="text" id="chart-drug" class="chart-input" placeholder="Normal saline... 입력"></td>
+                      </tr>
+                      <tr>
+                          <th>투여경로</th>
+                          <td><input type="text" id="chart-route" class="chart-input" placeholder="예: IV"></td>
+                      </tr>
+                      <tr>
+                          <th>투여속도</th>
+                          <td><input type="text" id="chart-speed" class="chart-input" placeholder="예: 80"></td>
+                      </tr>
+                      <tr>
+                          <th>주입시간</th>
+                          <td><input type="text" id="chart-time" class="chart-input" value="17:00" readonly></td>
+                      </tr>
+                  </table>
+                  <button class="btn-submit" style="margin-top:15px;" onclick="submitChart()">기록 완료 및 간호종료</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- 최종 평가 결과 화면 -->
+      <div id="phase-report" class="scene">
+          <div class="report-card">
+              <h2 style="color: #ffd700;">🎓 시뮬레이션 평가 결과 보고서</h2>
+              <div class="report-score" id="evaluation-score">0점</div>
+              <p style="margin-bottom: 20px; font-weight: bold; font-size: 16px;">정맥 수액 주입(핵심간호술) 시뮬레이션을 완료하셨습니다!</p>
+              
+              <div class="report-details">
+                  <div class="report-item">
+                      <span class="report-item-title">1단계: EMR 처방 및 투약카드 발행 (1~3항목)</span>
+                      <span class="report-item-status">통과 (100)</span>
+                  </div>
+                  <div class="report-item">
+                      <span class="report-item-title">2단계: 수액 선택 및 트레이 세팅 (4~7항목)</span>
+                      <span class="report-item-status">통과 (100)</span>
+                  </div>
+                  <div class="report-item">
+                      <span class="report-item-title">3단계: 환자 식별 및 개방형 질문 (8~10항목)</span>
+                      <span class="report-item-status">통과 (100)</span>
+                  </div>
+                  <div class="report-item">
+                      <span class="report-item-title">4단계: 약물 설명 및 정맥천자 준비 (11~16항목)</span>
+                      <span class="report-item-status" id="eval-step4">대기</span>
+                  </div>
+                  <div class="report-item">
+                      <span class="report-item-title">5단계: 카테터 삽입 및 수액 라인 연결 (17~21항목)</span>
+                      <span class="report-item-status" id="eval-step5">대기</span>
+                  </div>
+                  <div class="report-item">
+                      <span class="report-item-title">6단계: 수액 고정, 속도 및 정리 (22~28항목)</span>
+                      <span class="report-item-status" id="eval-step6">대기</span>
+                  </div>
+                  <div class="report-item">
+                      <span class="report-item-title">7단계: 기록 및 5 Rights 기록 확인 (29항목)</span>
+                      <span class="report-item-status" id="eval-step7">대기</span>
+                  </div>
+              </div>
+              
+              <button class="btn-submit" style="background-color: var(--primary-red);" onclick="location.reload()">🔄 다시 시작하기</button>
+          </div>
+      </div>
 
 </div>
 

@@ -37,6 +37,7 @@ body {
     width: 100vw; 
     height: 100vh; 
     position: relative; 
+    overflow: hidden;
 }
 
 .scene { 
@@ -63,14 +64,18 @@ body {
     z-index: 100; 
     align-items: center; 
     justify-content: center; 
+    padding: 15px;
 }
 
 .quiz-modal { 
     background-color: var(--bg-light); 
-    width: 550px; 
+    width: 100%;
+    max-width: 550px; 
     border-radius: 10px; 
     padding: 30px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+    max-height: 95vh;
+    overflow-y: auto;
 }
 
 .quiz-title { 
@@ -132,8 +137,8 @@ body {
 }
 
 .btn-next { 
-    padding: 20px 50px; 
-    font-size: 22px; 
+    padding: 15px 40px; 
+    font-size: 1.25rem; 
     font-weight: bold; 
     background: var(--primary-red); 
     color: white; 
@@ -142,6 +147,8 @@ body {
     border-radius: 10px; 
     box-shadow: 0 5px 15px rgba(229, 25, 55, 0.4); 
     transition: 0.2s; 
+    max-width: 90%;
+    text-align: center;
 }
 
 .btn-next:hover { 
@@ -204,6 +211,7 @@ body {
     justify-content: center; 
     z-index: 10; 
     display: flex; /* 초기 화면 보이기 */
+    padding: 20px;
 }
 
 .overlay { 
@@ -218,23 +226,32 @@ body {
 
 #scenario-intro { 
     position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 3; 
-    background-color: rgba(0, 0, 0, 0.75); 
+    background-color: rgba(0, 0, 0, 0.85); 
     color: #ffffff; 
-    padding: 40px 60px; 
+    padding: 30px 40px; 
     border-radius: 12px; 
     text-align: center; 
-    font-size: 22px; 
+    font-size: 1.35rem; 
     line-height: 1.8; 
     transition: opacity 1.5s ease-in-out; 
     opacity: 1; 
+    width: 90%;
+    max-width: 600px;
 }
 
 .popup-container { 
     display: none; 
-    position: relative; 
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 5; 
-    width: 700px; 
+    width: 90%; 
+    max-width: 700px; 
     background-color: var(--bg-light); 
     border-radius: 8px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
@@ -243,7 +260,7 @@ body {
 }
 
 .popup-container:hover { 
-    transform: scale(1.02); 
+    transform: translate(-50%, -50%) scale(1.02); 
 }
 
 .popup-header { 
@@ -289,7 +306,7 @@ body {
 
 .popup-title { 
     color: var(--primary-red); 
-    font-size: 38px; 
+    font-size: 2rem; 
     font-weight: bold; 
     line-height: 1.4; 
 }
@@ -307,11 +324,14 @@ body {
     background-color: rgba(0, 0, 0, 0.6); 
     align-items: center; 
     justify-content: center; 
+    padding: 15px;
 }
 
 .emr-container { 
-    width: 850px; 
-    height: 550px; 
+    width: 95%; 
+    max-width: 850px; 
+    height: 90vh; 
+    max-height: 550px; 
     background-color: var(--bg-light); 
     display: flex; 
     flex-direction: column; 
@@ -336,11 +356,12 @@ body {
 
 .patient-info-bar { 
     background-color: #eef2f5; 
-    padding: 5px 10px; 
+    padding: 8px 10px; 
     border-bottom: 1px solid var(--border-dark); 
     display: flex; 
+    flex-wrap: wrap;
     align-items: center; 
-    gap: 10px; 
+    gap: 8px; 
 }
 
 .info-group { 
@@ -373,13 +394,13 @@ body {
 table { 
     width: 100%; 
     border-collapse: collapse; 
-    min-width: 800px; 
+    min-width: 700px; 
     table-layout: fixed; 
 }
 
 th, td { 
     border: 1px solid #d4d4d4; 
-    padding: 4px; 
+    padding: 8px 4px; 
     text-align: center; 
 }
 
@@ -401,7 +422,7 @@ th {
 }
 
 .context-menu-item { 
-    padding: 10px 20px; 
+    padding: 12px 20px; 
     font-size: 14px; 
     color: var(--text-color); 
     cursor: pointer; 
@@ -420,10 +441,12 @@ th {
     flex-direction: column; 
     align-items: center; 
     justify-content: center; 
+    padding: 20px;
 }
 
 .printer-machine { 
-    width: 350px; 
+    width: 90%; 
+    max-width: 350px; 
     height: 80px; 
     background-color: #444; 
     border-radius: 10px 10px 0 0; 
@@ -431,7 +454,7 @@ th {
     display: flex; 
     justify-content: center; 
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); 
-    margin-top: 200px; 
+    margin-top: 100px; 
 }
 
 .printer-slot { 
@@ -463,26 +486,29 @@ th {
     z-index: 7; 
     background-color: #e0e0e0; 
     position: relative; 
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 .fixed-med-card { 
     position: absolute; 
     top: 50%; 
-    left: 50px; 
+    left: 40px; 
     transform: translateY(-50%); 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+    z-index: 10;
 }
 
 .shelf-container { 
-    position: absolute; 
-    top: 0; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    width: 600px; 
+    position: relative; 
+    width: 100%; 
+    max-width: 600px; 
     height: 100%; 
     background-image: url('../assets/image_df7000.jpg'); 
     background-size: 100% 100%; 
     background-position: center; 
+    margin: 0 auto;
 }
 
 .hotspot-ns1l, .hotspot-wrong { 
@@ -505,6 +531,21 @@ th {
     height: 12%; 
 }
 
+/* 수액장 반응형 처리 - 모니터 폭이 950px 이하일 때 카드 위치를 상단으로 조정 */
+@media (max-width: 950px) {
+    .fixed-med-card {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%) scale(0.85);
+        transform-origin: top center;
+    }
+    .shelf-container {
+        height: calc(100% - 150px);
+        top: 150px;
+    }
+}
+
 /* Phase 5: 투약 준비실 (물품 준비 퀴즈) */
 #phase-prep-room { 
     z-index: 8; 
@@ -520,10 +561,12 @@ th {
     left: 50%; 
     transform: translate(-50%, -50%); 
     background: rgba(255, 255, 255, 0.95); 
-    width: 85%; 
+    width: 90%; 
     max-width: 900px; 
+    max-height: 90vh;
+    overflow-y: auto;
     border-radius: 15px; 
-    padding: 30px 40px; 
+    padding: 25px; 
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); 
     opacity: 0; 
     transition: opacity 0.5s; 
@@ -535,7 +578,7 @@ th {
 }
 
 .eq-title { 
-    font-size: 24px; 
+    font-size: 20px; 
     font-weight: bold; 
     color: var(--primary-red); 
     margin-bottom: 20px; 
@@ -546,17 +589,17 @@ th {
 
 .eq-grid { 
     display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 15px; 
-    margin-bottom: 25px; 
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+    gap: 12px; 
+    margin-bottom: 20px; 
 }
 
 .eq-btn { 
     background-color: var(--bg-light); 
     border: 2px solid var(--border-dark); 
     border-radius: 8px; 
-    padding: 15px 10px; 
-    font-size: 16px; 
+    padding: 12px 8px; 
+    font-size: 14px; 
     font-weight: bold; 
     color: #555; 
     cursor: pointer; 
@@ -580,16 +623,18 @@ th {
     flex-direction: column; 
     align-items: center; 
     justify-content: center; 
+    padding: 15px;
 }
 
 #tray-image { 
-    width: 90%; 
-    height: 75%; 
+    width: 95%; 
+    max-width: 800px;
+    height: 65vh; 
     background-image: url('../assets/image_e23256.jpg'); 
     background-size: contain; 
     background-repeat: no-repeat; 
     background-position: center; 
-    margin-bottom: 30px; 
+    margin-bottom: 20px; 
     border-radius: 10px; 
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); 
 }
@@ -605,26 +650,37 @@ th {
 
 #prep-instruction { 
     position: absolute; 
-    top: 30px; 
+    top: 20px; 
     left: 50%; 
     transform: translateX(-50%); 
     background: rgba(0, 0, 0, 0.85); 
     color: white; 
-    padding: 15px 40px; 
-    font-size: 22px; 
+    padding: 12px 30px; 
+    font-size: 1.25rem; 
     font-weight: bold; 
     border-radius: 30px; 
     z-index: 20; 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
     text-align: center; 
+    width: 90%;
+    max-width: 650px;
+}
+
+/* 드래그 앤 드롭 영역 래퍼 */
+.connect-wrap {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    position: relative;
+    margin: 0 auto;
 }
 
 #iv-pole { 
     position: absolute; 
-    right: 15%; 
+    right: 5%; 
     bottom: 0; 
     width: 180px; 
-    height: 90vh; 
+    height: 85vh; 
     background-image: url('../assets/IV pole.jpeg'); 
     background-size: 100% 100%; 
     background-repeat: no-repeat; 
@@ -640,9 +696,10 @@ th {
 
 #prep-table { 
     position: absolute; 
-    bottom: 50px; 
-    left: 10%; 
-    width: 50%; 
+    bottom: 40px; 
+    left: 5%; 
+    width: 60%; 
+    max-width: 700px;
     height: 220px; 
     background-color: rgba(255, 255, 255, 0.2); 
     backdrop-filter: blur(4px); 
@@ -653,7 +710,7 @@ th {
     display: flex; 
     align-items: center; 
     justify-content: space-around; 
-    padding: 20px; 
+    padding: 10px; 
 }
 
 .drag-item { 
@@ -746,6 +803,47 @@ th {
     top: 180px !important; 
 }
 
+/* 드래그 앤 드롭 모바일/태블릿 반응형 */
+@media (max-width: 768px) {
+    #prep-instruction {
+        font-size: 1rem;
+        padding: 8px 15px;
+    }
+    #prep-table {
+        width: 90%;
+        left: 5%;
+        bottom: 20px;
+        height: 180px;
+    }
+    #iv-pole {
+        right: 5%;
+        width: 130px;
+        height: 70vh;
+    }
+    #attached-card {
+        top: 60px !important;
+        transform: scale(0.12) !important;
+    }
+    #item-card {
+        transform: scale(0.3) !important;
+    }
+    #item-regulator {
+        width: 80px;
+        height: 80px;
+    }
+    #item-ns1l {
+        width: 100px;
+        height: 170px;
+    }
+    #item-ns1l.connected-fluid {
+        width: 150px !important;
+        height: 300px !important;
+    }
+    #item-ns1l.connected-fluid #attached-card {
+        top: 100px !important;
+    }
+}
+
 /* Phase 7 & 8: 병실 이동 및 환자 대면 */
 #phase-moving { 
     z-index: 11; 
@@ -761,13 +859,15 @@ th {
     background: var(--bg-light); 
     border-radius: 20px; 
     padding: 15px 30px; 
-    font-size: 22px; 
+    font-size: 1.35rem; 
     font-weight: bold; 
     color: var(--text-color); 
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
     z-index: 20; 
     opacity: 0; 
     transition: opacity 0.5s; 
+    width: 90%;
+    max-width: 450px;
 }
 
 .speech-bubble.show { 
@@ -812,12 +912,31 @@ th {
     width: 0; 
 }
 
+@media (max-width: 768px) {
+    .speech-bubble {
+        font-size: 1rem;
+        padding: 8px 15px;
+    }
+    .nurse-bubble {
+        bottom: 20%;
+    }
+    .patient-bubble {
+        top: 25%;
+        right: 5%;
+    }
+}
+
 /* Phase 9: 환자 팔찌 & 투약카드 대조 확인 */
 #phase-verify { 
     z-index: 12; 
     background-color: rgba(0, 0, 0, 0.85); 
-    gap: 50px; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 30px; 
     position: relative; 
+    flex-wrap: wrap;
+    padding: 80px 20px 80px;
+    overflow-y: auto;
 }
 
 .verify-item { 
@@ -826,6 +945,7 @@ th {
     padding: 20px; 
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); 
     position: relative; 
+    flex-shrink: 0;
 }
 
 .text-blink { 
@@ -868,4 +988,288 @@ th {
     left: 24%; 
     width: 35%; 
     height: 5%; 
+}
+
+@media (max-width: 900px) {
+    #phase-verify h1 {
+        font-size: 1.35rem;
+        top: 20px;
+    }
+    #btn-next-action {
+        position: relative;
+        bottom: 0;
+        margin-top: 20px;
+        width: 100%;
+        max-width: 300px;
+        display: block;
+    }
+}
+
+/* =========================================
+   [4] Phase 10 ~ 14 추가 스타일
+========================================= */
+
+/* Phase 10: 처방 설명 및 자세 취하기 */
+#phase-prep-explain {
+    background-image: url('../assets/병실입장(팔찌적용).jpg');
+    background-size: cover;
+    background-position: center;
+    align-items: center;
+    justify-content: center;
+    z-index: 13;
+}
+
+/* Phase 11: 정맥천자 준비 (지혈대 및 부위 소독) */
+#phase-vein-prep {
+    background-color: #222;
+    z-index: 14;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.arm-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+}
+.arm-image {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: block;
+}
+.prep-tools {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.tool-btn {
+    background-color: var(--secondary-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    transition: 0.2s;
+}
+.tool-btn:hover {
+    background-color: var(--secondary-blue-hover);
+    transform: translateY(-2px);
+}
+.tool-btn.active {
+    background-color: var(--primary-red);
+}
+
+/* Phase 12: 정맥천자 삽입 및 탐침 제거 */
+#phase-vein-insert {
+    background-color: #222;
+    z-index: 15;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.flashback-indicator {
+    background-color: #ffeef0;
+    border: 2px solid var(--primary-red);
+    color: var(--primary-red);
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 15px 0;
+    text-align: center;
+    animation: flash 1s infinite alternate;
+}
+@keyframes flash {
+    0% { box-shadow: 0 0 5px rgba(229,25,55,0.3); }
+    100% { box-shadow: 0 0 20px rgba(229,25,55,0.8); }
+}
+
+/* Phase 13: 수액 주입 확인 및 고정 */
+#phase-flow-secure {
+    background-color: #222;
+    z-index: 16;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.tegaderm-overlay {
+    position: absolute;
+    top: 35%;
+    left: 20%;
+    width: 40%;
+    height: 35%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 2px dashed rgba(255,255,255,0.7);
+    border-radius: 10px;
+    backdrop-filter: blur(1px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    font-weight: bold;
+    font-size: 12px;
+    pointer-events: none;
+}
+.tegaderm-overlay.active {
+    display: flex;
+}
+
+/* Phase 14: 정리 및 간호기록지 */
+#phase-document {
+    background-color: #eef2f5;
+    z-index: 17;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px 15px;
+    overflow-y: auto;
+}
+
+.document-layout {
+    display: flex;
+    gap: 30px;
+    width: 95%;
+    max-width: 1000px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.waste-cleanup-box {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 320px;
+}
+.waste-bins {
+    display: flex;
+    gap: 15px;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+.bin {
+    border: 2px dashed var(--border-dark);
+    border-radius: 8px;
+    width: 120px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 10px;
+    transition: 0.2s;
+}
+.bin.dragover {
+    border-color: var(--secondary-blue);
+    background-color: rgba(91, 140, 154, 0.1);
+    transform: scale(1.05);
+}
+.bin-sharps { color: var(--primary-red); border-color: var(--primary-red); }
+.bin-general { color: #555; }
+
+.waste-items {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+.waste-item {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: grab;
+}
+
+.chart-box {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 320px;
+}
+.chart-table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+.chart-table th, .chart-table td {
+    border: 1px solid var(--border-dark);
+    padding: 8px;
+    text-align: left;
+}
+.chart-table th {
+    background-color: var(--bg-gray-table);
+    width: 30%;
+}
+.chart-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* 평가 보고서 화면 */
+#phase-report {
+    background-color: #1a1a1a;
+    z-index: 18;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    padding: 40px 20px;
+    overflow-y: auto;
+}
+.report-card {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    text-align: center;
+    border: 1px solid #444;
+}
+.report-score {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #ffd700;
+    margin: 20px 0;
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+.report-details {
+    margin: 20px 0;
+    text-align: left;
+}
+.report-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #444;
+    font-size: 15px;
+}
+.report-item-title {
+    color: #bbb;
+}
+.report-item-status {
+    color: #2ecc71;
+    font-weight: bold;
 }
