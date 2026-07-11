@@ -737,3 +737,4 @@ function checkQuiz12(ans) {
         }
     }
 }
+
