@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>IV 시뮬레이션 게임</title>
+    <style>
+        /* =========================================
+           공통 및 초기화 설정
+        ========================================= */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Malgun Gothic', '맑은 고딕', dotum, sans-serif; overflow: hidden; background-color: #333; }
+        
+        .game-window { width: 100vw; height: 100vh; position: relative; }
+        .scene { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+
+        /* =========================================
+           Phase 1: 병실 배경 및 알림창 팝업
+        ========================================= */
+        #phase-room {
+            background-image: url('병실사진.png'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); 
+            z-index: 1;
+        }
+
+        #scenario-intro {
+            position: absolute;
+            z-index: 3;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            padding: 40px 60px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            line-height: 1.8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: opacity 1.5s ease-in-out; 
+            opacity: 1;
+        }
+
+        .popup-container {
+            display: none; 
+            position: relative; z-index: 5;
+            width: 700px; background-color: #fff;
+            border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .popup-container:hover { transform: scale(1.02); }
+
+        .popup-header {
+            background-color: #d1f2e8; 
+            height: 90px; width: 100%;
+            position: relative;
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 20px 20px; 
+        }
+        
+        .popup-tab {
+            position: absolute; top: 15px; left: 20px;
+            display: flex; align-items: stretch;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            border-radius: 4px; overflow: hidden;
+        }
+        .popup-icon-mail {
+            background-color: #333; color: white;
+            padding: 10px 15px; font-size: 20px; font-weight: bold;
+        }
+        .popup-tab-text {
+            background-color: #fff; padding: 10px 20px;
+            font-size: 20px; font-weight: bold; color: #333;
+            border: 1px solid #ccc; border-left: none;
+        }
+
+        .popup-body {
+            text-align: center; padding: 50px 20px 40px; position: relative;
+        }
+        .popup-title {
+            color: #e51937; font-size: 38px; font-weight: bold; line-height: 1.4;
+        }
+
+        .popup-footer {
+            background-color: #f2f2f2; height: 70px; margin: 0 30px 30px;
+            border-radius: 5px;
+        }
+
+        /* =========================================
+           Phase 2: EMR 처방 화면 (크기 축소 및 우클릭 기능)
+        ========================================= */
+        /* 배경을 반투명하게 유지하여 팝업창 느낌을 살림 */
+        #phase-emr { display: none; z-index: 5; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+        
+        /* 🌟 EMR 창을 팝업 크기(700px)보다 조금 더 큰 850x550으로 줄였습니다. */
+        .emr-container { width: 850px; height: 550px; background-color: #fff; display: flex; flex-direction: column; font-size: 12px; color: #333; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; }
+        
+        .title-bar { background-color: #a3493b; color: #fff; padding: 5px 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .patient-info-bar { background-color: #eef2f5; padding: 5px 10px; border-bottom: 1px solid #ccc; display: flex; align-items: center; gap: 10px; }
+        .info-group { display: flex; align-items: center; }
+        .info-label { background-color: #f9f9f9; border: 1px solid #ccc; padding: 2px 5px; border-right: none; color: #555; }
+        .info-value { background-color: #fff; border: 1px solid #ccc; padding: 2px 8px; min-width: 80px; font-weight: bold; }
+        .btn-search { margin-left: auto; background-color: #5b8c9a; color: white; border: 1px solid #4a7582; padding: 3px 15px; cursor: pointer; font-weight: bold; }
+        .filter-bar { background-color: #fff; padding: 5px 10px; border-bottom: 1px solid #ccc; display: flex; align-items: center; gap: 10px; }
+        .table-container { flex-grow: 1; overflow: auto; background-color: #fff; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; table-layout: fixed; }
+        th, td { border: 1px solid #d4d4d4; padding: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        th { background-color: #f7f7f7; font-weight: normal; color: #333; position: sticky; top: 0; box-shadow: 0 1px 0 #d4d4d4; }
+        
+        /* 🌟 우클릭 메뉴 스타일 */
+        #context-menu {
+            display: none; position: absolute; background-color: white; 
+            border: 1px solid #999; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            z-index: 100; border-radius: 4px; overflow: hidden;
+        }
+        .context-menu-item { padding: 10px 20px; font-size: 14px; color: #333; cursor: pointer; font-weight: bold; }
+        .context-menu-item:hover { background-color: #eef2f5; color: #000; }
+
+        /* =========================================
+           Phase 3: 투약카드 출력 애니메이션
+        ========================================= */
+        #phase-printer { display: none; z-index: 6; background-color: rgba(0,0,0,0.8); flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* 기계(프린터) 입구 모양 */
+        .printer-machine { width: 350px; height: 80px; background-color: #444; border-radius: 10px 10px 0 0; position: relative; display: flex; justify-content: center; box-shadow: 0 20px 50px rgba(0,0,0,0.7); margin-top: 200px;}
+        .printer-slot { width: 280px; height: 10px; background-color: #111; border-radius: 5px; position: absolute; bottom: 10px; z-index: 10; box-shadow: inset 0 5px 5px rgba(0,0,0,0.5); }
+        
+        /* 🌟 투약 카드 (실제 영수증 느낌) */
+        .med-card {
+            width: 250px; height: 260px; background-color: #fcfcfc;
+            position: absolute; bottom: 15px; border: 1px solid #ddd;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); padding: 15px;
+            font-family: 'Malgun Gothic', sans-serif; color: #000; font-size: 13px;
+            z-index: 5;
+            /* 초기 상태: 기계 안에 숨어있음 */
+            transform: translateY(100%); opacity: 0;
+            transition: transform 1.5s ease-out, opacity 0.5s ease-in;
+        }
+        
+        /* 자바스크립트로 출력 명령이 떨어지면 위로 올라옴 */
+        .med-card.printed { transform: translateY(-70px); opacity: 1; }
+
+        /* 가짜 QR 코드 생성 */
+        .fake-qr {
+            width: 45px; height: 45px; float: left; margin-right: 10px;
+            background-image: repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+            background-position: 0 0, 4px 4px; background-size: 8px 8px;
+            border: 1px solid #333;
+        }
+        
+        .card-header { border-bottom: 1px dashed #999; padding-bottom: 10px; margin-bottom: 10px; }
+        .card-med { font-weight: bold; font-size: 14px; margin-bottom: 15px; line-height: 1.3;}
+        .card-details { line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="game-window">
+
+    <!-- =========================================
+         Phase 1: 병실 배경 & 시나리오 소개 & 알림창
+    ========================================= -->
+    <div id="phase-room" class="scene">
+        <div class="overlay"></div>
+        <div id="scenario-intro">
+            지금은 오후 4시.<br>당신은 <strong>이브닝 간호사</strong>로 출근해서 업무 중입니다.<br>
+            오늘은 7호부터 10호까지 담당하고 있습니다.<br>환자 라운딩을 돌고 내일자 처방을 정리하는 중입니다.
+        </div>
+        <div id="alert-popup" class="popup-container" onclick="goToEMR()">
+            <div class="popup-header">
+                <div class="popup-tab"><div class="popup-icon-mail">✉</div><div class="popup-tab-text">간호사님 보세요</div></div>
+            </div>
+            <div class="popup-body">
+                <div class="popup-title">추가처방이 조회되었습니다.<br>처방을 확인하세요.</div>
+            </div>
+            <div class="popup-footer"></div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         Phase 2: EMR 처방 확인 화면 (우클릭 영역)
+    ========================================= -->
+    <!-- 🌟 align-items:center 로 화면 중앙에 팝업처럼 띄움 -->
+    <div id="phase-emr" class="scene">
+        <!-- oncontextmenu 옵션을 넣어 우클릭 시 showContextMenu 함수 실행 -->
+        <div class="emr-container" oncontextmenu="showContextMenu(event)">
+            <div class="title-bar">
+                <span>(12345678 김이화 여/55y) 추가처방 조회 </span><span class="icons">✕</span>
+            </div>
+            <div class="patient-info-bar">
+                <div class="info-group"><span class="info-label">병원등록번호</span><span class="info-value">12345678</span></div>
+                <div class="info-value">김이화</div><div class="info-value">여/55y</div><div class="info-value">113병동 07병실</div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>타이틀</th><th>처방구분</th><th>처방명</th><th>투여량</th><th>단위</th><th>방법</th><th>속도</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Routine Order</td><td>약주사</td><td style="text-align:left;">Normal saline inj (JW) [1000ml]</td><td>1</td><td>BAG</td><td>IVF</td><td>80</td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 🌟 숨겨져 있는 커스텀 우클릭 메뉴 -->
+        <div id="context-menu">
+            <div class="context-menu-item" onclick="printCard()">🖨️ 투약카드 출력</div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         Phase 3: 투약카드 출력 (프린터 애니메이션)
+    ========================================= -->
+    <div id="phase-printer" class="scene">
+        <h2 style="color:white; margin-bottom: 20px;">바코드 프린터 기계</h2>
+        
+        <div class="printer-machine">
+            <div class="printer-slot"></div>
+            
+            <!-- 투약 카드 -->
+            <div class="med-card" id="med-card">
+                <div class="card-header">
+                    <div class="fake-qr"></div>
+                    <div style="float: right; font-size: 11px;"></div>
+                    <div style="margin-left: 55px;">
+                        2026-07-09<br>
+                        <strong style="font-size: 15px;">07-01 김이화</strong><br>
+                        12345678(1971-04-26)
+                    </div>
+                </div>
+                <div class="card-med">
+                    Normal saline inj (JW) [1000ml]
+                </div>
+                <div class="card-details">
+                    ● 1BAG ★1일 2회, 지시 속도로<br>
+                    정맥내 점적주사<br><br>
+                    80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
+                </div>
+            </div>
+        </div>
+        
+        <!-- 다음 단계로 넘어가기 위한 임시 버튼 -->
+        <button style="margin-top: 120px; padding: 10px 20px; background: #5b8c9a; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;" onclick="alert('다음 기획을 진행해주세요!')">다음 단계로 (물품 준비)</button>
+    </div>
+
+</div>
+
+<!-- 자바스크립트 -->
+<script>
+    // 페이지 진입 시 타이머
+    window.onload = function() {
+        setTimeout(function() { document.getElementById("scenario-intro").style.opacity = "0"; }, 8000);
+        setTimeout(function() {
+            document.getElementById("scenario-intro").style.display = "none";
+            document.getElementById("alert-popup").style.display = "block";
+        }, 10000); 
+    };
+
+    // EMR 화면 열기
+    function goToEMR() {
+        document.getElementById("phase-room").style.display = "none";
+        document.getElementById("phase-emr").style.display = "flex"; // 화면 중앙 정렬을 위해 flex 사용
+    }
+
+    // 🌟 EMR 화면에서 우클릭 시 브라우저 기본 메뉴 대신 커스텀 메뉴 띄우기
+    function showContextMenu(e) {
+        e.preventDefault(); // 기본 우클릭 방지
+        var menu = document.getElementById("context-menu");
+        menu.style.display = "block";
+        // 마우스 커서 위치에 메뉴 띄우기
+        menu.style.left = e.pageX + "px";
+        menu.style.top = e.pageY + "px";
+    }
+
+    // 바탕화면 클릭 시 우클릭 메뉴 숨기기
+    window.onclick = function(e) {
+        document.getElementById("context-menu").style.display = "none";
+    }
+
+    // 🌟 투약카드 출력 클릭 시 프린터 화면으로 넘어가서 카드 올라오는 애니메이션 실행
+    function printCard() {
+        document.getElementById("phase-emr").style.display = "none";
+        document.getElementById("phase-printer").style.display = "flex";
+        
+        // 0.5초 뒤에 카드가 기계에서 스르륵 위로 올라옴 (CSS 클래스 추가)
+        setTimeout(function() {
+            document.getElementById("med-card").classList.add("printed");
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
