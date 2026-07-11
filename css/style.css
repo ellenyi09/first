@@ -1,0 +1,871 @@
+/* =========================================
+   [1] 디자인 시스템 & 공통 스타일
+========================================= */
+:root {
+    /* 색상 정의 */
+    --primary-red: #e51937;
+    --primary-red-hover: #b8142c;
+    --secondary-blue: #5b8c9a;
+    --secondary-blue-hover: #4a7582;
+    --bg-dark: #333;
+    --bg-light: #fff;
+    --bg-gray-light: #f9f9f9;
+    --bg-gray-table: #f7f7f7;
+    --bg-gray-footer: #f2f2f2;
+    --border-color: #ddd;
+    --border-dark: #ccc;
+    --text-color: #333;
+    
+    /* 타이포그래피 */
+    --font-family: 'Malgun Gothic', sans-serif;
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+body { 
+    font-family: var(--font-family); 
+    overflow: hidden; 
+    background-color: var(--bg-dark); 
+    user-select: none; 
+}
+
+.game-window { 
+    width: 100vw; 
+    height: 100vh; 
+    position: relative; 
+}
+
+.scene { 
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    display: none; 
+}
+
+/* =========================================
+   [2] 공통 UI 컴포넌트 (모달, 카드, 버튼)
+========================================= */
+/* 공통 퀴즈 모달 팝업 스타일 */
+.quiz-modal-overlay { 
+    display: none; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.7); 
+    z-index: 100; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.quiz-modal { 
+    background-color: var(--bg-light); 
+    width: 550px; 
+    border-radius: 10px; 
+    padding: 30px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+}
+
+.quiz-title { 
+    font-size: 20px; 
+    font-weight: bold; 
+    color: var(--primary-red); 
+    margin-bottom: 20px; 
+    border-bottom: 2px solid #eee; 
+    padding-bottom: 10px; 
+}
+
+.quiz-option { 
+    display: block; 
+    width: 100%; 
+    padding: 12px; 
+    margin-bottom: 10px; 
+    background-color: var(--bg-gray-light); 
+    border: 1px solid var(--border-color); 
+    border-radius: 5px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    text-align: left; 
+    transition: 0.2s; 
+}
+
+.quiz-option:hover { 
+    background-color: #eef2f5; 
+    border-color: var(--secondary-blue); 
+}
+
+/* 퀴즈 2번 체크박스 세로 정렬 및 왼쪽 정렬 복구 */
+.quiz-checkbox-label { 
+    display: block; 
+    padding: 10px; 
+    font-size: 16px; 
+    margin-bottom: 5px; 
+    cursor: pointer; 
+    text-align: left; 
+}
+
+/* 버튼 스타일 */
+.btn-submit { 
+    display: block; 
+    width: 100%; 
+    padding: 15px; 
+    margin-top: 20px; 
+    background-color: var(--secondary-blue); 
+    color: var(--bg-light); 
+    font-size: 18px; 
+    font-weight: bold; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: 0.2s; 
+}
+
+.btn-submit:hover { 
+    background-color: var(--secondary-blue-hover); 
+}
+
+.btn-next { 
+    padding: 20px 50px; 
+    font-size: 22px; 
+    font-weight: bold; 
+    background: var(--primary-red); 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(229, 25, 55, 0.4); 
+    transition: 0.2s; 
+}
+
+.btn-next:hover { 
+    background: var(--primary-red-hover); 
+    transform: scale(1.05); 
+}
+
+/* 투약 카드 스타일 */
+.med-card { 
+    width: 250px; 
+    height: 260px; 
+    background-color: #fcfcfc; 
+    border: 1px solid var(--border-color); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+    padding: 15px; 
+    font-family: var(--font-family); 
+    color: #000; 
+    font-size: 13px; 
+    z-index: 5; 
+}
+
+.fake-qr { 
+    width: 45px; 
+    height: 45px; 
+    float: left; 
+    margin-right: 10px; 
+    background-image: repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000); 
+    background-position: 0 0, 4px 4px; 
+    background-size: 8px 8px; 
+    border: 1px solid #333; 
+}
+
+.card-header { 
+    border-bottom: 1px dashed #999; 
+    padding-bottom: 10px; 
+    margin-bottom: 10px; 
+}
+
+.card-med { 
+    font-weight: bold; 
+    font-size: 14px; 
+    margin-bottom: 15px; 
+    line-height: 1.3; 
+}
+
+.card-details { 
+    line-height: 1.6; 
+}
+
+/* =========================================
+   [3] 각 진행 단계(Phase)별 특화 스타일
+========================================= */
+
+/* Phase 1: 병실 배경 및 알림창 */
+#phase-room { 
+    background-image: url('../assets/병실사진.png'); 
+    background-size: cover; 
+    background-position: center; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 10; 
+    display: flex; /* 초기 화면 보이기 */
+}
+
+.overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1; 
+}
+
+#scenario-intro { 
+    position: absolute; 
+    z-index: 3; 
+    background-color: rgba(0, 0, 0, 0.75); 
+    color: #ffffff; 
+    padding: 40px 60px; 
+    border-radius: 12px; 
+    text-align: center; 
+    font-size: 22px; 
+    line-height: 1.8; 
+    transition: opacity 1.5s ease-in-out; 
+    opacity: 1; 
+}
+
+.popup-container { 
+    display: none; 
+    position: relative; 
+    z-index: 5; 
+    width: 700px; 
+    background-color: var(--bg-light); 
+    border-radius: 8px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+    cursor: pointer; 
+    transition: transform 0.2s; 
+}
+
+.popup-container:hover { 
+    transform: scale(1.02); 
+}
+
+.popup-header { 
+    background-color: #d1f2e8; 
+    height: 90px; 
+    position: relative; 
+    background-image: radial-gradient(white 1px, transparent 1px); 
+    background-size: 20px 20px; 
+}
+
+.popup-tab { 
+    position: absolute; 
+    top: 15px; 
+    left: 20px; 
+    display: flex; 
+    align-items: stretch; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+    border-radius: 4px; 
+    overflow: hidden; 
+}
+
+.popup-icon-mail { 
+    background-color: #333; 
+    color: white; 
+    padding: 10px 15px; 
+    font-size: 20px; 
+    font-weight: bold; 
+}
+
+.popup-tab-text { 
+    background-color: var(--bg-light); 
+    padding: 10px 20px; 
+    font-size: 20px; 
+    font-weight: bold; 
+    border: 1px solid var(--border-dark); 
+    border-left: none; 
+}
+
+.popup-body { 
+    text-align: center; 
+    padding: 50px 20px 40px; 
+}
+
+.popup-title { 
+    color: var(--primary-red); 
+    font-size: 38px; 
+    font-weight: bold; 
+    line-height: 1.4; 
+}
+
+.popup-footer { 
+    background-color: var(--bg-gray-footer); 
+    height: 70px; 
+    margin: 0 30px 30px; 
+    border-radius: 5px; 
+}
+
+/* Phase 2: EMR 처방 화면 */
+#phase-emr { 
+    z-index: 5; 
+    background-color: rgba(0, 0, 0, 0.6); 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.emr-container { 
+    width: 850px; 
+    height: 550px; 
+    background-color: var(--bg-light); 
+    display: flex; 
+    flex-direction: column; 
+    font-size: 12px; 
+    color: var(--text-color); 
+    border-radius: 8px; 
+    overflow: hidden; 
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); 
+    position: relative; 
+}
+
+.title-bar { 
+    background-color: #a3493b; 
+    color: #fff; 
+    padding: 5px 10px; 
+    font-weight: bold; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    font-size: 13px; 
+}
+
+.patient-info-bar { 
+    background-color: #eef2f5; 
+    padding: 5px 10px; 
+    border-bottom: 1px solid var(--border-dark); 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.info-group { 
+    display: flex; 
+    align-items: center; 
+}
+
+.info-label { 
+    background-color: var(--bg-gray-light); 
+    border: 1px solid var(--border-dark); 
+    padding: 2px 5px; 
+    border-right: none; 
+    color: #555; 
+}
+
+.info-value { 
+    background-color: var(--bg-light); 
+    border: 1px solid var(--border-dark); 
+    padding: 2px 8px; 
+    min-width: 80px; 
+    font-weight: bold; 
+}
+
+.table-container { 
+    flex-grow: 1; 
+    overflow: auto; 
+    background-color: var(--bg-light); 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    min-width: 800px; 
+    table-layout: fixed; 
+}
+
+th, td { 
+    border: 1px solid #d4d4d4; 
+    padding: 4px; 
+    text-align: center; 
+}
+
+th { 
+    background-color: var(--bg-gray-table); 
+    font-weight: normal; 
+    color: var(--text-color); 
+}
+
+#context-menu { 
+    display: none; 
+    position: absolute; 
+    background-color: white; 
+    border: 1px solid #999; 
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); 
+    z-index: 100; 
+    border-radius: 4px; 
+    overflow: hidden; 
+}
+
+.context-menu-item { 
+    padding: 10px 20px; 
+    font-size: 14px; 
+    color: var(--text-color); 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.context-menu-item:hover { 
+    background-color: #eef2f5; 
+    color: #000; 
+}
+
+/* Phase 3: 투약카드 출력 */
+#phase-printer { 
+    z-index: 6; 
+    background-color: rgba(0, 0, 0, 0.8); 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.printer-machine { 
+    width: 350px; 
+    height: 80px; 
+    background-color: #444; 
+    border-radius: 10px 10px 0 0; 
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); 
+    margin-top: 200px; 
+}
+
+.printer-slot { 
+    width: 280px; 
+    height: 10px; 
+    background-color: #111; 
+    border-radius: 5px; 
+    position: absolute; 
+    bottom: 10px; 
+    z-index: 10; 
+    box-shadow: inset 0 5px 5px rgba(0, 0, 0, 0.5); 
+}
+
+#animated-card { 
+    position: absolute; 
+    bottom: 15px; 
+    transform: translateY(100%); 
+    opacity: 0; 
+    transition: transform 1.5s ease-out, opacity 0.5s ease-in; 
+}
+
+#animated-card.printed { 
+    transform: translateY(-70px); 
+    opacity: 1; 
+}
+
+/* Phase 4: 수액장 화면 */
+#phase-fluid { 
+    z-index: 7; 
+    background-color: #e0e0e0; 
+    position: relative; 
+}
+
+.fixed-med-card { 
+    position: absolute; 
+    top: 50%; 
+    left: 50px; 
+    transform: translateY(-50%); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+}
+
+.shelf-container { 
+    position: absolute; 
+    top: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 600px; 
+    height: 100%; 
+    background-image: url('../assets/image_df7000.jpg'); 
+    background-size: 100% 100%; 
+    background-position: center; 
+}
+
+.hotspot-ns1l, .hotspot-wrong { 
+    position: absolute; 
+    background-color: rgba(255, 0, 0, 0.0); 
+    cursor: pointer; 
+    border-radius: 5px; 
+    transition: background-color 0.2s; 
+}
+
+.hotspot-ns1l:hover, .hotspot-wrong:hover { 
+    background-color: rgba(255, 235, 59, 0.3); 
+    border: 2px dashed #ffeb3b; 
+}
+
+.hotspot-ns1l { 
+    top: 40%; 
+    left: 60%; 
+    width: 20%; 
+    height: 12%; 
+}
+
+/* Phase 5: 투약 준비실 (물품 준비 퀴즈) */
+#phase-prep-room { 
+    z-index: 8; 
+    background-image: url('../assets/투약준비실.jpeg'); 
+    background-size: cover; 
+    background-position: center; 
+    position: relative; 
+}
+
+#equipment-selection { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: rgba(255, 255, 255, 0.95); 
+    width: 85%; 
+    max-width: 900px; 
+    border-radius: 15px; 
+    padding: 30px 40px; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); 
+    opacity: 0; 
+    transition: opacity 0.5s; 
+    z-index: 30; 
+}
+
+#equipment-selection.show { 
+    opacity: 1; 
+}
+
+.eq-title { 
+    font-size: 24px; 
+    font-weight: bold; 
+    color: var(--primary-red); 
+    margin-bottom: 20px; 
+    text-align: center; 
+    border-bottom: 2px solid var(--border-dark); 
+    padding-bottom: 15px; 
+}
+
+.eq-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 15px; 
+    margin-bottom: 25px; 
+}
+
+.eq-btn { 
+    background-color: var(--bg-light); 
+    border: 2px solid var(--border-dark); 
+    border-radius: 8px; 
+    padding: 15px 10px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #555; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    text-align: center; 
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.eq-btn.selected { 
+    background-color: var(--secondary-blue); 
+    border-color: #3a5c66; 
+    color: var(--bg-light); 
+    transform: translateY(-2px); 
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); 
+}
+
+/* Phase 5-2: 트레이 세팅 완료 화면 (이미지 확인) */
+#phase-tray-complete { 
+    z-index: 10; 
+    background-color: #111; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+#tray-image { 
+    width: 90%; 
+    height: 75%; 
+    background-image: url('../assets/image_e23256.jpg'); 
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    margin-bottom: 30px; 
+    border-radius: 10px; 
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); 
+}
+
+/* Phase 6: 수액 연결 (드래그 앤 드롭) */
+#phase-connect { 
+    z-index: 10; 
+    background-image: url('../assets/투약준비실.jpeg'); 
+    background-size: cover; 
+    background-position: center; 
+    position: relative; 
+}
+
+#prep-instruction { 
+    position: absolute; 
+    top: 30px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: rgba(0, 0, 0, 0.85); 
+    color: white; 
+    padding: 15px 40px; 
+    font-size: 22px; 
+    font-weight: bold; 
+    border-radius: 30px; 
+    z-index: 20; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
+    text-align: center; 
+}
+
+#iv-pole { 
+    position: absolute; 
+    right: 15%; 
+    bottom: 0; 
+    width: 180px; 
+    height: 90vh; 
+    background-image: url('../assets/IV pole.jpeg'); 
+    background-size: 100% 100%; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    z-index: 2; 
+    transition: filter 0.3s; 
+}
+
+#iv-pole.highlight { 
+    filter: drop-shadow(0 0 20px #ffeb3b) brightness(1.1); 
+    border-radius: 10px; 
+}
+
+#prep-table { 
+    position: absolute; 
+    bottom: 50px; 
+    left: 10%; 
+    width: 50%; 
+    height: 220px; 
+    background-color: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(4px); 
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+    z-index: 5; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-around; 
+    padding: 20px; 
+}
+
+.drag-item { 
+    cursor: grab; 
+    position: relative; 
+    transition: transform 0.1s; 
+}
+
+.drag-item:active { 
+    cursor: grabbing; 
+    transform: scale(1.05); 
+}
+
+/* 선반 위 미니어처 정밀 카드 세팅 */
+#item-card { 
+    width: 250px !important; 
+    height: 260px !important; 
+    padding: 15px !important; 
+    font-size: 13px !important; 
+    background-color: #fcfcfc; 
+    border: 1px solid var(--border-color); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+    text-align: left; 
+    transform: scale(0.4); 
+    transform-origin: center; 
+    flex-shrink: 0; 
+}
+
+#item-card .fake-qr { 
+    width: 45px !important; 
+    height: 45px !important; 
+    background-size: 8px 8px !important; 
+}
+
+#item-regulator { 
+    width: 120px; 
+    height: 120px; 
+    background-image: url('../assets/regulator.jpeg'); 
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3)); 
+}
+
+#item-ns1l { 
+    width: 130px; 
+    height: 220px; 
+    background-image: url('../assets/NS 1L.jpeg'); 
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    position: relative; 
+    transition: all 0.3s; 
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3)); 
+}
+
+#item-ns1l.highlight { 
+    filter: drop-shadow(0 0 15px #ffeb3b); 
+}
+
+/* 합쳐졌을 때 1.2배 확장 */
+#item-ns1l.connected-fluid { 
+    width: 220px !important; 
+    height: 450px !important; 
+    background-image: url('../assets/fluid set 연결.png'); 
+}
+
+/* 수액팩 위의 초소형 스티커 카드 디자인 및 기본 위치 */
+#attached-card { 
+    position: absolute; 
+    top: 95px !important; 
+    left: 50% !important; 
+    transform: scale(0.15) !important; 
+    transform-origin: top center !important; 
+    margin-left: -125px !important; 
+    width: 250px !important; 
+    height: 260px !important; 
+    padding: 15px !important; 
+    font-size: 13px !important; 
+    background-color: rgba(255, 255, 255, 0.95) !important; 
+    border: 1px solid #bbb !important; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important; 
+    z-index: 10; 
+    text-align: left; 
+    display: none; 
+}
+
+/* 조립 완료 후 사진 확장 시 카드를 최적 위치로 잡아주는 스타일 */
+#item-ns1l.connected-fluid #attached-card { 
+    top: 180px !important; 
+}
+
+/* Phase 7 & 8: 병실 이동 및 환자 대면 */
+#phase-moving { 
+    z-index: 11; 
+    background-size: cover; 
+    background-position: center; 
+    position: relative; 
+    transition: background-image 1s ease-in-out; 
+}
+
+.speech-bubble { 
+    display: none; 
+    position: absolute; 
+    background: var(--bg-light); 
+    border-radius: 20px; 
+    padding: 15px 30px; 
+    font-size: 22px; 
+    font-weight: bold; 
+    color: var(--text-color); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
+    z-index: 20; 
+    opacity: 0; 
+    transition: opacity 0.5s; 
+}
+
+.speech-bubble.show { 
+    opacity: 1; 
+    display: block; 
+}
+
+.nurse-bubble { 
+    bottom: 15%; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    border: 3px solid var(--secondary-blue); 
+}
+
+.nurse-bubble::after { 
+    content: ''; 
+    position: absolute; 
+    bottom: -15px; 
+    left: 50px; 
+    border-width: 15px 15px 0; 
+    border-style: solid; 
+    border-color: var(--secondary-blue) transparent; 
+    display: block; 
+    width: 0; 
+}
+
+.patient-bubble { 
+    top: 30%; 
+    right: 20%; 
+    border: 3px solid var(--primary-red); 
+}
+
+.patient-bubble::after { 
+    content: ''; 
+    position: absolute; 
+    bottom: -15px; 
+    right: 50px; 
+    border-width: 15px 15px 0; 
+    border-style: solid; 
+    border-color: var(--primary-red) transparent; 
+    display: block; 
+    width: 0; 
+}
+
+/* Phase 9: 환자 팔찌 & 투약카드 대조 확인 */
+#phase-verify { 
+    z-index: 12; 
+    background-color: rgba(0, 0, 0, 0.85); 
+    gap: 50px; 
+    position: relative; 
+}
+
+.verify-item { 
+    background: var(--bg-light); 
+    border-radius: 10px; 
+    padding: 20px; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); 
+    position: relative; 
+}
+
+.text-blink { 
+    animation: textBlink 0.8s infinite alternate; 
+}
+
+@keyframes textBlink { 
+    0% { color: inherit; } 
+    100% { color: red; font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); } 
+}
+
+.highlight-box { 
+    position: absolute; 
+    border: 3px solid transparent; 
+    border-radius: 5px; 
+    opacity: 0; 
+    transition: opacity 0.3s; 
+    pointer-events: none; 
+}
+
+.highlight-box.active { 
+    opacity: 1; 
+    animation: boxBlink 0.8s infinite alternate; 
+}
+
+@keyframes boxBlink { 
+    0% { border-color: transparent; background-color: rgba(255, 0, 0, 0.0); } 
+    100% { border-color: red; background-color: rgba(255, 0, 0, 0.3); box-shadow: 0 0 15px red; } 
+}
+
+.hb-brace-name { 
+    top: 40%; 
+    left: 24%; 
+    width: 30%; 
+    height: 9%; 
+}
+
+.hb-brace-id { 
+    top: 49%; 
+    left: 24%; 
+    width: 35%; 
+    height: 5%; 
+}
