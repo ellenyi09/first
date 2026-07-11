@@ -190,6 +190,21 @@
         </div>
     </div>
 
+    <!-- 퀴즈 3 모달 (수액 세트 연결 OX) -->
+    <div id="quiz2b-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 3</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">
+                [OX 퀴즈] 설명을 보고, OX로 답을 고르세요.<br><br>
+                "수액백의 고무마개를 소독솜으로 닦은 후 수액세트를 꽂아 점적통의 1/5 정도를 수액으로 채운다."
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+                <button class="quiz-option" style="width: 100px; font-size: 24px; font-weight: bold;" onclick="checkQuiz2b('O')">O</button>
+                <button class="quiz-option" style="width: 100px; font-size: 24px; font-weight: bold;" onclick="checkQuiz2b('X')">X</button>
+            </div>
+        </div>
+    </div>
+
     <!-- =================================================================
          [3] Phase 5 ~ 6: 물품 준비 퀴즈 & 수액 세팅 (조립/폴대)
     ================================================================== -->
@@ -308,10 +323,10 @@
         <div id="patient-reply" class="speech-bubble patient-bubble">김이화입니다.</div>
     </div>
 
-    <!-- 퀴즈 3 모달 -->
+    <!-- 퀴즈 4 모달 -->
     <div id="quiz3-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 3</div>
+            <div class="quiz-title">📝 퀴즈 4</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">당신은 지금부터 환자에게 정맥주사 삽입을 수행하려고 합니다. 가장 먼저 무엇을 해야 할까요?</p>
             <button class="quiz-option" onclick="checkQuiz3(1)">① 대상자 이름을 개방형으로 질문한다.</button>
             <button class="quiz-option" onclick="checkQuiz3(2)">② 수액을 준비한다.</button>
@@ -319,10 +334,10 @@
         </div>
     </div>
     
-    <!-- 퀴즈 4 모달 -->
+    <!-- 퀴즈 5 모달 -->
     <div id="quiz4-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 4</div>
+            <div class="quiz-title">📝 퀴즈 5</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">환자에게 어떻게 질문하시겠습니까?</p>
             <button class="quiz-option" onclick="checkQuiz4(1)">① 수액 처방이 있어서 주사 드리러 왔습니다.</button>
             <button class="quiz-option" onclick="checkQuiz4(2)">② 환자분 성함이 어떻게 되세요?</button>
@@ -331,10 +346,10 @@
         </div>
     </div>
     
-    <!-- 퀴즈 5 모달 -->
+    <!-- 퀴즈 6 모달 -->
     <div id="quiz5-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 5</div>
+            <div class="quiz-title">📝 퀴즈 6</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">이름을 대답한 환자에게 다음으로 할 말은?</p>
             <button class="quiz-option" onclick="checkQuiz5(1)">① 네, 확인 완료했습니다. 정맥 주사 삽입하러 왔어요.</button>
             <button class="quiz-option" onclick="checkQuiz5(2)">② 네, 성함 확인했습니다. 1971년 4월 26일생 맞으시죠?</button>
@@ -407,10 +422,10 @@
         <div id="explain-speech" class="speech-bubble nurse-bubble" style="display:none; opacity:0;">안녕하세요 김이화님, 금식 기간동안 수분 공급을 위해 수액을 투약하겠습니다. 주사부위 통증이나 붓기가 느껴지면 말씀해주세요</div>
     </div>
 
-    <!-- 퀴즈 6 모달 (수행항목 11) -->
+    <!-- 퀴즈 7 모달 (수행항목 11) -->
     <div id="quiz6-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 6</div>
+            <div class="quiz-title">📝 퀴즈 7</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">환자에게 설명할 내용으로 투약 설명 원칙에 가장 적합한 것은 무엇일까요?</p>
             <button class="quiz-option" onclick="checkQuiz6(1)">① 금식기간 동안 수분 공급을 위해 투약할 수액입니다. 주사 부위 통증이나 붓기가 있으면 바로 알려주세요.</button>
             <button class="quiz-option" onclick="checkQuiz6(2)">② 수액 처방이 있어서 주사 드리러 왔어요.</button>
@@ -436,10 +451,10 @@
         </div>
     </div>
 
-    <!-- 퀴즈 7 모달 (수행항목 14) -->
+    <!-- 퀴즈 8 모달 (수행항목 14) -->
     <div id="quiz7-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 7</div>
+            <div class="quiz-title">📝 퀴즈 8</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">지혈대(Tourniquet)는 정맥 천자할 부위보다 얼마큼 위쪽에 묶어야 할까요?</p>
             <button class="quiz-option" onclick="checkQuiz7(1)">① 천자 예정 부위 바로 위 (1~2cm)</button>
             <button class="quiz-option" onclick="checkQuiz7(2)">② 천자 예정 부위보다 위쪽으로 12~15cm</button>
@@ -447,10 +462,10 @@
         </div>
     </div>
 
-    <!-- 퀴즈 8 모달 (수행항목 16) -->
+    <!-- 퀴즈 9 모달 (수행항목 16) -->
     <div id="quiz8-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 8</div>
+            <div class="quiz-title">📝 퀴즈 9</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">소독솜으로 정맥천자 예정 부위를 닦는 올바른 방법은 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz8(1)">① 안에서 밖으로 5~8cm 정도 둥글게 닦아낸다.</button>
             <button class="quiz-option" onclick="checkQuiz8(2)">② 밖에서 안으로 원을 그리며 모아 닦는다.</button>
@@ -469,12 +484,12 @@
         </div>
         
         <div id="flashback-area" class="flashback-indicator" style="display:none;">
-            💉 [알림] 카테터 허브에 혈액이 역류되었습니다!
+            💉 [알림] 카테터 내로 혈액이 역류되었습니다!
         </div>
 
         <div class="prep-tools">
             <button id="btn-untie-tourniquet" class="tool-btn" onclick="triggerStep('insert', 'untie')">지혈대 풀기</button>
-            <button id="btn-remove-stylus" class="tool-btn" onclick="triggerStep('insert', 'remove')">스타일렛(탐침) 제거 & 수액선 연결</button>
+            <button id="btn-remove-stylus" class="tool-btn" onclick="triggerStep('insert', 'remove')">탐침 제거 & 수액선 연결</button>
             <button id="btn-insert-catheter" class="tool-btn" onclick="triggerStep('insert', 'insert')">정맥천자 바늘 삽입</button>
             <button id="btn-advance-catheter" class="tool-btn" onclick="triggerStep('insert', 'advance')">탐침 빼기 및 카테터 밀어넣기</button>
         </div>
@@ -484,14 +499,41 @@
         </div>
     </div>
 
-    <!-- 퀴즈 9 모달 (수행항목 17) --><!-- 퀴즈 9 모달 (수행항목 17) -->
+    <!-- 퀴즈 10 모달 (수행항목 17) --><!-- 퀴즈 9 모달 (수행항목 17) -->
     <div id="quiz9-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 9</div>
+            <div class="quiz-title">📝 퀴즈 10</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">카테터를 삽입할 때 바늘의 사면(bevel) 방향과 적절한 진입 각도는 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz9(1)">① 사면이 위로 오도록 하여, 15°~30° 각도로 삽입한다.</button>
             <button class="quiz-option" onclick="checkQuiz9(2)">② 사면이 아래로 오도록 하여, 45° 각도로 삽입한다.</button>
             <button class="quiz-option" onclick="checkQuiz9(3)">③ 사면의 방향은 무관하며, 90° 각도로 직각 삽입한다.</button>
+        </div>
+    </div>
+
+    <!-- 퀴즈 11 모달 -->
+    <div id="quiz9b-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal" style="max-width: 480px;">
+            <div class="quiz-title">📝 퀴즈 11</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">다음 중 옳은 설명을 고르세요.</p>
+            <button class="quiz-option" style="text-align: left; padding: 10px;" onclick="checkQuiz9b(1)">① 카테터를 혈관으로 진입시킬 때는 삽입각도를 약간 높여야 한다.</button>
+            <button class="quiz-option" style="text-align: left; padding: 10px;" onclick="checkQuiz9b(2)">② 카테터 내로 혈액이 역류되면 바로 탐침을 빼낸다.</button>
+            <button class="quiz-option" style="text-align: left; padding: 10px;" onclick="checkQuiz9b(3)">③ 모두 정답이다.</button>
+            <button class="quiz-option" style="text-align: left; padding: 10px;" onclick="checkQuiz9b(4)">④ 모두 오답이다.</button>
+        </div>
+    </div>
+
+    <!-- 퀴즈 12 모달 (지혈대 제거 OX) -->
+    <div id="quiz9c-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">📝 퀴즈 12</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">
+                [OX 퀴즈] 설명을 보고, OX로 답을 고르세요.<br><br>
+                "지혈대 제거는 카테터를 잡은 손으로 해도 상관없다."
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+                <button class="quiz-option" style="width: 100px; font-size: 24px; font-weight: bold;" onclick="checkQuiz9c('O')">O</button>
+                <button class="quiz-option" style="width: 100px; font-size: 24px; font-weight: bold;" onclick="checkQuiz9c('X')">X</button>
+            </div>
         </div>
     </div>
 
@@ -532,10 +574,10 @@
         </div>
     </div>
 
-    <!-- 퀴즈 10 모달 (수행항목 24) -->
+    <!-- 퀴즈 13 모달 (수행항목 24) -->
     <div id="quiz10-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 10</div>
+            <div class="quiz-title">📝 퀴즈 13</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">처방(EMR)에 따른 정확한 주입 속도는 몇 cc/hr로 세팅해야 할까요?</p>
             <button class="quiz-option" onclick="checkQuiz10(1)">① 120 cc/hr</button>
             <button class="quiz-option" onclick="checkQuiz10(2)">② 80 cc/hr</button>
@@ -571,7 +613,7 @@
                     <div id="waste-syringe" class="waste-item" draggable="true" ondragstart="dragWaste(event, 'syringe')">💉 주사기</div>
                 </div>
                 
-                <button id="btn-waste-complete" class="btn-submit" style="display:none; margin-top: 15px;" onclick="completeWasteAndShowChart()">폐기물 분리수거 완료</button>
+                <button id="btn-waste-complete" class="btn-submit" style="display:none; margin-top: 15px;" onclick="checkWasteSeparation()">폐기물 분리수거 완료</button>
             </div>
             
             <!-- 간호 기록지 작성 -->
@@ -649,10 +691,10 @@
 </div>
 
 
-    <!-- 퀴즈 11 모달 (라벨 기록 내용) -->
+    <!-- 퀴즈 14 모달 (라벨 기록 내용) -->
     <div id="quiz11-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 11</div>
+            <div class="quiz-title">📝 퀴즈 14</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">고정 테이프(라벨)에 작성해야 할 3가지 주요 항목을 적어보세요.</p>
             <div style="text-align: left; margin: 15px auto; max-width: 320px; font-size: 16px;">
                 <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
@@ -672,14 +714,34 @@
         </div>
     </div>
 
-    <!-- 퀴즈 12 모달 (폐기물 처리 후 할 일) -->
+    <!-- 퀴즈 15 모달 (폐기물 처리 후 할 일) -->
     <div id="quiz12-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 12</div>
+            <div class="quiz-title">📝 퀴즈 15</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">물품 정리를 완료한 직후에 수행해야 할 가장 알맞은 일은 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz12(1)">① 간호기록 작성</button>
             <button class="quiz-option" onclick="checkQuiz12(2)">② 환자에게 인사</button>
             <button class="quiz-option" onclick="checkQuiz12(3)">③ 물과 비누로 손위생 실시</button>
+        </div>
+    </div>
+
+    <!-- 퀴즈 공통 오답 모달 -->
+    <div id="quiz-wrong-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title">🚨 오답입니다!</div>
+            <p style="margin: 20px 0; font-size: 18px; font-weight: bold; color: #333333; text-align: center;">다시 고민해볼까요?</p>
+            <button class="btn-submit" onclick="closeQuizWrongModal()">다시 시도하기</button>
+        </div>
+    </div>
+
+    <!-- 폐기물 분리수거 결과 모달 -->
+    <div id="waste-result-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title" id="waste-result-title">📝 분리배출 결과</div>
+            <div id="waste-result-content" style="margin: 20px 0; font-size: 18px; line-height: 1.6; word-break: keep-all; text-align: center; color: #333333;">
+                <!-- 정오답 여부 및 해설이 동적으로 삽입됩니다 -->
+            </div>
+            <button class="btn-submit" id="btn-waste-result-next" onclick="closeWasteResultModal()">확인</button>
         </div>
     </div>
 

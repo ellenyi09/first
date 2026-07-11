@@ -175,9 +175,8 @@ function dropOnNS(ev) {
         document.getElementById('attached-card').style.display = 'block'; 
         prepState.card = true; 
     } else if (type === 'regulator') { 
-        document.getElementById('item-regulator').style.display = 'none'; 
-        document.getElementById('item-ns1l').classList.add('connected-fluid'); 
-        prepState.regulator = true; 
+        // Show OX Quiz 2b
+        document.getElementById('quiz2b-modal').style.display = 'flex';
     }
     
     // 카드와 세트(조절기)가 모두 결합되면 폴대에 걸 수 있도록 드래그 아이템으로 변경
@@ -190,7 +189,6 @@ function dropOnNS(ev) {
     }
 }
 
-// 폴대에 조립 완료된 수액 거치
 function dropOnPole(ev) {
     ev.preventDefault(); 
     let pole = document.getElementById('iv-pole');
@@ -258,39 +256,36 @@ function startMovingToPatientRoom() {
 // 퀴즈 3 (손위생 최우선 수행) 정답 확인
 function checkQuiz3(ans) {
     if (ans === 3) {
-        alert("정답입니다!");
         document.getElementById('quiz3-modal').style.display = 'none';
         document.getElementById('nurse-speech-1').classList.remove('show'); 
         setTimeout(() => { 
             document.getElementById('quiz4-modal').style.display = 'flex'; 
         }, 500);
     } else { 
-        alert("틀렸습니다."); 
+        document.getElementById('quiz-wrong-modal').style.display = 'flex';
     }
 }
 
 // 퀴즈 4 (환자 성함 개방형 질문) 정답 확인
 function checkQuiz4(ans) {
     if (ans === 2) {
-        alert("정답입니다!");
         document.getElementById('quiz4-modal').style.display = 'none';
         document.getElementById('patient-reply').classList.add('show');
         setTimeout(() => { 
             document.getElementById('quiz5-modal').style.display = 'flex'; 
         }, 2000);
     } else { 
-        alert("틀렸습니다."); 
+        document.getElementById('quiz-wrong-modal').style.display = 'flex';
     }
 }
 
 // 퀴즈 5 (입원팔찌 확인 절차) 정답 확인
 function checkQuiz5(ans) {
     if (ans === 3) {
-        alert("정답입니다!");
         document.getElementById('quiz5-modal').style.display = 'none';
         startBraceletCheck();
     } else { 
-        alert("틀렸습니다."); 
+        document.getElementById('quiz-wrong-modal').style.display = 'flex';
     }
 }
 
@@ -324,6 +319,7 @@ function startBraceletCheck() {
 // -------------------------------------------------------------
 let evaluation = { step4: 100, step5: 100, step6: 100, step7: 100 };
 let wasteState = { needle: false, swab: false, syringe: false };
+let wasteDrops = { needle: null, swab: null, syringe: null };
 
 // 각 단계별 순서 정의 및 진행 인덱스 트래커
 let sequenceTracker = {
@@ -426,7 +422,6 @@ function goToExplain() {
 // 퀴즈 6 (수행항목 11) 정답 확인
 function checkQuiz6(ans) {
     if (ans === 1) {
-        alert("정답입니다!");
         document.getElementById("quiz6-modal").style.display = "none";
         
         const bubble = document.getElementById("explain-speech");
@@ -441,7 +436,7 @@ function checkQuiz6(ans) {
             showScene("phase-vein-prep", "flex");
         }, 4000);
     } else {
-        alert("오답입니다. 환자에게 처방 수액의 목적(수분 공급), 예상되는 효과, 주의사항(통증/붓기 발생 시 알리기)을 명확하게 설명해야 합니다.");
+        document.getElementById('quiz-wrong-modal').style.display = 'flex';
         evaluation.step4 -= 10;
     }
 }
@@ -518,15 +513,15 @@ function checkQuiz9(ans) {
 
 // 2. 스타일렛 약간 뒤로 빼기 및 카테터 밀어넣기
 function advanceCatheter() {
-    alert("카테터를 혈관 안으로 끝까지 밀어넣는 동안 내관(스타일렛)은 살짝 뒤로 잡아당겨 뺐습니다.");
     document.getElementById("flashback-area").style.display = "none";
+    document.getElementById('quiz9b-modal').style.display = 'flex';
     document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
 // 3. 지혈대 해제
 function untieTourniquet() {
-    alert("지혈대를 풀었습니다.");
-    // 이미지 변경을 스타일렛 제거 & 수액선 연결 때로 연기
+    // 지혈대 풀기 알림 팝업 삭제 후 퀴즈 9-3 노출
+    document.getElementById('quiz9c-modal').style.display = 'flex';
     document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
@@ -599,40 +594,17 @@ function dropWaste(ev, binType) {
     ev.target.classList.remove("dragover");
     let item = ev.dataTransfer.getData("wasteItem");
     
-    if (binType === "sharps") {
-        if (item === "needle") {
-            document.getElementById("waste-needle").style.display = "none";
-            wasteState.needle = true;
-            alert("침 부품(주사바늘)을 손상성폐기물 전용 플라스틱 용기에 안전하게 배출했습니다!");
-        } else {
-            alert("바늘이 아닌 것은 손상성 폐기물 용기에 버리면 안 됩니다. (오분리 감점)");
-            evaluation.step6 -= 5;
-        }
-    } else if (binType === "general") {
-        if (item === "swab") {
-            document.getElementById("waste-swab").style.display = "none";
-            wasteState.swab = true;
-        } else if (item === "syringe") {
-            document.getElementById("waste-syringe").style.display = "none";
-            wasteState.syringe = true;
-        } else {
-            alert("주사바늘은 손상 위험이 있어 일반 의료폐기물함에 버릴 수 없습니다. (감점)");
-            evaluation.step6 -= 5;
-        }
+    if (item === "needle" || item === "swab" || item === "syringe") {
+        document.getElementById("waste-" + item).style.display = "none";
+        wasteDrops[item] = binType;
     }
     
-    // 일반 폐기물 2가지 버렸을 시 안내
-    if (binType === "general" && (item === "swab" || item === "syringe")) {
-        alert("알코올 소독솜/주사기를 일반 의료폐기물함에 배출했습니다.");
-    }
-    
-    // 분리 배출 모두 완료되었는지 확인
-    if (wasteState.needle && wasteState.swab && wasteState.syringe) {
+    // 분리 배출 모두 일단 올려놓았는지 확인
+    if (wasteDrops.needle && wasteDrops.swab && wasteDrops.syringe) {
         document.getElementById("btn-waste-complete").style.display = "block";
     }
 }
 
-// 쓰레기 분리배출 완료 및 기록지 노출
 function completeWasteAndShowChart() {
     document.getElementById("quiz12-modal").style.display = "flex";
 }
@@ -738,3 +710,122 @@ function checkQuiz12(ans) {
     }
 }
 
+// 퀴즈 2-2 (수액세트 연결 OX) 정답 확인
+let quiz2bPenaltyApplied = false;
+function checkQuiz2b(ans) {
+    if (ans === 'X') {
+        alert("정답입니다!\n수액세트에 공기가 차지 않도록 점적통의 1/2 정도를 수액으로 채워야 합니다.");
+    } else {
+        alert("틀렸습니다!\n수액세트에 공기가 차지 않도록 점적통의 1/2 정도를 수액으로 채워야 합니다.");
+        if (!quiz2bPenaltyApplied) {
+            evaluation.step4 -= 10;
+            quiz2bPenaltyApplied = true;
+        }
+    }
+    
+    // 정답/오답에 관계없이 점적통 채우기(연결) 완료 처리 및 진행
+    document.getElementById('quiz2b-modal').style.display = 'none';
+    document.getElementById('item-regulator').style.display = 'none'; 
+    document.getElementById('item-ns1l').classList.add('connected-fluid'); 
+    prepState.regulator = true; 
+    
+    if (prepState.card && prepState.regulator) {
+        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요.";
+        let ns1l = document.getElementById('item-ns1l'); 
+        ns1l.classList.add('drag-item'); 
+        ns1l.setAttribute('draggable', 'true'); 
+        ns1l.setAttribute('ondragstart', "drag(event, 'ready_fluid')"); 
+    }
+}
+
+// 퀴즈 9-2 정답 확인
+let quiz9bPenaltyApplied = false;
+function checkQuiz9b(ans) {
+    if (ans === 4) {
+        alert("정답입니다!\n해설: 카테터 내로 혈액이 역류되면 카테터의 삽입각도를 약간 낮추면서 카테터를 혈관으로 진입시킨 후, 카테터 길이만큼 탐침을 조금씩 빼내야 합니다.");
+    } else {
+        alert("틀렸습니다!\n해설: 카테터 내로 혈액이 역류되면 카테터의 삽입각도를 약간 낮추면서 카테터를 혈관으로 진입시킨 후, 카테터 길이만큼 탐침을 조금씩 빼내야 합니다.");
+        if (!quiz9bPenaltyApplied) {
+            evaluation.step5 -= 10;
+            quiz9bPenaltyApplied = true;
+        }
+    }
+    document.getElementById('quiz9b-modal').style.display = 'none';
+}
+
+// 퀴즈 9-3 정답 확인
+let quiz9cPenaltyApplied = false;
+function checkQuiz9c(ans) {
+    if (ans === 'X') {
+        alert("정답입니다!\n해설: 카테터를 잡지 않은 손으로 지혈대를 제거해야 합니다.");
+    } else {
+        alert("틀렸습니다!\n해설: 카테터를 잡지 않은 손으로 지혈대를 제거해야 합니다.");
+        if (!quiz9cPenaltyApplied) {
+            evaluation.step5 -= 10;
+            quiz9cPenaltyApplied = true;
+        }
+    }
+    document.getElementById('quiz9c-modal').style.display = 'none';
+}
+
+// 의료폐기물 분리수거 상태 일괄 검증
+function checkWasteSeparation() {
+    const isNeedleCorrect = (wasteDrops.needle === "sharps");
+    const isSwabCorrect = (wasteDrops.swab === "general");
+    const isSyringeCorrect = (wasteDrops.syringe === "general");
+    
+    const contentDiv = document.getElementById("waste-result-content");
+    const nextBtn = document.getElementById("btn-waste-result-next");
+    
+    if (isNeedleCorrect && isSwabCorrect && isSyringeCorrect) {
+        contentDiv.innerHTML = `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong><br><br>손상성 폐기물 전용용기(주사바늘)와 일반 의료폐기물 전용용기(소독솜, 주사기)를 구분하여 사용 물품 정리를 완료했습니다!`;
+        nextBtn.innerText = "확인 (다음 단계로)";
+        wasteSuccessState = true;
+    } else {
+        contentDiv.innerHTML = `<strong style="color: #e74c3c; font-size: 22px;">🚨 오답입니다!</strong><br><br>다시 고민해볼까요?`;
+        nextBtn.innerText = "다시 시도하기";
+        wasteSuccessState = false;
+        
+        if (!quiz2bPenaltyApplied) {
+            evaluation.step6 -= 10;
+        }
+    }
+    
+    // 모달 노출
+    document.getElementById("waste-result-modal").style.display = "flex";
+}
+
+// 폐기물 결과 모달 닫기 및 후속 조치
+let wasteSuccessState = false;
+function closeWasteResultModal() {
+    document.getElementById("waste-result-modal").style.display = "none";
+    
+    if (wasteSuccessState) {
+        completeWasteAndShowChart();
+    } else {
+        // 틀린 물품 복구
+        const isNeedleCorrect = (wasteDrops.needle === "sharps");
+        const isSwabCorrect = (wasteDrops.swab === "general");
+        const isSyringeCorrect = (wasteDrops.syringe === "general");
+        
+        if (!isNeedleCorrect) {
+            document.getElementById("waste-needle").style.display = "block";
+            wasteDrops.needle = null;
+        }
+        if (!isSwabCorrect) {
+            document.getElementById("waste-swab").style.display = "block";
+            wasteDrops.swab = null;
+        }
+        if (!isSyringeCorrect) {
+            document.getElementById("waste-syringe").style.display = "block";
+            wasteDrops.syringe = null;
+        }
+        
+        document.getElementById("btn-waste-complete").style.display = "none";
+    }
+}
+
+// 공통 오답 모달 닫기
+function closeQuizWrongModal() {
+    document.getElementById("quiz-wrong-modal").style.display = "none";
+}
