@@ -147,7 +147,7 @@ body {
     border-radius: 10px; 
     box-shadow: 0 5px 15px rgba(229, 25, 55, 0.4); 
     transition: 0.2s; 
-    max-width: 90%;
+    max-width: max-content;
     text-align: center;
 }
 
@@ -858,16 +858,17 @@ th {
     position: absolute; 
     background: var(--bg-light); 
     border-radius: 20px; 
-    padding: 15px 30px; 
-    font-size: 1.35rem; 
+    padding: 10px 20px; 
+    font-size: 1.15rem; 
     font-weight: bold; 
     color: var(--text-color); 
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
     z-index: 20; 
     opacity: 0; 
     transition: opacity 0.5s; 
-    width: 90%;
-    max-width: 450px;
+    width: max-content;
+    max-width: 85%;
+    word-break: keep-all;
 }
 
 .speech-bubble.show { 
@@ -895,7 +896,7 @@ th {
 }
 
 .patient-bubble { 
-    top: 30%; 
+    top: 10%; 
     right: 20%; 
     border: 3px solid var(--primary-red); 
 }
@@ -921,7 +922,7 @@ th {
         bottom: 20%;
     }
     .patient-bubble {
-        top: 25%;
+        top: 8%;
         right: 5%;
     }
 }
@@ -1154,8 +1155,8 @@ th {
 }
 .waste-bins {
     display: flex;
-    gap: 15px;
-    justify-content: space-around;
+    gap: 50px;
+    justify-content: center;
     margin-top: 15px;
 }
 .bin {
@@ -1297,4 +1298,20 @@ th {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-5px); }
     40%, 80% { transform: translateX(5px); }
+}
+
+.nurse-intro-bubble {
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 3px solid var(--secondary-blue);
+    width: max-content;
+    max-width: 90%;
+    text-align: center;
+}
+
+#patient-room-med-card {
+    left: 100px;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
 }

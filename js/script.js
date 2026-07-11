@@ -239,7 +239,10 @@ function startMovingToPatientRoom() {
         
         // 병실 도착 후 수액 정보 카드 표시
         setTimeout(() => {
-            document.getElementById('patient-room-med-card').style.display = 'block'; 
+            const medCard = document.getElementById('patient-room-med-card');
+        medCard.style.display = 'block';
+        void medCard.offsetWidth;
+        medCard.style.opacity = '1'; 
         }, 1500); 
         
         // 간호사 첫인사 및 퀴즈 3 노출
@@ -410,9 +413,14 @@ function triggerStep(phase, actionKey) {
 // Phase 10: 수액 처방 설명으로 전환
 function goToExplain() {
     showScene("phase-prep-explain", "flex");
+    const bubble = document.getElementById("explain-speech");
+    if (bubble) {
+        bubble.style.display = "none";
+        bubble.style.opacity = "0";
+    }
     setTimeout(() => {
         document.getElementById("quiz6-modal").style.display = "flex";
-    }, 2500);
+    }, 300);
 }
 
 // 퀴즈 6 (수행항목 11) 정답 확인
@@ -421,10 +429,17 @@ function checkQuiz6(ans) {
         alert("정답입니다!");
         document.getElementById("quiz6-modal").style.display = "none";
         
-        document.getElementById("explain-speech").innerText = "설명 완료! 이제 침상 옆 수액걸대에 수액백을 걸고 환자의 팔 자세를 편안히 한 뒤 정맥 상태를 확인하겠습니다.";
+        const bubble = document.getElementById("explain-speech");
+        if (bubble) {
+            bubble.innerText = "안녕하세요 김이화님, 금식 기간동안 수분 공급을 위해 수액을 투약하겠습니다. 주사부위 통증이나 붓기가 느껴지면 말씀해주세요";
+            bubble.style.display = "block";
+            bubble.style.opacity = "1";
+            bubble.classList.add("show");
+        }
+        
         setTimeout(() => {
             showScene("phase-vein-prep", "flex");
-        }, 2000);
+        }, 4000);
     } else {
         alert("오답입니다. 환자에게 처방 수액의 목적(수분 공급), 예상되는 효과, 주의사항(통증/붓기 발생 시 알리기)을 명확하게 설명해야 합니다.");
         evaluation.step4 -= 10;
@@ -504,19 +519,22 @@ function checkQuiz9(ans) {
 // 2. 스타일렛 약간 뒤로 빼기 및 카테터 밀어넣기
 function advanceCatheter() {
     alert("카테터를 혈관 안으로 끝까지 밀어넣는 동안 내관(스타일렛)은 살짝 뒤로 잡아당겨 뺐습니다.");
+    document.getElementById("flashback-area").style.display = "none";
     document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
 // 3. 지혈대 해제
 function untieTourniquet() {
     alert("지혈대를 풀었습니다.");
-    document.getElementById("vein-insert-arm").src = "assets/주사삽입완료(팔찌적용).jpg";
+    // 이미지 변경을 스타일렛 제거 & 수액선 연결 때로 연기
     document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
 // 4. 내관 완전 제거 및 수액 커넥션 연결
 function removeStylusAndConnect() {
     alert("카테터 끝 부위(혈관 부분)를 눌러 혈액이 새지 않게 고정하고, 스타일렛을 재빨리 제거한 뒤 준비된 수액세트 튜브를 연결하였습니다!");
+    // 스타일렛 제거 및 수액 커넥션이 연결될 때 팔 이미지 갱신
+    document.getElementById("vein-insert-arm").src = "assets/주사삽입완료(팔찌적용).jpg";
     showScene("phase-flow-secure", "flex");
 }
 
@@ -528,7 +546,10 @@ function openRegulatorAndCheck() {
 
 // 2. 투명 드레싱 고정
 function secureCatheter() {
-    // document.getElementById("tegaderm-overlay").classList.add("active");
+    const tegaderm = document.getElementById("tegaderm-overlay");
+    if (tegaderm) {
+        tegaderm.classList.add("active");
+    }
     alert("투명 필름 드레싱을 정맥 카테터 삽입 부위에 정확히 밀착하여 감염 예방과 함께 단단히 고정하였습니다.");
     document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
@@ -554,9 +575,7 @@ function checkQuiz10(ans) {
 
 // 4. 드레싱 네임 라벨 작성
 function labelDressing() {
-    alert("드레싱용 고정 테이프 위에 삽입 날짜, 시간, 카테터 규격(24G)을 네임펜으로 꼼꼼하게 적어 부착했습니다.");
-    alert("주입 시술이 완료되었습니다. 사용 물품 정리 및 기록 작성을 위해 이동합니다.");
-    showScene("phase-document", "flex");
+    document.getElementById("quiz11-modal").style.display = "flex";
 }
 
 // -------------------------------------------------------------
@@ -615,9 +634,7 @@ function dropWaste(ev, binType) {
 
 // 쓰레기 분리배출 완료 및 기록지 노출
 function completeWasteAndShowChart() {
-    alert("폐기물 분리수거가 완전히 완료되었으며, 물 Soap을 활용하여 깨끗하게 손위생을 마쳤습니다. 간호기록지를 열어 작성하세요.");
-    document.querySelector(".waste-cleanup-box").style.display = "none";
-    document.getElementById("chart-area").style.display = "block";
+    document.getElementById("quiz12-modal").style.display = "flex";
 }
 
 // 간호기록지 제출 및 최종 점수 계산
@@ -631,15 +648,27 @@ function submitChart() {
         alert("틀렸습니다. 대상자 이름이 처방과 일치하지 않습니다. (김이화)");
         evaluation.step7 -= 20;
     }
-    if (!drug.toLowerCase().includes("saline") && !drug.includes("수액")) {
-        alert("틀렸습니다. 투약약물/수액명이 올바르지 않습니다. (Normal Saline 1000ml)");
+    const drugClean = drug.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9\/]/g, '');
+    const isDrugCorrect = drugClean.includes("ns1l") || 
+                          drugClean.includes("n/s1l") || 
+                          drugClean.includes("normalsaline1l") || 
+                          drugClean.includes("normalsaline1000ml") || 
+                          drugClean.includes("normalsalineinj") ||
+                          drugClean.includes("ns1000ml") ||
+                          drugClean.includes("n/s1000ml") ||
+                          drugClean.includes("saline") ||
+                          drugClean.includes("수액");
+    
+    if (!isDrugCorrect) {
+        alert("틀렸습니다. 투약약물/수액명이 올바르지 않습니다. (Normal Saline 1L, NS 1L, N/S 1L 등)");
         evaluation.step7 -= 25;
     }
     if (route.toUpperCase() !== "IV" && route.toUpperCase() !== "IVF") {
         alert("틀렸습니다. 투여 경로는 IV 또는 IVF 여야 합니다.");
         evaluation.step7 -= 20;
     }
-    if (speed !== "80") {
+    const speedClean = speed.toLowerCase().replace(/\s+/g, '');
+    if (speedClean !== "80" && speedClean !== "80cc/hr" && speedClean !== "80cc") {
         alert("틀렸습니다. 처방된 주입 속도는 80cc/hr(또는 80)입니다.");
         evaluation.step7 -= 20;
     }
@@ -662,4 +691,49 @@ function submitChart() {
     
     alert("기록 작성이 완료되었습니다. 최종 성적 보고서를 확인하세요!");
     showScene("phase-report", "flex");
+}
+
+// -------------------------------------------------------------
+// [10] 퀴즈 11 및 퀴즈 12 핸들러
+// -------------------------------------------------------------
+let quiz11PenaltyApplied = false;
+function checkQuiz11() {
+    const a1 = document.getElementById("q11-ans1").value.trim().toLowerCase();
+    const a2 = document.getElementById("q11-ans2").value.trim().toLowerCase();
+    const a3 = document.getElementById("q11-ans3").value.trim().toLowerCase();
+    const inputs = [a1, a2, a3];
+    
+    const hasDate = inputs.some(v => v.includes("날짜") || v.includes("일자") || v.includes("date") || v === "일");
+    const hasTime = inputs.some(v => v.includes("시간") || v.includes("시각") || v.includes("time"));
+    const hasSize = inputs.some(v => v.includes("크기") || v.includes("규격") || v.includes("게이지") || v.includes("g") || v.includes("size") || v.includes("굵기") || v.includes("규격"));
+    
+    if (hasDate && hasTime && hasSize) {
+        alert("정답입니다! 고정용 라벨에 삽입 날짜, 시간, 카테터 크기(규격)를 적어 부착합니다.");
+        document.getElementById("quiz11-modal").style.display = "none";
+        alert("정맥주사 삽입이 완료되었습니다. 사용 물품 정리 및 기록 작성을 위해 이동합니다.");
+        showScene("phase-document", "flex");
+    } else {
+        alert("틀렸습니다. 드레싱 고정 테이프(라벨)에 적어야 하는 3가지 주요 내용은 '삽입 날짜', '삽입 시간', '카테터 크기(규격)'입니다.");
+        if (!quiz11PenaltyApplied) {
+            evaluation.step6 -= 10;
+            quiz11PenaltyApplied = true;
+        }
+    }
+}
+
+let quiz12PenaltyApplied = false;
+function checkQuiz12(ans) {
+    if (ans === 3) {
+        alert("정답입니다! 물품 정리 직후에는 물과 비누로 깨끗이 손위생을 실시하여 병원균 전파를 막습니다.");
+        document.getElementById("quiz12-modal").style.display = "none";
+        alert("물과 비누를 활용하여 깨끗하게 손위생을 마쳤습니다. 간호기록지를 작성해 주세요.");
+        document.querySelector(".waste-cleanup-box").style.display = "none";
+        document.getElementById("chart-area").style.display = "block";
+    } else {
+        alert("틀렸습니다. 폐기물 정리 및 주변 환경 청소 후에는 즉시 물과 비누로 손위생을 실시해야 합니다.");
+        if (!quiz12PenaltyApplied) {
+            evaluation.step6 -= 10;
+            quiz12PenaltyApplied = true;
+        }
+    }
 }
