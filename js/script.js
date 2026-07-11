@@ -322,6 +322,91 @@ function startBraceletCheck() {
 let evaluation = { step4: 100, step5: 100, step6: 100, step7: 100 };
 let wasteState = { needle: false, swab: false, syringe: false };
 
+// 각 단계별 순서 정의 및 진행 인덱스 트래커
+let sequenceTracker = {
+    prep: {
+        sequence: ['tourniquet', 'sanitize', 'clean'], // 1. 지혈대, 2. 손소독, 3. 소독솜
+        currentIndex: 0,
+        buttonIds: {
+            tourniquet: 'btn-tie-tourniquet',
+            sanitize: 'btn-sanitize-vein',
+            clean: 'btn-clean-vein'
+        },
+        actions: {
+            tourniquet: tieTourniquet,
+            sanitize: sanitizeHandsForVein,
+            clean: cleanVeinSite
+        }
+    },
+    insert: {
+        sequence: ['insert', 'advance', 'untie', 'remove'], // 1. 바늘삽입, 2. 카테터진입, 3. 지혈대풀기, 4. 스타일렛제거&수액선연결
+        currentIndex: 0,
+        buttonIds: {
+            insert: 'btn-insert-catheter',
+            advance: 'btn-advance-catheter',
+            untie: 'btn-untie-tourniquet',
+            remove: 'btn-remove-stylus'
+        },
+        actions: {
+            insert: showQuiz9,
+            advance: advanceCatheter,
+            untie: untieTourniquet,
+            remove: removeStylusAndConnect
+        }
+    },
+    secure: {
+        sequence: ['open', 'secure', 'speed', 'label'], // 1. 조절기열기, 2. 테가덤고정, 3. 속도조절, 4. 라벨작성
+        currentIndex: 0,
+        buttonIds: {
+            open: 'btn-open-regulator',
+            secure: 'btn-secure-catheter',
+            speed: 'btn-adjust-speed',
+            label: 'btn-label-dressing'
+        },
+        actions: {
+            open: openRegulatorAndCheck,
+            secure: secureCatheter,
+            speed: showQuiz10,
+            label: labelDressing
+        }
+    }
+};
+
+// 순서 선택 트리거 함수
+function triggerStep(phase, actionKey) {
+    let phaseData = sequenceTracker[phase];
+    let expectedAction = phaseData.sequence[phaseData.currentIndex];
+    let clickedButton = document.getElementById(phaseData.buttonIds[actionKey]);
+    
+    // 클릭된 버튼의 흔들림(에러) 애니메이션 제거용 초기화
+    clickedButton.classList.remove('error');
+    void clickedButton.offsetWidth; // 리플로우 유도
+    
+    if (actionKey === expectedAction) {
+        // 올바른 순서인 경우
+        clickedButton.classList.add('completed');
+        
+        // 해당 액션 실행
+        phaseData.actions[actionKey]();
+        
+        // 인덱스 증가
+        phaseData.currentIndex++;
+    } else {
+        // 잘못된 순서인 경우
+        clickedButton.classList.add('error');
+        alert("🚨 순서가 맞지 않습니다! 핵심간호술 임상 절차를 다시 생각해보고 알맞은 순서의 버튼을 클릭하세요.");
+        
+        // 패널티 감점 적용
+        if (phase === 'prep') {
+            evaluation.step4 -= 10;
+        } else if (phase === 'insert') {
+            evaluation.step5 -= 10;
+        } else if (phase === 'secure') {
+            evaluation.step6 -= 10;
+        }
+    }
+}
+
 // Phase 10: 수액 처방 설명으로 전환
 function goToExplain() {
     showScene("phase-prep-explain", "flex");
@@ -336,7 +421,6 @@ function checkQuiz6(ans) {
         alert("정답입니다!");
         document.getElementById("quiz6-modal").style.display = "none";
         
-        // 말풍선 대사 변경 후 1.5초 뒤 정맥천자 준비 화면으로 전환
         document.getElementById("explain-speech").innerText = "설명 완료! 이제 침상 옆 수액걸대에 수액백을 걸고 환자의 팔 자세를 편안히 한 뒤 정맥 상태를 확인하겠습니다.";
         setTimeout(() => {
             showScene("phase-vein-prep", "flex");
@@ -347,7 +431,7 @@ function checkQuiz6(ans) {
     }
 }
 
-// 지혈대 적용 함수
+// 1. 지혈대 적용 함수
 function tieTourniquet() {
     document.getElementById("quiz7-modal").style.display = "flex";
 }
@@ -357,27 +441,25 @@ function checkQuiz7(ans) {
     if (ans === 2) {
         alert("정답입니다!");
         document.getElementById("quiz7-modal").style.display = "none";
-        
-        // 지혈대 묶인 팔 이미지로 전환
         document.getElementById("vein-prep-arm").src = "assets/토니켓적용(팔찌적용).jpg";
-        document.getElementById("btn-tie-tourniquet").style.display = "none";
-        document.getElementById("btn-sanitize-vein").style.display = "block";
-        document.getElementById("vein-prep-instruction").innerText = "천자 부위를 만지기 전에 손소독제로 손위생을 실시하세요.";
+        document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     } else {
         alert("틀렸습니다. 지혈대는 천자할 예정 부위의 12~15cm 위쪽에 묶어야 충분히 정맥류를 충혈시킬 수 있습니다.");
         evaluation.step4 -= 10;
+        // 지혈대 적용은 오답이어도 강제 적용 처리하여 다음 단계로 유도
+        document.getElementById("quiz7-modal").style.display = "none";
+        document.getElementById("vein-prep-arm").src = "assets/토니켓적용(팔찌적용).jpg";
+        document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     }
 }
 
-// 천자 전 손위생 함수
+// 2. 천자 전 손위생 함수
 function sanitizeHandsForVein() {
     alert("손소독제로 손위생을 실시하였습니다.");
-    document.getElementById("btn-sanitize-vein").style.display = "none";
-    document.getElementById("btn-clean-vein").style.display = "block";
-    document.getElementById("vein-prep-instruction").innerText = "소독솜을 사용해 주사부위를 소독하세요.";
+    document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
-// 소독솜 닦기 함수
+// 3. 소독솜 닦기 함수
 function cleanVeinSite() {
     document.getElementById("quiz8-modal").style.display = "flex";
 }
@@ -387,16 +469,18 @@ function checkQuiz8(ans) {
     if (ans === 1) {
         alert("정답입니다!");
         document.getElementById("quiz8-modal").style.display = "none";
-        
         alert("소독솜으로 주사 예정 부위를 깨끗이 소독하고 건조시켰습니다. 정맥천자 단계로 진입합니다.");
         showScene("phase-vein-insert", "flex");
     } else {
         alert("틀렸습니다. 피부의 안쪽에서 바깥쪽으로 둥글게 원을 그리며 5~8cm 직경으로 소독해야 균을 변두리로 밀어낼 수 있습니다.");
         evaluation.step4 -= 10;
+        document.getElementById("quiz8-modal").style.display = "none";
+        alert("정맥천자 단계로 진입합니다.");
+        showScene("phase-vein-insert", "flex");
     }
 }
 
-// Phase 12 바늘 삽입 퀴즈 노출
+// Phase 12: 1. 바늘 삽입 퀴즈 노출
 function showQuiz9() {
     document.getElementById("quiz9-modal").style.display = "flex";
 }
@@ -406,59 +490,50 @@ function checkQuiz9(ans) {
     if (ans === 1) {
         alert("정답입니다!");
         document.getElementById("quiz9-modal").style.display = "none";
-        
-        // 혈액 역류 알림 영역 표시 및 다음 진행 버튼 토글
         document.getElementById("flashback-area").style.display = "block";
-        document.getElementById("btn-insert-catheter").style.display = "none";
-        document.getElementById("btn-advance-catheter").style.display = "block";
-        document.getElementById("vein-insert-instruction").innerText = "카테터 중심부를 고정하고 탐침(내관)을 밀어내며 진입각도를 낮춰 카테터를 끝까지 삽입하세요.";
+        document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     } else {
         alert("틀렸습니다. 카테터의 빗면(사면)이 위를 향하게 하여 정맥의 흐름 방향을 따라 15도~30도의 각도로 비스듬히 천자해야 합니다.");
         evaluation.step5 -= 10;
+        document.getElementById("quiz9-modal").style.display = "none";
+        document.getElementById("flashback-area").style.display = "block";
+        document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     }
 }
 
-// 스타일렛 약간 뒤로 빼기 및 카테터 밀어넣기
+// 2. 스타일렛 약간 뒤로 빼기 및 카테터 밀어넣기
 function advanceCatheter() {
     alert("카테터를 혈관 안으로 끝까지 밀어넣는 동안 내관(스타일렛)은 살짝 뒤로 잡아당겨 뺐습니다.");
-    document.getElementById("btn-advance-catheter").style.display = "none";
-    document.getElementById("btn-untie-tourniquet").style.display = "block";
-    document.getElementById("vein-insert-instruction").innerText = "카테터 진입 완료 후 지혈대를 풀어주세요.";
+    document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
-// 지혈대 해제
+// 3. 지혈대 해제
 function untieTourniquet() {
     alert("지혈대를 풀었습니다.");
     document.getElementById("vein-insert-arm").src = "assets/주사삽입완료(팔찌적용).jpg";
-    document.getElementById("btn-untie-tourniquet").style.display = "none";
-    document.getElementById("btn-remove-stylus").style.display = "block";
-    document.getElementById("vein-insert-instruction").innerText = "혈관 끝 부위를 누른 채 스타일렛을 제거하고 수액세트의 커넥터를 재빨리 연결하세요.";
+    document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
-// 내관 완전 제거 및 수액 커넥션 연결
+// 4. 내관 완전 제거 및 수액 커넥션 연결
 function removeStylusAndConnect() {
     alert("카테터 끝 부위(혈관 부분)를 눌러 혈액이 새지 않게 고정하고, 스타일렛을 재빨리 제거한 뒤 준비된 수액세트 튜브를 연결하였습니다!");
     showScene("phase-flow-secure", "flex");
 }
 
-// Phase 13: 조절기 열기 및 관찰
+// Phase 13: 1. 조절기 열기 및 관찰
 function openRegulatorAndCheck() {
     alert("조절기를 완전히 열어 수액 방울이 잘 떨어지는지 확인하고, 주사 부위에 붓기(부종), 통증, 새는 부분(침윤)이 없는지 꼼꼼히 관찰하였습니다.");
-    document.getElementById("btn-open-regulator").style.display = "none";
-    document.getElementById("btn-secure-catheter").style.display = "block";
-    document.getElementById("flow-secure-instruction").innerText = "수액 흐름 확인 완료. 이제 투명 드레싱(Tegaderm)으로 고정하세요.";
+    document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
-// 투명 드레싱 고정
+// 2. 투명 드레싱 고정
 function secureCatheter() {
-    document.getElementById("tegaderm-overlay").classList.add("active");
+    // document.getElementById("tegaderm-overlay").classList.add("active");
     alert("투명 필름 드레싱을 정맥 카테터 삽입 부위에 정확히 밀착하여 감염 예방과 함께 단단히 고정하였습니다.");
-    document.getElementById("btn-secure-catheter").style.display = "none";
-    document.getElementById("btn-adjust-speed").style.display = "block";
-    document.getElementById("flow-secure-instruction").innerText = "드레싱 부착 완료. EMR 처방 속도에 맞게 속도를 조절하세요.";
+    document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
-// 주입 속도 조절 퀴즈
+// 3. 주입 속도 조절 퀴즈
 function showQuiz10() {
     document.getElementById("quiz10-modal").style.display = "flex";
 }
@@ -468,17 +543,16 @@ function checkQuiz10(ans) {
     if (ans === 2) {
         alert("정답입니다!");
         document.getElementById("quiz10-modal").style.display = "none";
-        
-        document.getElementById("btn-adjust-speed").style.display = "none";
-        document.getElementById("btn-label-dressing").style.display = "block";
-        document.getElementById("flow-secure-instruction").innerText = "속도 조절 완료. 고정 부위에 부착할 네임 라벨을 작성하세요.";
+        document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     } else {
         alert("틀렸습니다. 처방된 IVF 주입 속도는 80cc/hr(약 80방울/시간 비율)입니다.");
         evaluation.step6 -= 10;
+        document.getElementById("quiz10-modal").style.display = "none";
+        document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     }
 }
 
-// 드레싱 네임 라벨 작성
+// 4. 드레싱 네임 라벨 작성
 function labelDressing() {
     alert("드레싱용 고정 테이프 위에 삽입 날짜, 시간, 카테터 규격(24G)을 네임펜으로 꼼꼼하게 적어 부착했습니다.");
     alert("주입 시술이 완료되었습니다. 사용 물품 정리 및 기록 작성을 위해 이동합니다.");
@@ -589,4 +663,3 @@ function submitChart() {
     alert("기록 작성이 완료되었습니다. 최종 성적 보고서를 확인하세요!");
     showScene("phase-report", "flex");
 }
-

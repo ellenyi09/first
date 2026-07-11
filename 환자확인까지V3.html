@@ -426,13 +426,13 @@
         </div>
         
         <div class="prep-tools">
-            <button id="btn-tie-tourniquet" class="tool-btn" onclick="tieTourniquet()">지혈대 묶기 (12~15cm 위)</button>
-            <button id="btn-sanitize-vein" class="tool-btn" style="display:none;" onclick="sanitizeHandsForVein()">손소독제 사용</button>
-            <button id="btn-clean-vein" class="tool-btn" style="display:none;" onclick="cleanVeinSite()">알코올 스왑 소독</button>
+            <button id="btn-clean-vein" class="tool-btn" onclick="triggerStep('prep', 'clean')">알코올 스왑 소독</button>
+            <button id="btn-tie-tourniquet" class="tool-btn" onclick="triggerStep('prep', 'tourniquet')">지혈대 묶기</button>
+            <button id="btn-sanitize-vein" class="tool-btn" onclick="triggerStep('prep', 'sanitize')">손소독제 사용</button>
         </div>
         
         <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="vein-prep-instruction">
-            먼저 지혈대를 적절한 위치에 묶어주세요.
+            올바른 다음 절차의 버튼을 순서대로 골라 클릭하세요.
         </div>
     </div>
 
@@ -473,14 +473,14 @@
         </div>
 
         <div class="prep-tools">
-            <button id="btn-insert-catheter" class="tool-btn" onclick="showQuiz9()">정맥천자 바늘 삽입</button>
-            <button id="btn-advance-catheter" class="tool-btn" style="display:none;" onclick="advanceCatheter()">탐침 빼기 및 카테터 밀어넣기</button>
-            <button id="btn-untie-tourniquet" class="tool-btn" style="display:none;" onclick="untieTourniquet()">지혈대 풀기</button>
-            <button id="btn-remove-stylus" class="tool-btn" style="display:none;" onclick="removeStylusAndConnect()">스타일렛(탐침) 제거 & 수액선 연결</button>
+            <button id="btn-untie-tourniquet" class="tool-btn" onclick="triggerStep('insert', 'untie')">지혈대 풀기</button>
+            <button id="btn-remove-stylus" class="tool-btn" onclick="triggerStep('insert', 'remove')">스타일렛(탐침) 제거 & 수액선 연결</button>
+            <button id="btn-insert-catheter" class="tool-btn" onclick="triggerStep('insert', 'insert')">정맥천자 바늘 삽입</button>
+            <button id="btn-advance-catheter" class="tool-btn" onclick="triggerStep('insert', 'advance')">탐침 빼기 및 카테터 밀어넣기</button>
         </div>
         
         <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="vein-insert-instruction">
-            정맥천자 바늘을 혈류 방향에 맞춰 삽입하세요.
+            올바른 다음 절차의 버튼을 순서대로 골라 클릭하세요.
         </div>
     </div>
 
@@ -500,18 +500,18 @@
         <h2 style="color:white; margin-top: 20px;">수액 주입 확인 및 고정</h2>
         <div class="arm-container">
             <img src="assets/주사삽입완료(팔찌적용).jpg" class="arm-image" alt="주사 삽입 완료">
-            <div id="tegaderm-overlay" class="tegaderm-overlay">Tegaderm 고정 완료</div>
+            
         </div>
         
         <div class="prep-tools">
-            <button id="btn-open-regulator" class="tool-btn" onclick="openRegulatorAndCheck()">조절기 열기 및 주입부 관찰</button>
-            <button id="btn-secure-catheter" class="tool-btn" style="display:none;" onclick="secureCatheter()">투명 드레싱(테가덤) 고정</button>
-            <button id="btn-adjust-speed" class="tool-btn" style="display:none;" onclick="showQuiz10()">수액 속도 조절</button>
-            <button id="btn-label-dressing" class="tool-btn" style="display:none;" onclick="labelDressing()">드레싱 라벨 작성</button>
+            <button id="btn-secure-catheter" class="tool-btn" onclick="triggerStep('secure', 'secure')">투명 드레싱(테가덤) 고정</button>
+            <button id="btn-open-regulator" class="tool-btn" onclick="triggerStep('secure', 'open')">조절기 열기 및 주입부 관찰</button>
+            <button id="btn-label-dressing" class="tool-btn" onclick="triggerStep('secure', 'label')">드레싱 라벨 작성</button>
+            <button id="btn-adjust-speed" class="tool-btn" onclick="triggerStep('secure', 'speed')">수액 속도 조절</button>
         </div>
         
         <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="flow-secure-instruction">
-            조절기를 풀어 수액이 정상적으로 흐르는지 확인하고 부위의 부종/통증 여부를 관찰하세요.
+            올바른 다음 절차의 버튼을 순서대로 골라 클릭하세요.
         </div>
     </div>
 
@@ -539,10 +539,12 @@
                 <h3 style="margin-bottom: 10px;">🗑️ 의료폐기물 분리 배출 (드래그하여 배출)</h3>
                 <div class="waste-bins">
                     <div id="bin-sharps" class="bin bin-sharps" ondrop="dropWaste(event, 'sharps')" ondragover="allowWasteDrop(event)" ondragleave="leaveWasteBin(event)">
-                        손상성 폐기물<br>(주사바늘 등)
+                        <img src="assets/sharps_container.jpg" alt="손상성 폐기물 용기" style="width: 110px; height: 110px; object-fit: contain; margin-bottom: 8px; pointer-events: none;">
+                        <span>손상성 폐기물<br>(주사바늘 등)</span>
                     </div>
                     <div id="bin-general" class="bin bin-general" ondrop="dropWaste(event, 'general')" ondragover="allowWasteDrop(event)" ondragleave="leaveWasteBin(event)">
-                        일반 의료폐기물<br>(소독솜/주사기 등)
+                        <img src="assets/biohazard_bin.jpg" alt="일반 의료폐기물 용기" style="width: 110px; height: 110px; object-fit: contain; margin-bottom: 8px; pointer-events: none;">
+                        <span>일반 의료폐기물<br>(소독솜/주사기 등)</span>
                     </div>
                 </div>
                 
@@ -595,15 +597,15 @@
               <div class="report-details">
                   <div class="report-item">
                       <span class="report-item-title">1단계: EMR 처방 및 투약카드 발행 (1~3항목)</span>
-                      <span class="report-item-status">통과 (100)</span>
+                      <span class="report-item-status">통과 (100점)</span>
                   </div>
                   <div class="report-item">
                       <span class="report-item-title">2단계: 수액 선택 및 트레이 세팅 (4~7항목)</span>
-                      <span class="report-item-status">통과 (100)</span>
+                      <span class="report-item-status">통과 (100점)</span>
                   </div>
                   <div class="report-item">
                       <span class="report-item-title">3단계: 환자 식별 및 개방형 질문 (8~10항목)</span>
-                      <span class="report-item-status">통과 (100)</span>
+                      <span class="report-item-status">통과 (100점)</span>
                   </div>
                   <div class="report-item">
                       <span class="report-item-title">4단계: 약물 설명 및 정맥천자 준비 (11~16항목)</span>
