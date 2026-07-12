@@ -686,7 +686,7 @@ function submitChart() {
     
     if (!isDrugCorrect) {
         errorFields.push("chart-drug");
-        errorMsgs.push("투여약물/수액");
+        errorMsgs.push("투여약물");
         evaluation.step7 -= 25;
     }
     
@@ -865,7 +865,7 @@ function showWrongModal(customText) {
     }
     wrongModalTimeout = setTimeout(() => {
         closeQuizWrongModal();
-    }, 1000);
+    }, 2500);
 }
 
 // 의료폐기물 분리수거 상태 일괄 검증
