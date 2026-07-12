@@ -147,36 +147,41 @@
             </div>
         </div>
         <div class="shelf-container">
-            <!-- 오답 핫스팟들 -->
-            <div class="hotspot-wrong" style="top: 10%; left: 20%; width: 18%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 10%; left: 40%; width: 18%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 10%; left: 60%; width: 20%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 20%; width: 15%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 36%; width: 14%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 51%; width: 14%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 66%; width: 14%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 40%; left: 20%; width: 18%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 40%; left: 40%; width: 18%; height: 12%;" onclick="wrongFluid()"></div>
-            
-            <!-- 정답 핫스팟 -->
+            <!-- Row 1 (3 Baskets) -> top: 10%, height: 12% -->
+            <div class="hotspot-wrong" style="top: 10%; left: 20.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 10%; left: 39.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 10%; left: 58.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+
+            <!-- Row 2 (4 Baskets) -> top: 25%, height: 12% -->
+            <div class="hotspot-wrong" style="top: 25%; left: 20.5%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 25%; left: 34.75%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 25%; left: 49%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 25%; left: 63.25%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
+
+            <!-- Row 3 (3 Baskets - Slot 3 is Correct N/S 1L) -> top: 40%, height: 12% -->
+            <div class="hotspot-wrong" style="top: 40%; left: 20.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 40%; left: 39.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
             <div class="hotspot-ns1l" onclick="showQuiz2()"></div>
-            
-            <div class="hotspot-wrong" style="top: 54%; left: 20%; width: 9%; height: 11%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 54%; left: 30%; width: 9%; height: 11%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 54%; left: 40%; width: 9%; height: 11%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 54%; left: 50%; width: 9%; height: 11%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 54%; left: 60%; width: 9%; height: 11%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 54%; left: 70%; width: 9%; height: 11%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 67%; left: 20%; width: 18%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 67%; left: 40%; width: 18%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 67%; left: 60%; width: 20%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 81%; left: 20%; width: 18%; height: 13%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 81%; left: 40%; width: 18%; height: 13%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 81%; left: 60%; width: 20%; height: 13%;" onclick="wrongFluid()"></div>
-        </div>
-        <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 20px; font-weight: bold; color: #fff; text-shadow: 1px 1px 5px #000;">투약카드와 일치하는 수액을 찾아 클릭하세요.</div>
-    </div>
-    
+
+            <!-- Row 4 (6 Small Baskets) -> top: 54%, height: 11% -->
+            <div class="hotspot-wrong" style="top: 54%; left: 20.5%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 54%; left: 30%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 54%; left: 39.5%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 54%; left: 49%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 54%; left: 58.5%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 54%; left: 68%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
+
+            <!-- Row 5 (3 Baskets) -> top: 67%, height: 12% -->
+            <div class="hotspot-wrong" style="top: 67%; left: 20.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 67%; left: 39.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 67%; left: 58.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+
+            <!-- Row 6 (3 Baskets) -> top: 81%, height: 13% -->
+            <div class="hotspot-wrong" style="top: 81%; left: 20.5%; width: 19%; height: 13%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 81%; left: 39.5%; width: 19%; height: 13%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 81%; left: 58.5%; width: 19%; height: 13%;" onclick="wrongFluid()"></div>
+        </div></div>
+
     <!-- 퀴즈 2 모달 -->
     <div id="quiz2-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
@@ -204,14 +209,10 @@
             </div>
         </div>
     </div>
-
-    <!-- =================================================================
-         [3] Phase 5 ~ 6: 물품 준비 퀴즈 & 수액 세팅 (조립/폴대)
-    ================================================================== -->
     <!-- Phase 5: 물품 준비 -->
     <div id="phase-prep-room" class="scene">
         <div id="equipment-selection">
-            <div class="eq-title">📝 정맥 수액 주입에 필요한 물품을 모두 고르세요 (9개)</div>
+            <div class="eq-title">📝 정맥 수액 주입에 필요한 물품을 모두 고르세요</div>
             <div class="eq-grid">
                 <button class="eq-btn" data-ans="1" onclick="this.classList.toggle('selected')">정맥 카테터</button>
                 <button class="eq-btn" data-ans="1" onclick="this.classList.toggle('selected')">수액세트</button>
@@ -301,23 +302,7 @@
     ================================================================== -->
     <!-- Phase 7 & 8: 병실 이동 -->
     <div id="phase-moving" class="scene">
-        <div class="med-card fixed-med-card" id="patient-room-med-card" style="display:none; z-index: 10;">
-            <div class="card-header">
-                <div class="fake-qr"></div>
-                <div style="float: right; font-size: 11px;"></div>
-                <div style="margin-left: 55px;">
-                    2026-07-09<br>
-                    <strong style="font-size: 15px;">07-01 김이화</strong><br>
-                    12345678(1971-04-26)
-                </div>
-            </div>
-            <div class="card-med">Normal saline inj (JW) [1000ml]</div>
-            <div class="card-details">
-                ● 1BAG ★1일 2회, 지시 속도로<br>
-                정맥내 점적주사<br><br>
-                80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
-            </div>
-        </div>
+
         
         <div id="nurse-speech-1" class="speech-bubble nurse-intro-bubble">안녕하세요, 환자분 담당간호사 이간호입니다.</div>
         <div id="patient-reply" class="speech-bubble patient-bubble">김이화입니다.</div>
@@ -338,7 +323,7 @@
     <div id="quiz4-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
             <div class="quiz-title">📝 퀴즈 5</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">환자에게 어떻게 질문하시겠습니까?</p>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">손위생 후 환자에게 할 말로 옳은 것을 고르세요.</p>
             <button class="quiz-option" onclick="checkQuiz4(1)">① 수액 처방이 있어서 주사 드리러 왔습니다.</button>
             <button class="quiz-option" onclick="checkQuiz4(2)">② 환자분 성함이 어떻게 되세요?</button>
             <button class="quiz-option" onclick="checkQuiz4(3)">③ 환자분 팔찌 확인하겠습니다.</button>
@@ -350,18 +335,34 @@
     <div id="quiz5-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
             <div class="quiz-title">📝 퀴즈 6</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">이름을 대답한 환자에게 다음으로 할 말은?</p>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">이름을 대답한 환자에게 다음으로 할 말로 옳은 것은?</p>
             <button class="quiz-option" onclick="checkQuiz5(1)">① 네, 확인 완료했습니다. 정맥 주사 삽입하러 왔어요.</button>
             <button class="quiz-option" onclick="checkQuiz5(2)">② 네, 성함 확인했습니다. 1971년 4월 26일생 맞으시죠?</button>
-            <button class="quiz-option" onclick="checkQuiz5(3)">③ 네, 성함 확인했습니다. 정확한 확인을 위해 팔찌 한번 보여주시겠어요?</button>
+            <button class="quiz-option" onclick="checkQuiz5(3)">③ 네, 성함 확인했습니다.<br>정확한 확인을 위해 팔찌 한번 보여주시겠어요?</button>
         </div>
     </div>
+
+    <!-- 퀴즈 5b 모달 (대조 확인할 항목 다중 선택 - 신규 퀴즈 7) -->
+    <div id="quiz5b-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal" style="width: 580px; max-width: 95%;">
+            <div class="quiz-title">📝 퀴즈 7</div>
+            <p style="margin-bottom: 20px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">
+                대상자 확인을 위해 입원팔찌와 투약카드에서 대조하여 확인할 항목으로 옳은 것을 모두 고르세요.
+            </p>
+            <label class="quiz-checkbox-label"><input type="checkbox" id="q5b-opt1"> ① 처방 날짜</label>
+            <label class="quiz-checkbox-label"><input type="checkbox" id="q5b-opt2"> ② 환자명</label>
+            <label class="quiz-checkbox-label"><input type="checkbox" id="q5b-opt3"> ③ 혈액형</label>
+            <label class="quiz-checkbox-label"><input type="checkbox" id="q5b-opt4"> ④ 생년월일</label>
+            <label class="quiz-checkbox-label"><input type="checkbox" id="q5b-opt5"> ⑤ 환자 등록번호</label>
+            <button class="btn-submit" onclick="checkQuiz5b()" style="margin-top: 15px; width: 100%;">제출하기</button>
+        </div>
+    </div>>
 
     <!-- =================================================================
          [5] Phase 9: 환자 팔찌 및 투약카드 대조 (최종 확인)
     ================================================================== -->
     <div id="phase-verify" class="scene">
-        <h1 style="position: absolute; top: 40px; color: white; width: 100%; text-align: center; text-shadow: 0 5px 10px rgba(0,0,0,0.5);">대상자 이름과 등록번호 교차 확인 중...</h1>
+        <h1 style="position: absolute; top: 40px; color: white; width: 100%; text-align: center; text-shadow: 0 5px 10px rgba(0,0,0,0.5);">환자명과 등록번호 교차 확인 중...</h1>
         
         <div class="verify-item">
             <div class="med-card" style="box-shadow: none; font-size: 16px; width: 300px; height: 320px;">
@@ -402,22 +403,7 @@
     ================================================================== -->
     <!-- Phase 10: 처방 설명 및 자세 취하기 -->
     <div id="phase-prep-explain" class="scene">
-        <div class="med-card fixed-med-card" style="display:block; z-index: 10;">
-            <div class="card-header">
-                <div class="fake-qr"></div>
-                <div style="margin-left: 55px;">
-                    2026-07-09<br>
-                    <strong style="font-size: 15px;">07-01 김이화</strong><br>
-                    12345678(1971-04-26)
-                </div>
-            </div>
-            <div class="card-med">Normal saline inj (JW) [1000ml]</div>
-            <div class="card-details">
-                ● 1BAG ★1일 2회, 지시 속도로<br>
-                정맥내 점적주사<br><br>
-                80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
-            </div>
-        </div>
+
         
         <div id="explain-speech" class="speech-bubble nurse-bubble" style="display:none; opacity:0;">안녕하세요 김이화님, 금식 기간동안 수분 공급을 위해 수액을 투약하겠습니다. 주사부위 통증이나 붓기가 느껴지면 말씀해주세요</div>
     </div>
@@ -425,8 +411,8 @@
     <!-- 퀴즈 7 모달 (수행항목 11) -->
     <div id="quiz6-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 7</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">환자에게 설명할 내용으로 투약 설명 원칙에 가장 적합한 것은 무엇일까요?</p>
+            <div class="quiz-title">📝 퀴즈 8</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">환자에게 제공할 투약 설명으로 가장 적합한 것은 무엇일까요?</p>
             <button class="quiz-option" onclick="checkQuiz6(1)">① 금식기간 동안 수분 공급을 위해 투약할 수액입니다. 주사 부위 통증이나 붓기가 있으면 바로 알려주세요.</button>
             <button class="quiz-option" onclick="checkQuiz6(2)">② 수액 처방이 있어서 주사 드리러 왔어요.</button>
             <button class="quiz-option" onclick="checkQuiz6(3)">③ 수액이 잘 안들어가면 환자분께서 조절하셔도 됩니다.</button>
@@ -454,7 +440,7 @@
     <!-- 퀴즈 8 모달 (수행항목 14) -->
     <div id="quiz7-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 8</div>
+            <div class="quiz-title">📝 퀴즈 9</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">지혈대(Tourniquet)는 정맥 천자할 부위보다 얼마큼 위쪽에 묶어야 할까요?</p>
             <button class="quiz-option" onclick="checkQuiz7(1)">① 천자 예정 부위 바로 위 (1~2cm)</button>
             <button class="quiz-option" onclick="checkQuiz7(2)">② 천자 예정 부위보다 위쪽으로 12~15cm</button>
@@ -465,7 +451,7 @@
     <!-- 퀴즈 9 모달 (수행항목 16) -->
     <div id="quiz8-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 9</div>
+            <div class="quiz-title">📝 퀴즈 10</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">소독솜으로 정맥천자 예정 부위를 닦는 올바른 방법은 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz8(1)">① 안에서 밖으로 5~8cm 정도 둥글게 닦아낸다.</button>
             <button class="quiz-option" onclick="checkQuiz8(2)">② 밖에서 안으로 원을 그리며 모아 닦는다.</button>
@@ -502,7 +488,7 @@
     <!-- 퀴즈 10 모달 (수행항목 17) --><!-- 퀴즈 9 모달 (수행항목 17) -->
     <div id="quiz9-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 10</div>
+            <div class="quiz-title">📝 퀴즈 11</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">카테터를 삽입할 때 바늘의 사면(bevel) 방향과 적절한 진입 각도는 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz9(1)">① 사면이 위로 오도록 하여, 15°~30° 각도로 삽입한다.</button>
             <button class="quiz-option" onclick="checkQuiz9(2)">② 사면이 아래로 오도록 하여, 45° 각도로 삽입한다.</button>
@@ -513,7 +499,7 @@
     <!-- 퀴즈 11 모달 -->
     <div id="quiz9b-modal" class="quiz-modal-overlay">
         <div class="quiz-modal" style="max-width: 480px;">
-            <div class="quiz-title">📝 퀴즈 11</div>
+            <div class="quiz-title">📝 퀴즈 12</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">다음 중 옳은 설명을 고르세요.</p>
             <button class="quiz-option" style="text-align: left; padding: 10px;" onclick="checkQuiz9b(1)">① 카테터를 혈관으로 진입시킬 때는 삽입각도를 약간 높여야 한다.</button>
             <button class="quiz-option" style="text-align: left; padding: 10px;" onclick="checkQuiz9b(2)">② 카테터 내로 혈액이 역류되면 바로 탐침을 빼낸다.</button>
@@ -525,7 +511,7 @@
     <!-- 퀴즈 12 모달 (지혈대 제거 OX) -->
     <div id="quiz9c-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 12</div>
+            <div class="quiz-title">📝 퀴즈 13</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">
                 [OX 퀴즈] 설명을 보고, OX로 답을 고르세요.<br><br>
                 "지혈대 제거는 카테터를 잡은 손으로 해도 상관없다."
@@ -539,23 +525,7 @@
 
     <!-- Phase 13: 수액 주입 확인 및 고정 -->
     <div id="phase-flow-secure" class="scene">
-        <!-- EMR 카드 추가 (속도 조절 퀴즈 10 풀이 시 참고용) -->
-        <div class="med-card fixed-med-card" style="display:block; z-index: 10;">
-            <div class="card-header">
-                <div class="fake-qr"></div>
-                <div style="margin-left: 55px;">
-                    2026-07-09<br>
-                    <strong style="font-size: 15px;">07-01 김이화</strong><br>
-                    12345678(1971-04-26)
-                </div>
-            </div>
-            <div class="card-med">Normal saline inj (JW) [1000ml]</div>
-            <div class="card-details">
-                ● 1BAG ★1일 2회, 지시 속도로<br>
-                정맥내 점적주사<br><br>
-                80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
-            </div>
-        </div>
+        
         <h2 style="color:white; margin-top: 20px;">수액 주입 확인 및 고정</h2>
         <div class="arm-container">
             <img src="assets/주사삽입완료(팔찌적용).jpg" class="arm-image" alt="주사 삽입 완료">
@@ -565,7 +535,7 @@
         <div class="prep-tools">
             <button id="btn-secure-catheter" class="tool-btn" onclick="triggerStep('secure', 'secure')">투명 드레싱(테가덤) 고정</button>
             <button id="btn-open-regulator" class="tool-btn" onclick="triggerStep('secure', 'open')">조절기 열기 및 주입부 관찰</button>
-            <button id="btn-label-dressing" class="tool-btn" onclick="triggerStep('secure', 'label')">드레싱 라벨 작성</button>
+            <button id="btn-label-dressing" class="tool-btn" onclick="triggerStep('secure', 'label')">고정 드레싱 기록 작성</button>
             <button id="btn-adjust-speed" class="tool-btn" onclick="triggerStep('secure', 'speed')">수액 속도 조절</button>
         </div>
         
@@ -576,12 +546,49 @@
 
     <!-- 퀴즈 13 모달 (수행항목 24) -->
     <div id="quiz10-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal" style="max-width: 750px; width: 90%;">
+            <div class="quiz-title">📝 퀴즈 14</div>
+            <p style="margin-bottom: 20px; font-size: 18px; font-weight: bold;">처방(EMR)에 따른 정확한 주입 속도는 몇 cc/hr로 세팅해야 할까요?</p>
+            
+            <div style="display: flex; gap: 30px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <!-- EMR 투약카드 -->
+                <div class="med-card" style="box-shadow: 0 4px 15px rgba(0,0,0,0.15); border: 1px solid #ddd; margin: 0; text-align: left; background: #ffffff;">
+                    <div class="card-header">
+                        <div class="fake-qr"></div>
+                        <div style="margin-left: 55px;">
+                            2026-07-09<br>
+                            <strong style="font-size: 15px;">07-01 김이화</strong><br>
+                            12345678(1971-04-26)
+                        </div>
+                    </div>
+                    <div class="card-med" style="color: #2c3e50; font-weight: bold;">Normal saline inj (JW) [1000ml]</div>
+                    <div class="card-details" style="color: #555555; line-height: 1.5;">
+                        ● 1BAG ★1일 2회, 지시 속도로<br>
+                        정맥내 점적주사<br><br>
+                        80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
+                    </div>
+                </div>
+                
+                <!-- 보기 영역 -->
+                <div style="display: flex; flex-direction: column; gap: 12px; width: 280px;">
+                    <button class="quiz-option" style="margin: 0; width: 100%;" onclick="checkQuiz10(1)">① 120 cc/hr</button>
+                    <button class="quiz-option" style="margin: 0; width: 100%;" onclick="checkQuiz10(2)">② 80 cc/hr</button>
+                    <button class="quiz-option" style="margin: 0; width: 100%;" onclick="checkQuiz10(3)">③ 40 cc/hr</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 퀴즈 10b 모달 (주입속도 방울 계산 - 신규 퀴즈 14) -->
+    <div id="quiz10b-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 13</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">처방(EMR)에 따른 정확한 주입 속도는 몇 cc/hr로 세팅해야 할까요?</p>
-            <button class="quiz-option" onclick="checkQuiz10(1)">① 120 cc/hr</button>
-            <button class="quiz-option" onclick="checkQuiz10(2)">② 80 cc/hr</button>
-            <button class="quiz-option" onclick="checkQuiz10(3)">③ 40 cc/hr</button>
+            <div class="quiz-title">📝 퀴즈 15</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">80cc/hr는 몇 초에 한 방울일까요?</p>
+            <button class="quiz-option" onclick="checkQuiz10b(1)">① 1.5초</button>
+            <button class="quiz-option" onclick="checkQuiz10b(2)">② 1.8초</button>
+            <button class="quiz-option" onclick="checkQuiz10b(3)">③ 2.3초</button>
+            <button class="quiz-option" onclick="checkQuiz10b(4)">④ 3초</button>
+            <button class="quiz-option" onclick="checkQuiz10b(5)">⑤ 4.5초</button>
         </div>
     </div>
 
@@ -590,7 +597,7 @@
     ================================================================== -->
     <!-- Phase 14: 정리 및 간호기록지 작성 -->
     <div id="phase-document" class="scene">
-        <h2>정리 및 수행 결과 기록</h2>
+        <h2>사용 물품 정리</h2>
         
         <div class="document-layout">
             <!-- 쓰레기 정리 (드래그 앤 드롭) -->
@@ -618,7 +625,7 @@
             
             <!-- 간호 기록지 작성 -->
             <div id="chart-area" class="chart-box" style="display:none;">
-                <h3>📝 간호기록 및 투약기록 작성 (5 Rights)</h3>
+                <h3>📝 간호기록 및 투약기록 작성</h3>
                 <table class="chart-table">
                     <tr>
                         <th>대상자명</th>
@@ -694,8 +701,8 @@
     <!-- 퀴즈 14 모달 (라벨 기록 내용) -->
     <div id="quiz11-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 14</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">고정 테이프(라벨)에 작성해야 할 3가지 주요 항목을 적어보세요.</p>
+            <div class="quiz-title">📝 퀴즈 16</div>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">고정 드레싱에 기록해야 할 3가지 주요 항목을 적어보세요.</p>
             <div style="text-align: left; margin: 15px auto; max-width: 320px; font-size: 16px;">
                 <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
                     <span style="color: white; font-weight: bold; width: 60px;">항목 1:</span>
@@ -717,7 +724,7 @@
     <!-- 퀴즈 15 모달 (폐기물 처리 후 할 일) -->
     <div id="quiz12-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
-            <div class="quiz-title">📝 퀴즈 15</div>
+            <div class="quiz-title">📝 퀴즈 17</div>
             <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">물품 정리를 완료한 직후에 수행해야 할 가장 알맞은 일은 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz12(1)">① 간호기록 작성</button>
             <button class="quiz-option" onclick="checkQuiz12(2)">② 환자에게 인사</button>
@@ -725,12 +732,34 @@
         </div>
     </div>
 
+    <!-- 수행 결과 자동 알림 모달 -->
+    <div id="step-notify-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal" style="min-height: auto; padding: 30px; border: 2px solid var(--primary-color);">
+            <div class="quiz-title" style="background: var(--primary-color);">✅ 수행 완료</div>
+            <div id="step-notify-text" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: #333333; text-align: center; line-height: 1.6; word-break: keep-all;">
+                수행 내용이 여기에 노출됩니다.
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- 퀴즈 공통 해설 및 진행 모달 -->
+    <div id="quiz-explain-modal" class="quiz-modal-overlay">
+        <div class="quiz-modal">
+            <div class="quiz-title" id="quiz-explain-title">📝 해설 피드백</div>
+            <p id="quiz-explain-text" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: #333333; text-align: center; line-height: 1.6; word-break: keep-all;">
+                해설 내용이 여기에 동적으로 삽입됩니다.
+            </p>
+            <button class="btn-submit" onclick="closeQuizExplainModal()">확인</button>
+        </div>
+    </div>
+
     <!-- 퀴즈 공통 오답 모달 -->
     <div id="quiz-wrong-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
             <div class="quiz-title">🚨 오답입니다!</div>
-            <p style="margin: 20px 0; font-size: 18px; font-weight: bold; color: #333333; text-align: center;">다시 고민해볼까요?</p>
-            <button class="btn-submit" onclick="closeQuizWrongModal()">다시 시도하기</button>
+            <p id="quiz-wrong-text" style="margin: 20px 0; font-size: 18px; font-weight: bold; color: #333333; text-align: center; line-height: 1.6; word-break: keep-all;">다시 고민해볼까요?</p>
+            <button class="btn-submit" style="display: none;" onclick="closeQuizWrongModal()">다시 시도하기</button>
         </div>
     </div>
 

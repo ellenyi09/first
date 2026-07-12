@@ -70,17 +70,18 @@ function printCard() {
 // 퀴즈 1 (5 Right) 정답 확인
 function checkQuiz1(ans) { 
     if (ans === 6) { 
-        alert("정답입니다!"); 
-        document.getElementById("quiz1-modal").style.display = "none"; 
-        showScene("phase-fluid", "block"); 
+        const clickedBtn = document.querySelector(`#quiz1-modal .quiz-option[onclick*="(${ans})"]`);
+        handleSimpleQuizCorrect("quiz1-modal", clickedBtn, () => {
+            showScene("phase-fluid", "block"); 
+        });
     } else { 
-        alert("오답입니다."); 
+        showWrongModal();
     } 
 }
 
 // 잘못된 수액 선택 시 경고
 function wrongFluid() { 
-    alert("투약카드와 일치하지 않는 수액입니다."); 
+    showWrongModal("🚨 투약카드와 일치하지 않는 수액입니다.<br><br>5right을 다시 확인해주세요!"); 
 }
 
 // 알맞은 수액 선택 시 퀴즈 2 노출
@@ -97,18 +98,17 @@ function checkQuiz2() {
     
     // 정답 조건: 유효일자(opt1) & 이물질 유무(opt2) 체크, 나머지 미체크
     if (opt1 && opt2 && !opt3 && !opt4) {
-        alert("정답입니다!");
-        document.getElementById("quiz2-modal").style.display = "none";
-        showScene("phase-prep-room", "block"); 
-        
-        // 물품 준비 영역 서서히 나타나는 효과
-        let eqBox = document.getElementById('equipment-selection');
-        eqBox.style.display = 'block'; 
-        setTimeout(() => { 
-            eqBox.classList.add('show'); 
+        const clickedBtn = document.querySelector("#quiz2-modal .btn-submit");
+        handleSimpleQuizCorrect("quiz2-modal", clickedBtn, () => {
+            showScene("phase-prep-room", "block"); 
+            let eqBox = document.getElementById('equipment-selection');
+            eqBox.style.display = 'block'; 
+            setTimeout(() => { 
+                eqBox.classList.add('show'); 
             }, 50);
+        });
     } else { 
-        alert("틀렸습니다."); 
+        showWrongModal(); 
     }
 }
 
@@ -129,13 +129,14 @@ function checkEquipment() {
     });
     
     if (allCorrect && selCount === 9) {
-        showScene("phase-tray-complete", "flex");
+        showExplainModal(`<strong style="color: #2ecc71; font-size: 22px;">🎉 물품 준비 완료</strong>`, "필요한 물품을 모두 챙겼습니다.", () => {
+            showScene("phase-tray-complete", "flex");
+        });
     } else { 
-        alert("9개를 정확히 골라주세요."); 
+        showWrongModal("🚨 어떤 물품이 필요할지 다시 한번 고민해볼까요?");
     }
 }
 
-// 수액 조립/세팅 화면으로 이동
 function goToConnection() { 
     showScene("phase-connect", "block"); 
 }
@@ -214,7 +215,7 @@ function dropOnPole(ev) {
             startMovingToPatientRoom();
         }, 1500);
     } else {
-        alert("수액에 먼저 투약카드와 수액세트를 모두 연결해야 걸 수 있습니다.");
+        alert("먼저 투약카드와 수액세트를 수액에 모두 연결해야 걸 수 있습니다.");
     }
 }
 
@@ -235,14 +236,6 @@ function startMovingToPatientRoom() {
     setTimeout(() => {
         moveScene.style.backgroundImage = "url('assets/병실입장(팔찌적용).jpg')"; 
         
-        // 병실 도착 후 수액 정보 카드 표시
-        setTimeout(() => {
-            const medCard = document.getElementById('patient-room-med-card');
-        medCard.style.display = 'block';
-        void medCard.offsetWidth;
-        medCard.style.opacity = '1'; 
-        }, 1500); 
-        
         // 간호사 첫인사 및 퀴즈 3 노출
         setTimeout(() => {
             document.getElementById('nurse-speech-1').classList.add('show');
@@ -256,36 +249,66 @@ function startMovingToPatientRoom() {
 // 퀴즈 3 (손위생 최우선 수행) 정답 확인
 function checkQuiz3(ans) {
     if (ans === 3) {
-        document.getElementById('quiz3-modal').style.display = 'none';
-        document.getElementById('nurse-speech-1').classList.remove('show'); 
-        setTimeout(() => { 
-            document.getElementById('quiz4-modal').style.display = 'flex'; 
-        }, 500);
+        const clickedBtn = document.querySelector(`#quiz3-modal .quiz-option[onclick*="(${ans})"]`);
+        handleSimpleQuizCorrect("quiz3-modal", clickedBtn, () => {
+            document.getElementById('nurse-speech-1').classList.remove('show'); 
+            setTimeout(() => { 
+                document.getElementById('quiz4-modal').style.display = 'flex'; 
+            }, 500);
+        });
     } else { 
-        document.getElementById('quiz-wrong-modal').style.display = 'flex';
+        showWrongModal();
     }
 }
 
 // 퀴즈 4 (환자 성함 개방형 질문) 정답 확인
 function checkQuiz4(ans) {
     if (ans === 2) {
-        document.getElementById('quiz4-modal').style.display = 'none';
-        document.getElementById('patient-reply').classList.add('show');
-        setTimeout(() => { 
-            document.getElementById('quiz5-modal').style.display = 'flex'; 
-        }, 2000);
+        const clickedBtn = document.querySelector(`#quiz4-modal .quiz-option[onclick*="(${ans})"]`);
+        handleSimpleQuizCorrect("quiz4-modal", clickedBtn, () => {
+            document.getElementById('patient-reply').classList.add('show');
+            setTimeout(() => { 
+                document.getElementById('quiz5-modal').style.display = 'flex'; 
+            }, 2000);
+        });
     } else { 
-        document.getElementById('quiz-wrong-modal').style.display = 'flex';
+        showWrongModal();
     }
 }
 
 // 퀴즈 5 (입원팔찌 확인 절차) 정답 확인
 function checkQuiz5(ans) {
     if (ans === 3) {
-        document.getElementById('quiz5-modal').style.display = 'none';
-        startBraceletCheck();
+        const clickedBtn = document.querySelector(`#quiz5-modal .quiz-option[onclick*="(${ans})"]`);
+        handleSimpleQuizCorrect("quiz5-modal", clickedBtn, () => {
+            document.getElementById('quiz5b-modal').style.display = 'flex';
+        });
     } else { 
-        document.getElementById('quiz-wrong-modal').style.display = 'flex';
+        showWrongModal();
+    }
+}
+
+// 퀴즈 5b (대조 확인할 항목 - 신규 퀴즈 7) 정답 확인
+let quiz5bPenaltyApplied = false;
+function checkQuiz5b() {
+    let opt1 = document.getElementById("q5b-opt1").checked;
+    let opt2 = document.getElementById("q5b-opt2").checked;
+    let opt3 = document.getElementById("q5b-opt3").checked;
+    let opt4 = document.getElementById("q5b-opt4").checked;
+    let opt5 = document.getElementById("q5b-opt5").checked;
+    
+    // 정답: 2번(환자명) & 5번(환자 등록번호)
+    if (!opt1 && opt2 && !opt3 && !opt4 && opt5) {
+        const clickedBtn = document.querySelector("#quiz5b-modal .btn-submit");
+        handleSimpleQuizCorrect("quiz5b-modal", clickedBtn, () => {
+            startBraceletCheck();
+        });
+    } else {
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        if (!quiz5bPenaltyApplied) {
+            evaluation.step4 -= 10;
+            quiz5bPenaltyApplied = true;
+        }
     }
 }
 
@@ -377,10 +400,6 @@ function triggerStep(phase, actionKey) {
     let expectedAction = phaseData.sequence[phaseData.currentIndex];
     let clickedButton = document.getElementById(phaseData.buttonIds[actionKey]);
     
-    // 클릭된 버튼의 흔들림(에러) 애니메이션 제거용 초기화
-    clickedButton.classList.remove('error');
-    void clickedButton.offsetWidth; // 리플로우 유도
-    
     if (actionKey === expectedAction) {
         // 올바른 순서인 경우
         clickedButton.classList.add('completed');
@@ -391,9 +410,8 @@ function triggerStep(phase, actionKey) {
         // 인덱스 증가
         phaseData.currentIndex++;
     } else {
-        // 잘못된 순서인 경우
-        clickedButton.classList.add('error');
-        alert("🚨 순서가 맞지 않습니다! 핵심간호술 임상 절차를 다시 생각해보고 알맞은 순서의 버튼을 클릭하세요.");
+        // 잘못된 순서인 경우 (빨간색 색상 변화 제거하여 힌트 노출 예방)
+        showWrongModal("🚨 순서가 맞지 않습니다!<br><br>핵심간호술 임상 절차를 다시 생각해보고 알맞은 순서의 버튼을 클릭하세요.");
         
         // 패널티 감점 적용
         if (phase === 'prep') {
@@ -406,7 +424,6 @@ function triggerStep(phase, actionKey) {
     }
 }
 
-// Phase 10: 수액 처방 설명으로 전환
 function goToExplain() {
     showScene("phase-prep-explain", "flex");
     const bubble = document.getElementById("explain-speech");
@@ -422,21 +439,22 @@ function goToExplain() {
 // 퀴즈 6 (수행항목 11) 정답 확인
 function checkQuiz6(ans) {
     if (ans === 1) {
-        document.getElementById("quiz6-modal").style.display = "none";
-        
-        const bubble = document.getElementById("explain-speech");
-        if (bubble) {
-            bubble.innerText = "안녕하세요 김이화님, 금식 기간동안 수분 공급을 위해 수액을 투약하겠습니다. 주사부위 통증이나 붓기가 느껴지면 말씀해주세요";
-            bubble.style.display = "block";
-            bubble.style.opacity = "1";
-            bubble.classList.add("show");
-        }
-        
-        setTimeout(() => {
-            showScene("phase-vein-prep", "flex");
-        }, 4000);
+        const clickedBtn = document.querySelector(`#quiz6-modal .quiz-option[onclick*="(${ans})"]`);
+        handleSimpleQuizCorrect("quiz6-modal", clickedBtn, () => {
+            const bubble = document.getElementById("explain-speech");
+            if (bubble) {
+                bubble.innerText = "안녕하세요 김이화님, 금식 기간동안 탈수 예방을 위해 수액을 투약하겠습니다. 주사부위 통증이나 붓기가 느껴지면 말씀해주세요";
+                bubble.style.display = "block";
+                bubble.style.opacity = "1";
+                bubble.classList.add("show");
+            }
+            
+            setTimeout(() => {
+                showScene("phase-vein-prep", "flex");
+            }, 4000);
+        });
     } else {
-        document.getElementById('quiz-wrong-modal').style.display = 'flex';
+        showWrongModal();
         evaluation.step4 -= 10;
     }
 }
@@ -449,23 +467,24 @@ function tieTourniquet() {
 // 퀴즈 7 (수행항목 14) 정답 확인
 function checkQuiz7(ans) {
     if (ans === 2) {
-        alert("정답입니다!");
         document.getElementById("quiz7-modal").style.display = "none";
-        document.getElementById("vein-prep-arm").src = "assets/토니켓적용(팔찌적용).jpg";
-        document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "지혈대는 천자할 예정 부위의 12~15cm 위쪽에 묶어야<br>혈관을 충분히 울혈시킬 수 있습니다.",
+            () => {
+                document.getElementById("vein-prep-arm").src = "assets/토니켓적용(팔찌적용).jpg";
+                document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+            }
+        );
     } else {
-        alert("틀렸습니다. 지혈대는 천자할 예정 부위의 12~15cm 위쪽에 묶어야 충분히 정맥류를 충혈시킬 수 있습니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         evaluation.step4 -= 10;
-        // 지혈대 적용은 오답이어도 강제 적용 처리하여 다음 단계로 유도
-        document.getElementById("quiz7-modal").style.display = "none";
-        document.getElementById("vein-prep-arm").src = "assets/토니켓적용(팔찌적용).jpg";
-        document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     }
 }
 
 // 2. 천자 전 손위생 함수
 function sanitizeHandsForVein() {
-    alert("손소독제로 손위생을 실시하였습니다.");
+    showStepNotify("손소독제로 손위생을 실시하였습니다.", 2000);
     document.getElementById("vein-prep-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
@@ -477,16 +496,17 @@ function cleanVeinSite() {
 // 퀴즈 8 (수행항목 16) 정답 확인
 function checkQuiz8(ans) {
     if (ans === 1) {
-        alert("정답입니다!");
         document.getElementById("quiz8-modal").style.display = "none";
-        alert("소독솜으로 주사 예정 부위를 깨끗이 소독하고 건조시켰습니다. 정맥천자 단계로 진입합니다.");
-        showScene("phase-vein-insert", "flex");
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "피부의 안쪽에서 바깥쪽으로 둥글게 원을 그리며<br>5~8cm 직경으로 소독하고 완전히 건조시켜야 합니다.",
+            () => {
+                showScene("phase-vein-insert", "flex");
+            }
+        );
     } else {
-        alert("틀렸습니다. 피부의 안쪽에서 바깥쪽으로 둥글게 원을 그리며 5~8cm 직경으로 소독해야 균을 변두리로 밀어낼 수 있습니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         evaluation.step4 -= 10;
-        document.getElementById("quiz8-modal").style.display = "none";
-        alert("정맥천자 단계로 진입합니다.");
-        showScene("phase-vein-insert", "flex");
     }
 }
 
@@ -498,16 +518,18 @@ function showQuiz9() {
 // 퀴즈 9 (수행항목 17) 정답 확인
 function checkQuiz9(ans) {
     if (ans === 1) {
-        alert("정답입니다!");
         document.getElementById("quiz9-modal").style.display = "none";
-        document.getElementById("flashback-area").style.display = "block";
-        document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "카테터의 빗면(사면)이 위를 향하게 하여<br>정맥의 흐름 방향을 따라 15도~30도의 각도로<br>비스듬히 천자해야 합니다.",
+            () => {
+                document.getElementById("flashback-area").style.display = "block";
+                document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+            }
+        );
     } else {
-        alert("틀렸습니다. 카테터의 빗면(사면)이 위를 향하게 하여 정맥의 흐름 방향을 따라 15도~30도의 각도로 비스듬히 천자해야 합니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         evaluation.step5 -= 10;
-        document.getElementById("quiz9-modal").style.display = "none";
-        document.getElementById("flashback-area").style.display = "block";
-        document.getElementById("vein-insert-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
     }
 }
 
@@ -527,7 +549,7 @@ function untieTourniquet() {
 
 // 4. 내관 완전 제거 및 수액 커넥션 연결
 function removeStylusAndConnect() {
-    alert("카테터 끝 부위(혈관 부분)를 눌러 혈액이 새지 않게 고정하고, 스타일렛을 재빨리 제거한 뒤 준비된 수액세트 튜브를 연결하였습니다!");
+    showStepNotify("카테터 끝 부위(혈관 부분)를 눌러 혈액이 새지 않게 고정하고, 탐침을 재빨리 제거한 뒤 준비된 수액세트 튜브를 연결하였습니다!", 2000);
     // 스타일렛 제거 및 수액 커넥션이 연결될 때 팔 이미지 갱신
     document.getElementById("vein-insert-arm").src = "assets/주사삽입완료(팔찌적용).jpg";
     showScene("phase-flow-secure", "flex");
@@ -535,7 +557,7 @@ function removeStylusAndConnect() {
 
 // Phase 13: 1. 조절기 열기 및 관찰
 function openRegulatorAndCheck() {
-    alert("조절기를 완전히 열어 수액 방울이 잘 떨어지는지 확인하고, 주사 부위에 붓기(부종), 통증, 새는 부분(침윤)이 없는지 꼼꼼히 관찰하였습니다.");
+    showStepNotify("조절기를 열어 수액 방울이 잘 떨어지는지 확인하고, 주사 부위에 발적, 통증, 침윤이 없는지 꼼꼼히 관찰하였습니다.", 2000);
     document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
@@ -545,7 +567,7 @@ function secureCatheter() {
     if (tegaderm) {
         tegaderm.classList.add("active");
     }
-    alert("투명 필름 드레싱을 정맥 카테터 삽입 부위에 정확히 밀착하여 감염 예방과 함께 단단히 고정하였습니다.");
+    showStepNotify("투명 필름 드레싱을 정맥 카테터 삽입 부위에 정확히 밀착하여 감염 예방과 함께 단단히 고정하였습니다.", 2000);
     document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
 }
 
@@ -557,14 +579,38 @@ function showQuiz10() {
 // 퀴즈 10 (주입 속도 조절) 정답 확인
 function checkQuiz10(ans) {
     if (ans === 2) {
-        alert("정답입니다!");
         document.getElementById("quiz10-modal").style.display = "none";
-        document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "처방된 수액의 주입 속도는 80cc/hr입니다.",
+            () => {
+                document.getElementById("quiz10b-modal").style.display = "flex";
+            }
+        );
     } else {
-        alert("틀렸습니다. 처방된 IVF 주입 속도는 80cc/hr(약 80방울/시간 비율)입니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         evaluation.step6 -= 10;
-        document.getElementById("quiz10-modal").style.display = "none";
-        document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+    }
+}
+
+// 퀴즈 10b (방울 수 계산 - 퀴즈 14) 정답 확인
+let quiz10bPenaltyApplied = false;
+function checkQuiz10b(ans) {
+    if (ans === 3) {
+        document.getElementById("quiz10b-modal").style.display = "none";
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "80cc/hr ÷ 3 = 26.7gtt/min<br>60초 ÷ 26.7gtt/min = 2.3초/방울 (sec/gtt)",
+            () => {
+                document.getElementById("flow-secure-instruction").innerText = "순서에 맞춰 다음 술기 단계를 진행하세요.";
+            }
+        );
+    } else {
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        if (!quiz10bPenaltyApplied) {
+            evaluation.step6 -= 10;
+            quiz10bPenaltyApplied = true;
+        }
     }
 }
 
@@ -611,38 +657,74 @@ function completeWasteAndShowChart() {
 
 // 간호기록지 제출 및 최종 점수 계산
 function submitChart() {
+    // 이전 에러 표시 초기화
+    document.querySelectorAll('.chart-input').forEach(el => el.classList.remove('error'));
+    
     let name = document.getElementById("chart-name").value.trim();
     let drug = document.getElementById("chart-drug").value.trim();
     let route = document.getElementById("chart-route").value.trim();
     let speed = document.getElementById("chart-speed").value.trim();
     
+    let errorFields = [];
+    let errorMsgs = [];
+    
     if (name !== "김이화") {
-        alert("틀렸습니다. 대상자 이름이 처방과 일치하지 않습니다. (김이화)");
+        errorFields.push("chart-name");
+        errorMsgs.push("대상자명");
         evaluation.step7 -= 20;
     }
-    const drugClean = drug.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9\/]/g, '');
-    const isDrugCorrect = drugClean.includes("ns1l") || 
-                          drugClean.includes("n/s1l") || 
-                          drugClean.includes("normalsaline1l") || 
-                          drugClean.includes("normalsaline1000ml") || 
-                          drugClean.includes("normalsalineinj") ||
-                          drugClean.includes("ns1000ml") ||
-                          drugClean.includes("n/s1000ml") ||
-                          drugClean.includes("saline") ||
-                          drugClean.includes("수액");
+    
+    const drugClean = drug.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9\/가-힣]/g, '');
+    const hasBase = drugClean.includes("ns") || 
+                    drugClean.includes("n/s") || 
+                    drugClean.includes("normalsaline") || 
+                    drugClean.includes("생리식염수") || 
+                    drugClean.includes("식염수");
+    const hasVolume = drugClean.includes("1l") || 
+                      drugClean.includes("1000ml");
+    const isDrugCorrect = hasBase && hasVolume;
     
     if (!isDrugCorrect) {
-        alert("틀렸습니다. 투약약물/수액명이 올바르지 않습니다. (Normal Saline 1L, NS 1L, N/S 1L 등)");
+        errorFields.push("chart-drug");
+        errorMsgs.push("투여약물/수액");
         evaluation.step7 -= 25;
     }
-    if (route.toUpperCase() !== "IV" && route.toUpperCase() !== "IVF") {
-        alert("틀렸습니다. 투여 경로는 IV 또는 IVF 여야 합니다.");
+    
+    const routeClean = route.toUpperCase().replace(/\s+/g, '');
+    const isRouteCorrect = routeClean === "IV" || routeClean === "IVF" || routeClean === "정맥" || routeClean === "정맥주사" || routeClean === "정맥내점적주사";
+    
+    if (!isRouteCorrect) {
+        errorFields.push("chart-route");
+        errorMsgs.push("투여경로");
         evaluation.step7 -= 20;
     }
+    
     const speedClean = speed.toLowerCase().replace(/\s+/g, '');
-    if (speedClean !== "80" && speedClean !== "80cc/hr" && speedClean !== "80cc") {
-        alert("틀렸습니다. 처방된 주입 속도는 80cc/hr(또는 80)입니다.");
+    const isSpeedCorrect = speedClean === "80" || speedClean === "80cc/hr";
+    
+    if (!isSpeedCorrect) {
+        errorFields.push("chart-speed");
+        errorMsgs.push("투여속도");
         evaluation.step7 -= 20;
+    }
+    
+    if (errorFields.length > 0) {
+        // 모든 오답 입력칸을 동시에 빨간색으로 표시
+        errorFields.forEach(id => {
+            document.getElementById(id).classList.add("error");
+        });
+        
+        // 첫 번째 오답 입력칸에 포커싱
+        document.getElementById(errorFields[0]).focus();
+        
+        // 여러 개의 오답을 한 번에 리스트업하여 노출
+        let combinedMsg = "🚨 다음 항목을 다시 확인하세요:<br>";
+        errorMsgs.forEach(msg => {
+            combinedMsg += `• ${msg}<br>`;
+        });
+        
+        showWrongModal(combinedMsg);
+        return;
     }
     
     // 최하 점수 0점 보장
@@ -661,114 +743,133 @@ function submitChart() {
     document.getElementById("eval-step6").innerText = evaluation.step6 === 100 ? "통과 (100점)" : "감점 (" + evaluation.step6 + "점)";
     document.getElementById("eval-step7").innerText = evaluation.step7 === 100 ? "통과 (100점)" : "감점 (" + evaluation.step7 + "점)";
     
-    alert("기록 작성이 완료되었습니다. 최종 성적 보고서를 확인하세요!");
-    showScene("phase-report", "flex");
-}
-
-// -------------------------------------------------------------
-// [10] 퀴즈 11 및 퀴즈 12 핸들러
-// -------------------------------------------------------------
-let quiz11PenaltyApplied = false;
-function checkQuiz11() {
-    const a1 = document.getElementById("q11-ans1").value.trim().toLowerCase();
-    const a2 = document.getElementById("q11-ans2").value.trim().toLowerCase();
-    const a3 = document.getElementById("q11-ans3").value.trim().toLowerCase();
-    const inputs = [a1, a2, a3];
-    
-    const hasDate = inputs.some(v => v.includes("날짜") || v.includes("일자") || v.includes("date") || v === "일");
-    const hasTime = inputs.some(v => v.includes("시간") || v.includes("시각") || v.includes("time"));
-    const hasSize = inputs.some(v => v.includes("크기") || v.includes("규격") || v.includes("게이지") || v.includes("g") || v.includes("size") || v.includes("굵기") || v.includes("규격"));
-    
-    if (hasDate && hasTime && hasSize) {
-        alert("정답입니다! 고정용 라벨에 삽입 날짜, 시간, 카테터 크기(규격)를 적어 부착합니다.");
-        document.getElementById("quiz11-modal").style.display = "none";
-        alert("정맥주사 삽입이 완료되었습니다. 사용 물품 정리 및 기록 작성을 위해 이동합니다.");
-        showScene("phase-document", "flex");
-    } else {
-        alert("틀렸습니다. 드레싱 고정 테이프(라벨)에 적어야 하는 3가지 주요 내용은 '삽입 날짜', '삽입 시간', '카테터 크기(규격)'입니다.");
-        if (!quiz11PenaltyApplied) {
-            evaluation.step6 -= 10;
-            quiz11PenaltyApplied = true;
+    showExplainModal(
+        `<strong style="color: #2ecc71; font-size: 22px;">🎉 기록 작성 완료</strong>`,
+        "기록 작성이 완료되었습니다. 최종 성적 보고서를 확인하세요!",
+        () => {
+            showScene("phase-report", "flex");
         }
-    }
-}
-
-let quiz12PenaltyApplied = false;
-function checkQuiz12(ans) {
-    if (ans === 3) {
-        alert("정답입니다! 물품 정리 직후에는 물과 비누로 깨끗이 손위생을 실시하여 병원균 전파를 막습니다.");
-        document.getElementById("quiz12-modal").style.display = "none";
-        alert("물과 비누를 활용하여 깨끗하게 손위생을 마쳤습니다. 간호기록지를 작성해 주세요.");
-        document.querySelector(".waste-cleanup-box").style.display = "none";
-        document.getElementById("chart-area").style.display = "block";
-    } else {
-        alert("틀렸습니다. 폐기물 정리 및 주변 환경 청소 후에는 즉시 물과 비누로 손위생을 실시해야 합니다.");
-        if (!quiz12PenaltyApplied) {
-            evaluation.step6 -= 10;
-            quiz12PenaltyApplied = true;
-        }
-    }
+    );
 }
 
 // 퀴즈 2-2 (수액세트 연결 OX) 정답 확인
 let quiz2bPenaltyApplied = false;
 function checkQuiz2b(ans) {
     if (ans === 'X') {
-        alert("정답입니다!\n수액세트에 공기가 차지 않도록 점적통의 1/2 정도를 수액으로 채워야 합니다.");
+        document.getElementById('quiz2b-modal').style.display = 'none';
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "수액세트에 공기가 차지 않도록 점적통의 1/2 정도를 수액으로 채워야 합니다.",
+            () => {
+                document.getElementById('item-regulator').style.display = 'none'; 
+                document.getElementById('item-ns1l').classList.add('connected-fluid'); 
+                prepState.regulator = true; 
+                
+                if (prepState.card && prepState.regulator) {
+                    document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요.";
+                    let ns1l = document.getElementById('item-ns1l'); 
+                    ns1l.classList.add('drag-item'); 
+                    ns1l.setAttribute('draggable', 'true'); 
+                    ns1l.setAttribute('ondragstart', "drag(event, 'ready_fluid')"); 
+                }
+            }
+        );
     } else {
-        alert("틀렸습니다!\n수액세트에 공기가 차지 않도록 점적통의 1/2 정도를 수액으로 채워야 합니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         if (!quiz2bPenaltyApplied) {
             evaluation.step4 -= 10;
             quiz2bPenaltyApplied = true;
         }
     }
-    
-    // 정답/오답에 관계없이 점적통 채우기(연결) 완료 처리 및 진행
-    document.getElementById('quiz2b-modal').style.display = 'none';
-    document.getElementById('item-regulator').style.display = 'none'; 
-    document.getElementById('item-ns1l').classList.add('connected-fluid'); 
-    prepState.regulator = true; 
-    
-    if (prepState.card && prepState.regulator) {
-        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요.";
-        let ns1l = document.getElementById('item-ns1l'); 
-        ns1l.classList.add('drag-item'); 
-        ns1l.setAttribute('draggable', 'true'); 
-        ns1l.setAttribute('ondragstart', "drag(event, 'ready_fluid')"); 
-    }
 }
 
-// 퀴즈 9-2 정답 확인
 let quiz9bPenaltyApplied = false;
 function checkQuiz9b(ans) {
     if (ans === 4) {
-        alert("정답입니다!\n해설: 카테터 내로 혈액이 역류되면 카테터의 삽입각도를 약간 낮추면서 카테터를 혈관으로 진입시킨 후, 카테터 길이만큼 탐침을 조금씩 빼내야 합니다.");
+        document.getElementById('quiz9b-modal').style.display = 'none';
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "카테터 내로 혈액이 역류되면 카테터의 삽입각도를<br>약간 낮추면서 카테터를 혈관으로 진입시킨 후,<br>카테터 길이만큼 탐침을 조금씩 빼내야 합니다.",
+            () => {}
+        );
     } else {
-        alert("틀렸습니다!\n해설: 카테터 내로 혈액이 역류되면 카테터의 삽입각도를 약간 낮추면서 카테터를 혈관으로 진입시킨 후, 카테터 길이만큼 탐침을 조금씩 빼내야 합니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         if (!quiz9bPenaltyApplied) {
             evaluation.step5 -= 10;
             quiz9bPenaltyApplied = true;
         }
     }
-    document.getElementById('quiz9b-modal').style.display = 'none';
 }
 
 // 퀴즈 9-3 정답 확인
 let quiz9cPenaltyApplied = false;
 function checkQuiz9c(ans) {
     if (ans === 'X') {
-        alert("정답입니다!\n해설: 카테터를 잡지 않은 손으로 지혈대를 제거해야 합니다.");
+        document.getElementById('quiz9c-modal').style.display = 'none';
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "카테터를 잡지 않은 손으로 지혈대를 제거해야 합니다.",
+            () => {}
+        );
     } else {
-        alert("틀렸습니다!\n해설: 카테터를 잡지 않은 손으로 지혈대를 제거해야 합니다.");
+        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
         if (!quiz9cPenaltyApplied) {
             evaluation.step5 -= 10;
             quiz9cPenaltyApplied = true;
         }
     }
-    document.getElementById('quiz9c-modal').style.display = 'none';
+}
+
+// 퀴즈 공통 해설 모달 열기/닫기 제어
+let explainCallback = null;
+function showExplainModal(title, text, callback) {
+    document.getElementById("quiz-explain-title").innerHTML = title;
+    document.getElementById("quiz-explain-text").innerHTML = text;
+    explainCallback = callback;
+    document.getElementById("quiz-explain-modal").style.display = "flex";
+}
+
+function closeQuizExplainModal() {
+    document.getElementById("quiz-explain-modal").style.display = "none";
+    if (explainCallback) {
+        explainCallback();
+        explainCallback = null;
+    }
+}
+
+// 공통 오답 모달 닫기
+let wrongModalTimeout = null;
+function closeQuizWrongModal() {
+    document.getElementById("quiz-wrong-modal").style.display = "none";
+    const textEl = document.getElementById("quiz-wrong-text");
+    if (textEl) {
+        textEl.innerHTML = "다시 고민해볼까요?";
+    }
+    if (wrongModalTimeout) {
+        clearTimeout(wrongModalTimeout);
+        wrongModalTimeout = null;
+    }
+}
+
+// 공통 오답 모달 커스텀 노출
+function showWrongModal(customText) {
+    const textEl = document.getElementById("quiz-wrong-text");
+    if (textEl) {
+        textEl.innerHTML = customText || "다시 고민해볼까요?";
+    }
+    const modal = document.getElementById("quiz-wrong-modal");
+    modal.style.display = "flex";
+    
+    if (wrongModalTimeout) {
+        clearTimeout(wrongModalTimeout);
+    }
+    wrongModalTimeout = setTimeout(() => {
+        closeQuizWrongModal();
+    }, 1000);
 }
 
 // 의료폐기물 분리수거 상태 일괄 검증
+let wasteModalTimeout = null;
 function checkWasteSeparation() {
     const isNeedleCorrect = (wasteDrops.needle === "sharps");
     const isSwabCorrect = (wasteDrops.swab === "general");
@@ -779,26 +880,39 @@ function checkWasteSeparation() {
     
     if (isNeedleCorrect && isSwabCorrect && isSyringeCorrect) {
         contentDiv.innerHTML = `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong><br><br>손상성 폐기물 전용용기(주사바늘)와 일반 의료폐기물 전용용기(소독솜, 주사기)를 구분하여 사용 물품 정리를 완료했습니다!`;
-        nextBtn.innerText = "확인 (다음 단계로)";
+        nextBtn.innerText = "확인";
+        nextBtn.style.display = "block";
         wasteSuccessState = true;
+        
+        document.getElementById("waste-result-modal").style.display = "flex";
     } else {
         contentDiv.innerHTML = `<strong style="color: #e74c3c; font-size: 22px;">🚨 오답입니다!</strong><br><br>다시 고민해볼까요?`;
-        nextBtn.innerText = "다시 시도하기";
+        nextBtn.style.display = "none";
         wasteSuccessState = false;
         
         if (!quiz2bPenaltyApplied) {
             evaluation.step6 -= 10;
         }
+        
+        document.getElementById("waste-result-modal").style.display = "flex";
+        
+        if (wasteModalTimeout) {
+            clearTimeout(wasteModalTimeout);
+        }
+        wasteModalTimeout = setTimeout(() => {
+            closeWasteResultModal();
+        }, 1000);
     }
-    
-    // 모달 노출
-    document.getElementById("waste-result-modal").style.display = "flex";
 }
 
 // 폐기물 결과 모달 닫기 및 후속 조치
 let wasteSuccessState = false;
 function closeWasteResultModal() {
     document.getElementById("waste-result-modal").style.display = "none";
+    if (wasteModalTimeout) {
+        clearTimeout(wasteModalTimeout);
+        wasteModalTimeout = null;
+    }
     
     if (wasteSuccessState) {
         completeWasteAndShowChart();
@@ -825,7 +939,89 @@ function closeWasteResultModal() {
     }
 }
 
-// 공통 오답 모달 닫기
-function closeQuizWrongModal() {
-    document.getElementById("quiz-wrong-modal").style.display = "none";
+// 단순 퀴즈 정답 시 녹색 강조 후 0.8초 뒤 자동 넘김 처리
+function handleSimpleQuizCorrect(modalId, clickedButton, callback) {
+    if (clickedButton) {
+        clickedButton.classList.add('correct-highlight');
+    }
+    
+    const modal = document.getElementById(modalId);
+    const buttons = modal.querySelectorAll('button, input[type="checkbox"]');
+    buttons.forEach(b => {
+        b.style.pointerEvents = 'none';
+    });
+    
+    setTimeout(() => {
+        modal.style.display = 'none';
+        if (clickedButton) {
+            clickedButton.classList.remove('correct-highlight');
+        }
+        buttons.forEach(b => {
+            b.style.pointerEvents = '';
+        });
+        if (callback) callback();
+    }, 800);
+}
+
+// 퀴즈 11 (고정 네임 라벨 작성) 정답 확인
+let quiz11PenaltyApplied = false;
+function checkQuiz11() {
+    const a1 = document.getElementById("q11-ans1").value.trim().toLowerCase();
+    const a2 = document.getElementById("q11-ans2").value.trim().toLowerCase();
+    const a3 = document.getElementById("q11-ans3").value.trim().toLowerCase();
+    const inputs = [a1, a2, a3];
+    
+    const hasDate = inputs.some(v => v.includes("날짜") || v.includes("일자") || v.includes("date") || v === "일");
+    const hasTime = inputs.some(v => v.includes("시간") || v.includes("시각") || v.includes("time"));
+    const hasSize = inputs.some(v => v.includes("크기") || v.includes("규격") || v.includes("게이지") || v.includes("g") || v.includes("size") || v.includes("굵기") || v.includes("규격"));
+    
+    if (hasDate && hasTime && hasSize) {
+        document.getElementById("quiz11-modal").style.display = "none";
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "고정용 라벨에 삽입 날짜, 시간, 카테터 크기(규격)를<br>적어 부착합니다.<br><br>정맥주사 삽입이 완료되었습니다.<br>사용 물품 정리 및 기록 작성을 위해 이동합니다.",
+            () => {
+                showScene("phase-document", "flex");
+            }
+        );
+    } else {
+        showWrongModal();
+        if (!quiz11PenaltyApplied) {
+            evaluation.step6 -= 10;
+            quiz11PenaltyApplied = true;
+        }
+    }
+}
+
+// 퀴즈 12 (폐기물 정리 후 손위생) 정답 확인
+let quiz12PenaltyApplied = false;
+function checkQuiz12(ans) {
+    if (ans === 3) {
+        document.getElementById("quiz12-modal").style.display = "none";
+        showExplainModal(
+            `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
+            "물품 정리 직후에는 물과 비누로 깨끗이 손위생을<br>실시하여 병원균 전파를 막습니다.<br><br>간호기록지를 작성해 주세요.",
+            () => {
+                document.querySelector(".waste-cleanup-box").style.display = "none";
+                document.getElementById("chart-area").style.display = "block";
+            }
+        );
+    } else {
+        showWrongModal();
+        if (!quiz12PenaltyApplied) {
+            evaluation.step6 -= 10;
+            quiz12PenaltyApplied = true;
+        }
+    }
+}
+
+// 수행 완료 자동 알림 모달 제어
+function showStepNotify(text, duration = 2500) {
+    document.getElementById("step-notify-text").innerHTML = text;
+    const modal = document.getElementById("step-notify-modal");
+    modal.style.display = "flex";
+    
+    setTimeout(() => {
+        modal.style.display = "none";
+    }, duration);
 }
