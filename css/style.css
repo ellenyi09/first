@@ -1359,3 +1359,54 @@ th {
     border-color: #27ae60 !important;
     transition: background-color 0.2s ease;
 }
+
+/* 결과보고서 합격/재시험 스탬프 스타일 */
+.report-stamp {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 8px 25px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    margin: 15px 0;
+    letter-spacing: 2px;
+    transform: rotate(-5deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    font-family: 'Malgun Gothic', sans-serif;
+}
+.report-stamp.pass {
+    color: #2ecc71;
+    border: 3px double #2ecc71;
+    background-color: rgba(46, 204, 113, 0.1);
+}
+.report-stamp.replay {
+    color: #e74c3c;
+    border: 3px double #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* 오답노트 영역 스타일 */
+.report-feedback-area {
+    margin-top: 25px;
+    text-align: left;
+    background: #333;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    display: none;
+}
+.report-feedback-title {
+    color: #ffd700;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-bottom: 1px dashed #555;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+.report-feedback-list {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #ddd;
+    max-height: 180px;
+    overflow-y: auto;
+}

@@ -658,40 +658,18 @@
           <div class="report-card">
               <h2 style="color: #ffd700;">🎓 시뮬레이션 평가 결과 보고서</h2>
               <div class="report-score" id="evaluation-score">0점</div>
-              <p style="margin-bottom: 20px; font-weight: bold; font-size: 16px;">정맥 수액 주입(핵심간호술) 시뮬레이션을 완료하셨습니다!</p>
+              <div id="evaluation-stamp" class="report-stamp"></div>
+              <p id="evaluation-desc" style="margin-bottom: 20px; font-weight: bold; font-size: 16px; word-break: keep-all;"></p>
               
-              <div class="report-details">
-                  <div class="report-item">
-                      <span class="report-item-title">1단계: EMR 처방 및 투약카드 발행 (1~3항목)</span>
-                      <span class="report-item-status">통과 (100점)</span>
-                  </div>
-                  <div class="report-item">
-                      <span class="report-item-title">2단계: 수액 선택 및 트레이 세팅 (4~7항목)</span>
-                      <span class="report-item-status">통과 (100점)</span>
-                  </div>
-                  <div class="report-item">
-                      <span class="report-item-title">3단계: 환자 식별 및 개방형 질문 (8~10항목)</span>
-                      <span class="report-item-status">통과 (100점)</span>
-                  </div>
-                  <div class="report-item">
-                      <span class="report-item-title">4단계: 약물 설명 및 정맥천자 준비 (11~16항목)</span>
-                      <span class="report-item-status" id="eval-step4">대기</span>
-                  </div>
-                  <div class="report-item">
-                      <span class="report-item-title">5단계: 카테터 삽입 및 수액 라인 연결 (17~21항목)</span>
-                      <span class="report-item-status" id="eval-step5">대기</span>
-                  </div>
-                  <div class="report-item">
-                      <span class="report-item-title">6단계: 수액 고정, 속도 및 정리 (22~28항목)</span>
-                      <span class="report-item-status" id="eval-step6">대기</span>
-                  </div>
-                  <div class="report-item">
-                      <span class="report-item-title">7단계: 기록 및 5 Rights 기록 확인 (29항목)</span>
-                      <span class="report-item-status" id="eval-step7">대기</span>
-                  </div>
+
+              
+              <!-- 오답 노트 및 맞춤형 피드백 영역 -->
+              <div id="report-feedback-area" class="report-feedback-area">
+                  <div class="report-feedback-title">🔍 오답 노트 및 학습 피드백</div>
+                  <div id="report-feedback-list" class="report-feedback-list"></div>
               </div>
               
-              <button class="btn-submit" style="background-color: var(--primary-red);" onclick="location.reload()">🔄 다시 시작하기</button>
+              <button id="btn-restart-game" class="btn-submit" style="background-color: var(--primary-red); margin-top: 20px;" onclick="location.reload()">🔄 다시 시작하기</button>
           </div>
       </div>
 
