@@ -110,8 +110,8 @@ function checkQuiz1(ans) {
 
 // 잘못된 수액 선택 시 경고
 function wrongFluid() { 
-    showWrongModal("🚨 투약카드와 일치하지 않는 수액입니다.<br><br>5right을 다시 확인해주세요!"); 
-    applyPenalty(null, "wrong_fluid", "• 수액 선택: 처방과 다른 수액(오답)을 선택하였습니다.");
+    showWrongModal("투약카드와 일치하지 않는 수액입니다.<br>5right을 다시 확인해주세요!"); 
+    applyPenalty(null, "wrong_fluid", "• 수액 선택: 처방과 다른 수액을 선택하였습니다.");
 }
 
 // 알맞은 수액 선택 시 퀴즈 2 노출
@@ -164,7 +164,7 @@ function checkEquipment() {
             showScene("phase-tray-complete", "flex");
         });
     } else { 
-        showWrongModal("🚨 어떤 물품이 필요할지 다시 한번 고민해볼까요?");
+        showWrongModal("어떤 물품이 필요할지 다시 한번 고민해볼까요?");
         applyPenalty(null, "prep_tray", "• 물품 선택: 정맥주사 삽입에 필요한 9가지 물품 준비에 실수가 있었습니다.");
     }
 }
@@ -338,7 +338,7 @@ function checkQuiz5b() {
             startBraceletCheck();
         });
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal();
         applyPenalty("step4", "quiz5b", "• 퀴즈 7 (팔찌 대조 항목): 입원팔찌와 카드에서 교차 대조할 항목(이름, 등록번호) 선택에 오류가 있었습니다.");
     }
 }
@@ -442,7 +442,7 @@ function triggerStep(phase, actionKey) {
         phaseData.currentIndex++;
     } else {
         // 잘못된 순서인 경우 (빨간색 색상 변화 제거하여 힌트 노출 예방)
-        showWrongModal("🚨 순서가 맞지 않습니다!<br><br>핵심간호술 임상 절차를 다시 생각해보고 알맞은 순서의 버튼을 클릭하세요.");
+        showWrongModal("핵심간호술 임상 절차를 다시 생각해보고 알맞은 순서의 버튼을 클릭하세요.");
         
         // 패널티 감점 적용
         if (phase === 'prep') {
@@ -508,7 +508,7 @@ function checkQuiz7(ans) {
             }
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step4", "quiz7", "• 퀴즈 9 (지혈대 위치): 지혈대를 묶는 위치(천자 예정 부위 12~15cm 위쪽) 지정에 오류가 있었습니다.");
     }
 }
@@ -536,7 +536,7 @@ function checkQuiz8(ans) {
             }
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step4", "quiz8", "• 퀴즈 10 (피부 소독): 소독솜으로 안에서 밖으로 원을 그리며 닦는 소독 방식에 오류가 있었습니다.");
     }
 }
@@ -559,7 +559,7 @@ function checkQuiz9(ans) {
             }
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step5", "quiz9", "• 퀴즈 11 (바늘 각도): 바늘 사면 방향 및 적절한 진입 각도(15~30도) 선택에 오류가 있었습니다.");
     }
 }
@@ -583,7 +583,10 @@ function removeStylusAndConnect() {
     showStepNotify("카테터 끝 부위(혈관 부분)를 눌러 혈액이 새지 않게 고정하고, 탐침을 재빨리 제거한 뒤 준비된 수액세트 튜브를 연결하였습니다!", 2000);
     // 스타일렛 제거 및 수액 커넥션이 연결될 때 팔 이미지 갱신
     document.getElementById("vein-insert-arm").src = "assets/주사삽입완료(팔찌적용).jpg";
-    showScene("phase-flow-secure", "flex");
+    
+    setTimeout(() => {
+        showScene("phase-flow-secure", "flex");
+    }, 2000);
 }
 
 // Phase 13: 1. 조절기 열기 및 관찰
@@ -619,7 +622,7 @@ function checkQuiz10(ans) {
             }
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step6", "quiz10", "• 퀴즈 14 (처방 속도): EMR 처방에 따른 올바른 주입 속도(80cc/hr) 확인이 미흡했습니다.");
     }
 }
@@ -637,7 +640,7 @@ function checkQuiz10b(ans) {
             }
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step6", "quiz10b", "• 퀴즈 15 (gtt 계산): 주입 속도 80cc/hr 기준 방울 수 계산(2.3초당 한 방울)에 오답이 있었습니다.");
     }
 }
@@ -715,7 +718,7 @@ function submitChart() {
     if (!isDrugCorrect) {
         errorFields.push("chart-drug");
         errorMsgs.push("투여약물");
-        applyPenalty("step7", "chart_drug", "• 간호기록지 (투여약물): 수액명과 용량(1L/1000ml)을 정확히 기재하지 못했습니다.");
+        applyPenalty("step7", "chart_drug", "• 간호기록지 (투여약물): 수액명과 용량을 정확히 기재하지 못했습니다.");
     }
     
     const routeClean = route.toUpperCase().replace(/\s+/g, '');
@@ -724,7 +727,7 @@ function submitChart() {
     if (!isRouteCorrect) {
         errorFields.push("chart-route");
         errorMsgs.push("투여경로");
-        applyPenalty("step7", "chart_route", "• 간호기록지 (투여경로): 투약 방법(IV/IVF/정맥주사)을 정확히 기재하지 못했습니다.");
+        applyPenalty("step7", "chart_route", "• 간호기록지 (투여경로): 투여경로를 정확히 기재하지 못했습니다.");
     }
     
     const speedClean = speed.toLowerCase().replace(/\s+/g, '');
@@ -733,7 +736,7 @@ function submitChart() {
     if (!isSpeedCorrect) {
         errorFields.push("chart-speed");
         errorMsgs.push("투여속도");
-        applyPenalty("step7", "chart_speed", "• 간호기록지 (투여속도): 투여 속도(80 또는 80cc/hr)를 정확히 기재하지 못했습니다.");
+        applyPenalty("step7", "chart_speed", "• 간호기록지 (투여속도): 투여속도를 정확히 기재하지 못했습니다.");
     }
     
     if (errorFields.length > 0) {
@@ -825,11 +828,8 @@ function checkQuiz2b(ans) {
             }
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
-        if (!quiz2bPenaltyApplied) {
-            evaluation.step4 -= 10;
-            quiz2bPenaltyApplied = true;
-        }
+        showWrongModal();
+        applyPenalty("step4", "quiz2b", "• 퀴즈 3 (수액세트 연결): 점적통을 채우는 비율에 대한 이해가 부족했습니다.");
     }
 }
 
@@ -843,7 +843,7 @@ function checkQuiz9b(ans) {
             () => {}
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step5", "quiz9b", "• 퀴즈 12 (혈액 역류): 바늘에 피가 비칠 때의 각도 조절 및 카테터 진입 요령에 대한 오류가 있었습니다.");
     }
 }
@@ -859,7 +859,7 @@ function checkQuiz9c(ans) {
             () => {}
         );
     } else {
-        showWrongModal("🚨 오답입니다!<br><br>다시 고민해볼까요?");
+        showWrongModal("다시 고민해볼까요?");
         applyPenalty("step5", "quiz9c", "• 퀴즈 13 (지혈대 풀기): 카테터를 잡지 않은 다른 손으로 지혈대를 제거하는 방식에 오답이 있었습니다.");
     }
 }

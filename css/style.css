@@ -1272,7 +1272,7 @@ th {
     background-color: #1a1a1a;
     z-index: 18;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
     color: white;
     padding: 40px 20px;
@@ -1287,12 +1287,13 @@ th {
     box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     text-align: center;
     border: 1px solid #444;
+    margin: 20px auto;
 }
 .report-score {
     font-size: 4rem;
     font-weight: bold;
     color: #ffd700;
-    margin: 20px 0;
+    margin: 10px 0;
     text-shadow: 0 0 10px rgba(255,215,0,0.5);
 }
 .report-details {
@@ -1368,7 +1369,7 @@ th {
     padding: 8px 25px;
     border-radius: 6px;
     text-transform: uppercase;
-    margin: 15px 0;
+    margin: 25px 0 20px 0;
     letter-spacing: 2px;
     transform: rotate(-5deg);
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -1407,6 +1408,4 @@ th {
     font-size: 13px;
     line-height: 1.6;
     color: #ddd;
-    max-height: 180px;
-    overflow-y: auto;
 }
