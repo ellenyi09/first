@@ -5,6 +5,8 @@
     <title>IV 시뮬레이션 게임</title>
     <!-- 외부 스타일시트 연결 -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mobile-drag-drop/2.3.0/default.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-drag-drop/2.3.0/index.min.js"></script>
 </head>
 <body>
 
@@ -433,7 +435,7 @@
         </div>
         
         <div style="color:white; margin-top: 15px; font-size: 16px; font-weight: bold; text-align: center;" id="vein-prep-instruction">
-            올바른 다음 절차의 버튼을 순서대로 골라 클릭하세요.
+            다음 절차로 올바른 것을 순서대로 골라 클릭하세요.
         </div>
     </div>
 
@@ -489,7 +491,7 @@
     <div id="quiz9-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
             <div class="quiz-title">📝 퀴즈 11</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">카테터를 삽입할 때 바늘의 사면(bevel) 방향과 적절한 진입 각도는 무엇입니까?</p>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">카테터를 삽입할 때 올바른 바늘의 사면 방향과 적절한 진입 각도는 무엇입니까?</p>
             <button class="quiz-option" onclick="checkQuiz9(1)">① 사면이 위로 오도록 하여, 15°~30° 각도로 삽입한다.</button>
             <button class="quiz-option" onclick="checkQuiz9(2)">② 사면이 아래로 오도록 하여, 45° 각도로 삽입한다.</button>
             <button class="quiz-option" onclick="checkQuiz9(3)">③ 사면의 방향은 무관하며, 90° 각도로 직각 삽입한다.</button>
@@ -548,7 +550,7 @@
     <div id="quiz10-modal" class="quiz-modal-overlay">
         <div class="quiz-modal" style="max-width: 750px; width: 90%;">
             <div class="quiz-title">📝 퀴즈 14</div>
-            <p style="margin-bottom: 20px; font-size: 18px; font-weight: bold;">처방(EMR)에 따른 정확한 주입 속도는 몇 cc/hr로 세팅해야 할까요?</p>
+            <p style="margin-bottom: 20px; font-size: 18px; font-weight: bold;">처방에 따른 정확한 주입 속도는 몇 cc/hr로 세팅해야 할까요?</p>
             
             <div style="display: flex; gap: 30px; align-items: center; justify-content: center; flex-wrap: wrap;">
                 <!-- EMR 투약카드 -->
@@ -626,30 +628,52 @@
             <!-- 간호 기록지 작성 -->
             <div id="chart-area" class="chart-box" style="display:none;">
                 <h3>📝 간호기록 및 투약기록 작성</h3>
-                <table class="chart-table">
-                    <tr>
-                        <th>대상자명</th>
-                        <td><input type="text" id="chart-name" class="chart-input" ></td>
-                      </tr>
-                      <tr>
-                          <th>투여약물</th>
-                          <td><input type="text" id="chart-drug" class="chart-input" ></td>
-                      </tr>
-                      <tr>
-                          <th>투여경로</th>
-                          <td><input type="text" id="chart-route" class="chart-input" ></td>
-                      </tr>
-                      <tr>
-                          <th>투여속도</th>
-                          <td><input type="text" id="chart-speed" class="chart-input" ></td>
-                      </tr>
-                      <tr>
-                          <th>주입시간</th>
-                          <td><input type="text" id="chart-time" class="chart-input" value="17:00" readonly></td>
-                      </tr>
-                  </table>
-                  <button class="btn-submit" style="margin-top:15px;" onclick="submitChart()">기록 완료 및 간호종료</button>
-              </div>
+                <div class="chart-content-wrapper" style="display: flex; gap: 20px; margin-top: 15px; align-items: flex-start; flex-wrap: wrap;">
+                    <!-- 투약카드 추가 -->
+                    <div class="med-card" style="box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #ccc; flex-shrink: 0; background: #fcfcfc;">
+                        <div class="card-header">
+                            <div class="fake-qr"></div>
+                            <div style="margin-left: 55px;">
+                                2026-07-09<br>
+                                <strong style="font-size: 15px;">07-01 김이화</strong><br>
+                                12345678(1971-04-26)
+                            </div>
+                        </div>
+                        <div class="card-med">Normal saline inj (JW) [1000ml]</div>
+                        <div class="card-details">
+                            ● 1BAG ★1일 2회, 지시 속도로<br>
+                            정맥내 점적주사<br><br>
+                            80cc/hr <u style="font-weight:bold;">17:00</u> (1-1)
+                        </div>
+                    </div>
+                    <!-- 기록지 테이블 -->
+                    <div style="flex: 1; min-width: 250px;">
+                        <table class="chart-table" style="margin-top: 0;">
+                            <tr>
+                                <th>대상자명</th>
+                                <td><input type="text" id="chart-name" class="chart-input" ></td>
+                            </tr>
+                            <tr>
+                                <th>투여약물</th>
+                                <td><input type="text" id="chart-drug" class="chart-input" ></td>
+                            </tr>
+                            <tr>
+                                <th>투여경로</th>
+                                <td><input type="text" id="chart-route" class="chart-input" ></td>
+                            </tr>
+                            <tr>
+                                <th>투여속도</th>
+                                <td><input type="text" id="chart-speed" class="chart-input" ></td>
+                            </tr>
+                            <tr>
+                                <th>주입시간</th>
+                                <td><input type="text" id="chart-time" class="chart-input" value="17:00" readonly></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <button class="btn-submit" style="margin-top:15px;" onclick="submitChart()">기록 완료 및 간호종료</button>
+            </div>
           </div>
       </div>
 

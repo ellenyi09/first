@@ -748,6 +748,7 @@ th {
     cursor: grab; 
     position: relative; 
     transition: transform 0.1s; 
+    touch-action: none;
 }
 
 .drag-item:active { 

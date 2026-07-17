@@ -4,28 +4,34 @@
 let prepState = { card: false, regulator: false };
 let totalScore = 100;
 let wrongFeedbacks = [];
+let failedRequiredKeys = [];
+
+// 필수 문항 정의
+const requiredKeys = [
+    "quiz1", "quiz2b", "quiz4", "quiz5", "quiz5b", 
+    "quiz7", "quiz9", "quiz9b", "quiz9c", "quiz10",
+    "q11_date", "q11_time", "q11_size"
+];
 
 function applyPenalty(stepKey, key, feedbackText) {
     if (!wrongFeedbacks.includes(feedbackText)) {
         wrongFeedbacks.push(feedbackText);
         
-        const highWeightKeys = [
-            "quiz1", "quiz2", "quiz2b", "quiz3", "quiz4", "quiz5", "quiz5b", 
-            "quiz6", "quiz7", "quiz8", "quiz9", "quiz9b", "quiz9c", "quiz10", 
-            "quiz10b", "quiz11", "quiz12"
-        ];
-        const isHigh = highWeightKeys.includes(key);
+        const isRequired = requiredKeys.includes(key);
         
-        if (isHigh) {
-            totalScore -= 5;
-        } else {
+        if (isRequired) {
             totalScore -= 2;
+            if (!failedRequiredKeys.includes(key)) {
+                failedRequiredKeys.push(key);
+            }
+        } else {
+            totalScore -= 1;
         }
         if (totalScore < 0) totalScore = 0;
         
         // Step-wise breakdown deduction (kept for internal log compatibility)
         if (stepKey && evaluation && evaluation[stepKey] !== undefined) {
-            evaluation[stepKey] -= 10;
+            evaluation[stepKey] -= isRequired ? 10 : 5;
             if (evaluation[stepKey] < 0) evaluation[stepKey] = 0;
         }
     }
@@ -51,6 +57,13 @@ function showScene(sceneId, displayType = 'block') {
 // [2] Phase 1 & 2: 병실 인트로 및 EMR 처방 확인
 // -------------------------------------------------------------
 window.onload = function() {
+    // 터치 드래그앤드롭 폴리필 초기화 (모바일/태블릿 지원)
+    if (typeof MobileDragDrop !== 'undefined') {
+        MobileDragDrop.polyfill({
+            holdToDrag: 100
+        });
+    }
+
     // 인트로 문구 페이드아웃 및 팝업 표시 타이머 설정
     setTimeout(() => { 
         document.getElementById("scenario-intro").style.opacity = "0"; 
@@ -290,6 +303,7 @@ function checkQuiz3(ans) {
         });
     } else { 
         showWrongModal();
+        applyPenalty("step4", "quiz3", "• 퀴즈 4 (손위생 시점): 환자 대면 직후 우선 수행해야 할 손위생 단계를 누락하였습니다.");
     }
 }
 
@@ -444,13 +458,35 @@ function triggerStep(phase, actionKey) {
         // 잘못된 순서인 경우 (빨간색 색상 변화 제거하여 힌트 노출 예방)
         showWrongModal("핵심간호술 임상 절차를 다시 생각해보고 알맞은 순서의 버튼을 클릭하세요.");
         
-        // 패널티 감점 적용
+        // 각 페이즈별로 현재 도달해야 할 예상 순서(expectedAction)에 맞게 개별적으로 1점씩 감점 및 피드백 처리
         if (phase === 'prep') {
-            applyPenalty("step4", "seq_prep", "• 천자 준비 단계: 지혈대 묶기 ➔ 손위생 ➔ 소독솜 소독의 순서가 올바르지 않았습니다.");
+            if (expectedAction === 'tourniquet') {
+                applyPenalty("step4", "seq_prep_tourniquet", "• 천자 준비 단계 (1단계 - 지혈대 적용): 천자 부위 선정 후 첫 번째 순서인 지혈대 적용을 수행하지 못했습니다.");
+            } else if (expectedAction === 'sanitize') {
+                applyPenalty("step4", "seq_prep_sanitize", "• 천자 준비 단계 (2단계 - 손위생): 지혈대 적용 직후 두 번째 순서인 손소독제 손위생을 수행하지 못했습니다.");
+            } else if (expectedAction === 'clean') {
+                applyPenalty("step4", "seq_prep_clean", "• 천자 준비 단계 (3단계 - 피부 소독): 천자 직전 세 번째 순서인 피부 소독솜 소독을 수행하지 못했습니다.");
+            }
         } else if (phase === 'insert') {
-            applyPenalty("step5", "seq_insert", "• 천자 수행 단계: 바늘 삽입 ➔ 카테터 진입 ➔ 지혈대 풀기 ➔ 탐침 제거 및 연결의 순서가 올바르지 않았습니다.");
+            if (expectedAction === 'insert') {
+                applyPenalty("step5", "seq_insert_insert", "• 천자 수행 단계 (1단계 - 바늘 삽입): 천자 첫 번째 순서인 정맥천자 바늘 삽입을 올바르게 수행하지 못했습니다.");
+            } else if (expectedAction === 'advance') {
+                applyPenalty("step5", "seq_insert_advance", "• 천자 수행 단계 (2단계 - 카테터 전진): 바늘 삽입 직후 두 번째 순서인 카테터 진입을 올바르게 수행하지 못했습니다.");
+            } else if (expectedAction === 'untie') {
+                applyPenalty("step5", "seq_insert_untie", "• 천자 수행 단계 (3단계 - 지혈대 풀기): 혈액 역류 및 진입 완료 후 세 번째 순서인 지혈대 풀기를 올바르게 수행하지 못했습니다.");
+            } else if (expectedAction === 'remove') {
+                applyPenalty("step5", "seq_insert_remove", "• 천자 수행 단계 (4단계 - 탐침 제거 & 연결): 지혈대 제거 직후 네 번째 순서인 탐침 제거 및 수액선 연결을 수행하지 못했습니다.");
+            }
         } else if (phase === 'secure') {
-            applyPenalty("step6", "seq_secure", "• 수액 고정/속도 조절 단계: 조절기 열기 ➔ 테가덤 고정 ➔ 속도 조절 ➔ 라벨 작성의 순서가 올바르지 않았습니다.");
+            if (expectedAction === 'open') {
+                applyPenalty("step6", "seq_secure_open", "• 고정 및 조절 단계 (1단계 - 조절기 개방): 수액선 연결 직후 첫 번째 순서인 조절기 열기 및 주입부 관찰을 수행하지 못했습니다.");
+            } else if (expectedAction === 'secure') {
+                applyPenalty("step6", "seq_secure_secure", "• 고정 및 조절 단계 (2단계 - 테가덤 고정): 조절기 개방 직후 두 번째 순서인 투명 드레싱 고정을 수행하지 못했습니다.");
+            } else if (expectedAction === 'speed') {
+                applyPenalty("step6", "seq_secure_speed", "• 고정 및 조절 단계 (3단계 - 속도 조절): 드레싱 고정 직후 세 번째 순서인 주입 속도 세팅을 수행하지 못했습니다.");
+            } else if (expectedAction === 'label') {
+                applyPenalty("step6", "seq_secure_label", "• 고정 및 조절 단계 (4단계 - 라벨 작성): 속도 조절 직후 네 번째 순서인 드레싱 고정 라벨지 작성을 수행하지 못했습니다.");
+            }
         }
     }
 }
@@ -709,8 +745,7 @@ function submitChart() {
     const hasBase = drugClean.includes("ns") || 
                     drugClean.includes("n/s") || 
                     drugClean.includes("normalsaline") || 
-                    drugClean.includes("생리식염수") || 
-                    drugClean.includes("식염수");
+                    drugClean.includes("생리식염수");
     const hasVolume = drugClean.includes("1l") || 
                       drugClean.includes("1000ml");
     const isDrugCorrect = hasBase && hasVolume;
@@ -748,7 +783,7 @@ function submitChart() {
         // 첫 번째 오답 입력칸에 포커싱
         document.getElementById(errorFields[0]).focus();
         
-        // 여러 개의 오답을 한 번에 리스트업하여 노출
+        // 여러 개의 오답을 한 번에 리스트업하여 노출 (원래 사양 복구)
         let combinedMsg = "🚨 다음 항목을 다시 확인하세요:<br>";
         errorMsgs.forEach(msg => {
             combinedMsg += `• ${msg}<br>`;
@@ -771,15 +806,27 @@ function submitChart() {
     const descEl = document.getElementById("evaluation-desc");
     const restartBtn = document.getElementById("btn-restart-game");
     
-    if (totalScore >= 60) {
+    // 합격 조건: 90점 이상이면서 필수 문항 오답이 전혀 없을 때
+    const isPass = (totalScore >= 90) && (failedRequiredKeys.length === 0);
+    
+    if (isPass) {
         stampEl.className = "report-stamp pass";
         stampEl.innerText = "PASS";
-        descEl.innerText = "정맥수액주입 게임을 성공적으로 수행하셨습니다!";
+        descEl.innerText = "축하합니다! 정맥수액주입 시뮬레이션을 완료하셨습니다!";
         restartBtn.innerText = "🔄 다시 시작하기";
     } else {
         stampEl.className = "report-stamp replay";
         stampEl.innerText = "REPLAY";
-        descEl.innerText = "다시 한번 정맥수액주입 게임을 풀어봅시다.";
+        
+        let reason = "다시 한번 정맥수액주입 게임을 풀어봅시다.";
+        if (totalScore >= 90 && failedRequiredKeys.length > 0) {
+            reason = "총점 90점 이상이나, 필수 항목 오답으로 재시험 대상자입니다.";
+        } else if (totalScore < 90 && failedRequiredKeys.length > 0) {
+            reason = `최종 점수 미달(${totalScore}점 / 90점 기준) 및 필수 항목 오답으로 재시험 대상자입니다.`;
+        } else if (totalScore < 90) {
+            reason = `최종 점수 미달(${totalScore}점 / 90점 기준)로 재시험 대상자입니다.`;
+        }
+        descEl.innerText = reason;
         restartBtn.innerText = "🔄 재시도하기";
     }
     
@@ -1005,8 +1052,7 @@ function handleSimpleQuizCorrect(modalId, clickedButton, callback) {
     }, 800);
 }
 
-// 퀴즈 11 (고정 네임 라벨 작성) 정답 확인
-let quiz11PenaltyApplied = false;
+// 퀴즈 16 (고정 네임 라벨 작성) 정답 확인 - 3개 항목 개별 분리 채점
 function checkQuiz11() {
     const a1 = document.getElementById("q11-ans1").value.trim().toLowerCase();
     const a2 = document.getElementById("q11-ans2").value.trim().toLowerCase();
@@ -1017,7 +1063,26 @@ function checkQuiz11() {
     const hasTime = inputs.some(v => v.includes("시간") || v.includes("시각") || v.includes("time"));
     const hasSize = inputs.some(v => v.includes("크기") || v.includes("규격") || v.includes("게이지") || v.includes("g") || v.includes("size") || v.includes("굵기") || v.includes("규격"));
     
-    if (hasDate && hasTime && hasSize) {
+    let errors = [];
+    if (!hasDate) {
+        errors.push("date");
+        applyPenalty("step6", "q11_date", "• 퀴즈 16 (라벨 기재 - 삽입 날짜): 고정용 라벨에 삽입 날짜 기재가 누락되거나 정확하지 않습니다.");
+    }
+    if (!hasTime) {
+        errors.push("time");
+        applyPenalty("step6", "q11_time", "• 퀴즈 16 (라벨 기재 - 삽입 시간): 고정용 라벨에 삽입 시간 기재가 누락되거나 정확하지 않습니다.");
+    }
+    if (!hasSize) {
+        errors.push("size");
+        applyPenalty("step6", "q11_size", "• 퀴즈 16 (라벨 기재 - 카테터 크기): 고정용 라벨에 카테터 크기(규격) 기재가 누락되거나 정확하지 않습니다.");
+    }
+    
+    // 에러 표시 스타일 제어
+    document.getElementById("q11-ans1").classList.remove("error");
+    document.getElementById("q11-ans2").classList.remove("error");
+    document.getElementById("q11-ans3").classList.remove("error");
+    
+    if (errors.length === 0) {
         document.getElementById("quiz11-modal").style.display = "none";
         showExplainModal(
             `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
@@ -1027,8 +1092,33 @@ function checkQuiz11() {
             }
         );
     } else {
-        showWrongModal();
-        applyPenalty("step6", "quiz11", "• 퀴즈 16 (라벨 기재): 고정용 라벨에 삽입 날짜, 시간, 카테터 크기(규격)를 기재하는 과정에서 오류가 있었습니다.");
+        // 어느 인풋이 틀렸는지 스타일 적용
+        const checkInput = (val) => {
+            const isDate = val.includes("날짜") || val.includes("일자") || val.includes("date") || val === "일";
+            const isTime = val.includes("시간") || val.includes("시각") || val.includes("time");
+            const isSize = val.includes("크기") || val.includes("규격") || val.includes("게이지") || val.includes("g") || val.includes("size") || val.includes("굵기") || val.includes("규격");
+            return isDate || isTime || isSize;
+        };
+        
+        let firstErrorInput = null;
+        if (!checkInput(a1)) {
+            document.getElementById("q11-ans1").classList.add("error");
+            if (!firstErrorInput) firstErrorInput = document.getElementById("q11-ans1");
+        }
+        if (!checkInput(a2)) {
+            document.getElementById("q11-ans2").classList.add("error");
+            if (!firstErrorInput) firstErrorInput = document.getElementById("q11-ans2");
+        }
+        if (!checkInput(a3)) {
+            document.getElementById("q11-ans3").classList.add("error");
+            if (!firstErrorInput) firstErrorInput = document.getElementById("q11-ans3");
+        }
+        
+        if (firstErrorInput) {
+            firstErrorInput.focus();
+        }
+        
+        showWrongModal("다시 고민해볼까요?");
     }
 }
 
@@ -1039,7 +1129,7 @@ function checkQuiz12(ans) {
         document.getElementById("quiz12-modal").style.display = "none";
         showExplainModal(
             `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
-            "물품 정리 직후에는 물과 비누로 깨끗이 손위생을<br>실시하여 병원균 전파를 막습니다.<br><br>간호기록지를 작성해 주세요.",
+            "물품 정리 직후에는 물과 비누로 깨끗이 손위생을<br>실시합니다.<br><br>간호기록지를 작성해 주세요.",
             () => {
                 document.querySelector(".waste-cleanup-box").style.display = "none";
                 document.getElementById("chart-area").style.display = "block";
