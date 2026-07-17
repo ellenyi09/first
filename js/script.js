@@ -1,4 +1,115 @@
 // -------------------------------------------------------------
+// 구글 스프레드시트 연동 설정 (교수자 웹앱 URL)
+// -------------------------------------------------------------
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxLnYEd0F73D5Adlcpb7kuq2qoCCs8N0Dkuw0LXKAmkIu4yKArYIDLiOGk4huT1_ak_tg/exec";
+
+// -------------------------------------------------------------
+// 수강생 명단 등록 (오타 방지용 사전 매핑)
+// 형식: "학번": "이름" 형태로 나열하시면 검증이 자동 실행됩니다.
+// 예: {"1234": "이서연", "1235": "박민우"}
+// -------------------------------------------------------------
+const STUDENT_LIST = {};
+
+let studentId = "";
+let studentName = "";
+let playAttempt = 1;
+
+function submitLogin() {
+    const idInput = document.getElementById("student-id").value.trim();
+    const nameInput = document.getElementById("student-name").value.trim();
+    
+    if (!idInput) {
+        showWrongModal("🚨 학번을 입력해 주세요.");
+        return;
+    }
+    if (!nameInput) {
+        showWrongModal("🚨 이름을 입력해 주세요.");
+        return;
+    }
+    
+    // 만약 수강생 명단(STUDENT_LIST)이 등록되어 있다면 대조 검증 수행
+    if (Object.keys(STUDENT_LIST).length > 0) {
+        const registeredName = STUDENT_LIST[idInput];
+        if (!registeredName) {
+            showWrongModal("🚨 등록되지 않은 학번입니다. 오타가 없는지 확인해 주세요.");
+            return;
+        }
+        if (registeredName !== nameInput) {
+            showWrongModal("🚨 학번과 이름 정보가 일치하지 않습니다. 다시 확인해 주세요.");
+            return;
+        }
+    }
+    
+    studentId = idInput;
+    studentName = nameInput;
+    
+    // 도전 차수(시도 횟수) 판별 및 누적
+    let attemptCount = 1;
+    const savedAttempt = localStorage.getItem('iv_attempt_count_' + studentId);
+    const needIncrement = localStorage.getItem('iv_need_increment_' + studentId);
+    
+    if (!savedAttempt) {
+        attemptCount = 1;
+        localStorage.setItem('iv_attempt_count_' + studentId, '1');
+    } else {
+        attemptCount = parseInt(savedAttempt);
+        if (needIncrement === 'true') {
+            attemptCount += 1;
+            localStorage.setItem('iv_attempt_count_' + studentId, attemptCount.toString());
+            localStorage.removeItem('iv_need_increment_' + studentId);
+        }
+    }
+    playAttempt = attemptCount;
+    
+    // 로그인 화면 숨기고 게임 시작 (Phase 1 병실)
+    showScene("phase-room", "block");
+    
+    // 인트로 문구 페이드아웃 및 팝업 표시 타이머 개시
+    setTimeout(() => { 
+        document.getElementById("scenario-intro").style.opacity = "0"; 
+    }, 8000);
+    
+    setTimeout(() => { 
+        document.getElementById("scenario-intro").style.display = "none"; 
+        document.getElementById("alert-popup").style.display = "block"; 
+    }, 6000);
+}
+
+function sendDataToGoogleSheet(score, status, wrongList) {
+    if (!GOOGLE_SHEET_URL) {
+        console.warn("구글 스프레드시트 웹앱 URL이 설정되지 않아 성적 전송을 건너뜁니다.");
+        return;
+    }
+    
+    // 다음 시도 때 도전 차수가 정상 증가하도록 플래그 셋팅
+    localStorage.setItem('iv_need_increment_' + studentId, 'true');
+    
+    const payload = {
+        studentId: studentId,
+        studentName: studentName,
+        attempt: playAttempt,
+        score: score,
+        status: status,
+        wrongList: wrongList
+    };
+    
+    fetch(GOOGLE_SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(() => {
+        console.log("성적 데이터가 성공적으로 구글 스프레드시트에 전송되었습니다.");
+    })
+    .catch(err => {
+        console.error("구글 스프레드시트 성적 데이터 전송 오류:", err);
+    });
+}
+
+// -------------------------------------------------------------
 // [1] 전역 상태 및 유틸리티 함수 (씬 매니저)
 // -------------------------------------------------------------
 let prepState = { card: false, regulator: false };
@@ -63,16 +174,9 @@ window.onload = function() {
             holdToDrag: 100
         });
     }
-
-    // 인트로 문구 페이드아웃 및 팝업 표시 타이머 설정
-    setTimeout(() => { 
-        document.getElementById("scenario-intro").style.opacity = "0"; 
-    }, 8000);
     
-    setTimeout(() => { 
-        document.getElementById("scenario-intro").style.display = "none"; 
-        document.getElementById("alert-popup").style.display = "block"; 
-    }, 6000); 
+    // 시작 시 로그인 화면 강제 노출
+    showScene("phase-login", "flex");
 };
 
 // EMR 화면으로 이동
@@ -843,6 +947,9 @@ function submitChart() {
         }
     }
     
+    // 구글 스프레드시트에 전송 트리거
+    sendDataToGoogleSheet(totalScore, isPass ? "PASS" : "REPLAY", wrongFeedbacks);
+
     showExplainModal(
         `<strong style="color: #2ecc71; font-size: 22px;">🎉 기록 작성 완료</strong>`,
         "기록 작성이 완료되었습니다. 최종 성적 보고서를 확인하세요!",

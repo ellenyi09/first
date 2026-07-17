@@ -1244,6 +1244,7 @@ th {
     width: 100%;
     margin-top: 15px;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 .chart-table th, .chart-table td {
     border: 1px solid var(--border-dark);
@@ -1256,10 +1257,13 @@ th {
 }
 .chart-input {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     padding: 6px 10px;
     border: 1px solid var(--border-dark);
     border-radius: 4px;
     font-size: 13px;
+    box-sizing: border-box;
 }
 
 /* 잘못 입력한 입력창에 빨간색 피드백 효과 */
@@ -1410,3 +1414,60 @@ th {
     line-height: 1.6;
     color: #ddd;
 }
+
+/* 로그인 화면 스타일 */
+#phase-login {
+    background-color: #1a1a1a;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.login-container {
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 40px 30px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    border: 1px solid #444;
+    text-align: center;
+}
+.login-title {
+    font-size: 26px;
+    color: #ffd700;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.login-subtitle {
+    font-size: 14px;
+    color: #bbb;
+    margin-bottom: 30px;
+}
+.login-form {
+    text-align: left;
+}
+.login-input-group {
+    margin-bottom: 20px;
+}
+.login-input-group label {
+    display: block;
+    font-size: 13px;
+    color: #ffd700;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.login-input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 6px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.login-input-group input:focus {
+    border-color: #ffd700;
+}
+
