@@ -84,6 +84,14 @@ function sendDataToGoogleSheet(score, status, failReason, wrongList) {
     // 다음 시도 때 도전 차수가 정상 증가하도록 플래그 셋팅
     localStorage.setItem('iv_need_increment_' + studentId, 'true');
     
+    // 콜론(:) 뒤의 길다란 설명을 지우고 '• 퀴즈 1 (5 Rights)' 형태로 심플하게 정제
+    const cleanedWrongList = (wrongList || []).map(item => {
+        if (item.includes(":")) {
+            return item.split(":")[0].trim();
+        }
+        return item.trim();
+    });
+    
     const payload = {
         studentId: studentId,
         studentName: studentName,
@@ -91,7 +99,7 @@ function sendDataToGoogleSheet(score, status, failReason, wrongList) {
         score: score,
         status: status,
         failReason: failReason,
-        wrongList: wrongList
+        wrongList: cleanedWrongList
     };
     
     fetch(GOOGLE_SHEET_URL, {

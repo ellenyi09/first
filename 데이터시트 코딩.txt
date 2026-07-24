@@ -1,0 +1,33 @@
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    
+    var now = new Date();
+    var timestamp = Utilities.formatDate(now, "Asia/Seoul", "yyyy-MM-dd HH:mm");
+    
+    var studentId = data.studentId || "";
+    var studentName = data.studentName || "";
+    var attemptStr = (data.attempt || "1") + "차";
+    var scoreStr = (data.score !== undefined ? data.score : 0) + "점";
+    var statusStr = data.status || "";
+    var failReasonStr = data.failReason || "-";
+    var wrongListStr = data.wrongList ? data.wrongList.join("\n") : "";
+
+    // 8개 열: [제출일시, 학번, 이름, 응시차수, 최종점수, 통과여부, 재시험사유, 틀린문항]
+    sheet.appendRow([
+      timestamp,
+      studentId,
+      studentName,
+      attemptStr,
+      scoreStr,
+      statusStr,
+      failReasonStr,
+      wrongListStr
+    ]);
+    
+    return ContentService.createTextOutput("Success");
+  } catch (error) {
+    return ContentService.createTextOutput("Error: " + error.toString());
+  }
+}
