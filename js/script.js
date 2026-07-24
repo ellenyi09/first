@@ -75,7 +75,7 @@ function submitLogin() {
     }, 6000);
 }
 
-function sendDataToGoogleSheet(score, status, wrongList) {
+function sendDataToGoogleSheet(score, status, failReason, wrongList) {
     if (!GOOGLE_SHEET_URL) {
         console.warn("구글 스프레드시트 웹앱 URL이 설정되지 않아 성적 전송을 건너뜁니다.");
         return;
@@ -90,6 +90,7 @@ function sendDataToGoogleSheet(score, status, wrongList) {
         attempt: playAttempt,
         score: score,
         status: status,
+        failReason: failReason,
         wrongList: wrongList
     };
     
@@ -973,6 +974,18 @@ function submitChart() {
         restartBtn.innerText = "🔄 재시도하기";
     }
     
+    // 구글 스프레드시트 기록용 세부 사유 데이터 생성
+    let dataFailReason = "-";
+    if (!isPass) {
+        if (totalScore >= 90 && failedRequiredKeys.length > 0) {
+            dataFailReason = "필수항목 오답 (과락)";
+        } else if (totalScore < 90 && failedRequiredKeys.length > 0) {
+            dataFailReason = "필수항목 오답 및 점수 미달";
+        } else if (totalScore < 90) {
+            dataFailReason = "점수 미달 (90점 미만)";
+        }
+    }
+    
     // 오답노트(피드백 목록) 렌더링
     const feedbackArea = document.getElementById("report-feedback-area");
     const feedbackList = document.getElementById("report-feedback-list");
@@ -986,8 +999,8 @@ function submitChart() {
         }
     }
     
-    // 구글 스프레드시트에 전송 트리거
-    sendDataToGoogleSheet(totalScore, isPass ? "PASS" : "REPLAY", wrongFeedbacks);
+    // 구글 스프레드시트에 전송 트리거 (사유 추가)
+    sendDataToGoogleSheet(totalScore, isPass ? "PASS" : "REPLAY", dataFailReason, wrongFeedbacks);
 
     showExplainModal(
         `<strong style="color: #2ecc71; font-size: 22px;">🎉 기록 작성 완료</strong>`,
