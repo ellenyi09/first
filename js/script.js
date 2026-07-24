@@ -14,6 +14,25 @@ let studentId = "";
 let studentName = "";
 let playAttempt = 1;
 
+// 게임 시작 시 주요 이미지 사전 로딩 (버벅거림 100% 제거)
+(function preloadGameImages() {
+    const imagesToPreload = [
+        'assets/병실사진.jpg',
+        'assets/fluid set 연결.jpg',
+        'assets/image_df7000.jpg',
+        'assets/image_e23256.jpg',
+        'assets/IV pole.jpeg',
+        'assets/NS 1L.jpeg',
+        'assets/regulator.jpeg',
+        'assets/sharps_container.jpg',
+        'assets/biohazard_bin.jpg'
+    ];
+    imagesToPreload.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+})();
+
 function submitLogin() {
     const idInput = document.getElementById("student-id").value.trim();
     const nameInput = document.getElementById("student-name").value.trim();
