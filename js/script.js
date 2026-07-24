@@ -64,15 +64,23 @@ function submitLogin() {
     // 로그인 화면 숨기고 게임 시작 (Phase 1 병실)
     showScene("phase-room", "block");
     
+    // 시나리오 인트로 노출
+    const introEl = document.getElementById("scenario-intro");
+    if (introEl) {
+        introEl.style.display = "block";
+        introEl.style.opacity = "1";
+    }
+    
     // 인트로 문구 페이드아웃 및 팝업 표시 타이머 개시
     setTimeout(() => { 
-        document.getElementById("scenario-intro").style.opacity = "0"; 
-    }, 8000);
+        if (introEl) introEl.style.opacity = "0"; 
+    }, 4000);
     
     setTimeout(() => { 
-        document.getElementById("scenario-intro").style.display = "none"; 
-        document.getElementById("alert-popup").style.display = "block"; 
-    }, 6000);
+        if (introEl) introEl.style.display = "none"; 
+        const alertPop = document.getElementById("alert-popup");
+        if (alertPop) alertPop.style.display = "block"; 
+    }, 4500);
 }
 
 function sendDataToGoogleSheet(score, status, failReason, wrongList) {
