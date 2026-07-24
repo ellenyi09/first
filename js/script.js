@@ -204,15 +204,16 @@ function showContextMenu(e) {
     menu.style.top = posY + "px"; 
 }
 
-// 태블릿/모바일 길게 터치(Long Press - 800ms) 이벤트 바인딩
+// 태블릿/모바일 길게 터치(Long Press - 400ms) 이벤트 바인딩
 document.addEventListener("DOMContentLoaded", function() {
     const emrBox = document.getElementById("emr-box");
     if (emrBox) {
         emrBox.addEventListener("touchstart", function(e) {
+            if (touchTimer) clearTimeout(touchTimer);
             touchTimer = setTimeout(function() {
                 showContextMenu(e);
-            }, 800); // 0.8초 누르고 있으면 메뉴 뜸
-        }, { passive: true });
+            }, 400); // 0.4초로 대기시간을 줄여 즉각적 반응성 확보
+        }, { passive: false });
         
         emrBox.addEventListener("touchend", function() {
             if (touchTimer) clearTimeout(touchTimer);
