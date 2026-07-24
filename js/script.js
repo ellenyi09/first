@@ -184,19 +184,57 @@ function goToEMR() {
     showScene("phase-emr", "flex"); 
 }
 
-// EMR 처방 우클릭 시 컨텍스트 메뉴 표시
+// EMR 처방 우클릭 및 길게 누르기(롱터치) 시 컨텍스트 메뉴 표시
+let touchTimer = null;
+
 function showContextMenu(e) { 
-    e.preventDefault(); 
+    if (e.preventDefault) e.preventDefault(); 
     let menu = document.getElementById("context-menu"); 
     menu.style.display = "block"; 
-    menu.style.left = e.pageX + "px"; 
-    menu.style.top = e.pageY + "px"; 
+    
+    let posX = e.pageX;
+    let posY = e.pageY;
+    
+    if (e.touches && e.touches.length > 0) {
+        posX = e.touches[0].pageX;
+        posY = e.touches[0].pageY;
+    }
+    
+    menu.style.left = posX + "px"; 
+    menu.style.top = posY + "px"; 
 }
 
-// 화면 클릭 시 컨텍스트 메뉴 숨김
-window.onclick = function(e) { 
-    document.getElementById("context-menu").style.display = "none"; 
-}
+// 태블릿/모바일 길게 터치(Long Press - 800ms) 이벤트 바인딩
+document.addEventListener("DOMContentLoaded", function() {
+    const emrBox = document.getElementById("emr-box");
+    if (emrBox) {
+        emrBox.addEventListener("touchstart", function(e) {
+            touchTimer = setTimeout(function() {
+                showContextMenu(e);
+            }, 800); // 0.8초 누르고 있으면 메뉴 뜸
+        }, { passive: true });
+        
+        emrBox.addEventListener("touchend", function() {
+            if (touchTimer) clearTimeout(touchTimer);
+        }, { passive: true });
+        
+        emrBox.addEventListener("touchmove", function() {
+            if (touchTimer) clearTimeout(touchTimer);
+        }, { passive: true });
+    }
+});
+
+// 화면 클릭 또는 터치 시 컨텍스트 메뉴 숨김
+window.addEventListener("click", function() {
+    const menu = document.getElementById("context-menu");
+    if (menu) menu.style.display = "none";
+});
+window.addEventListener("touchstart", function(e) {
+    const menu = document.getElementById("context-menu");
+    if (menu && !e.target.closest("#context-menu")) {
+        menu.style.display = "none";
+    }
+}, { passive: true });
 
 // -------------------------------------------------------------
 // [3] Phase 3 & 4: 투약카드 출력, 수액장 선택 및 관련 퀴즈

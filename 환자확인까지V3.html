@@ -59,7 +59,7 @@
 
     <!-- Phase 2: EMR 처방 조회 -->
     <div id="phase-emr" class="scene">
-        <div class="emr-container" oncontextmenu="showContextMenu(event)">
+        <div class="emr-container" id="emr-box" oncontextmenu="showContextMenu(event)">
             <div class="title-bar">
                 <span>(12345678 김이화 여/55y) 추가처방 조회 </span>
                 <span class="icons">✕</span>
@@ -99,8 +99,11 @@
                     </tbody>
                 </table>
             </div>
+            <div style="margin-top: 10px; font-size: 13px; color: #666; text-align: center;">
+                💡 <strong>안내:</strong> 마우스 우클릭 또는 화면을 <strong>1초간 길게 터치</strong>하시면 투약카드를 출력할 수 있습니다.
+            </div>
         </div>
-        <!-- 우클릭 컨텍스트 메뉴 -->
+        <!-- 우클릭 / 롱터치 컨텍스트 메뉴 -->
         <div id="context-menu">
             <div class="context-menu-item" onclick="printCard()">🖨️ 투약카드 출력</div>
         </div>
