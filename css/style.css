@@ -241,7 +241,7 @@ body {
 
 /* Phase 1: 병실 배경 및 알림창 */
 #phase-room { 
-    background-image: url('../assets/병실사진.jpg'); 
+    background-image: url('../assets/병실사진.png'); 
     background-size: cover; 
     background-position: center; 
     align-items: center; 
@@ -814,7 +814,7 @@ th {
 #item-ns1l.connected-fluid { 
     width: 220px !important; 
     height: 450px !important; 
-    background-image: url('../assets/fluid set 연결.jpg'); 
+    background-image: url('../assets/fluid set 연결.png'); 
 }
 
 /* 수액팩 위의 초소형 스티커 카드 디자인 및 기본 위치 */

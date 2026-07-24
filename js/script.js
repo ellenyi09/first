@@ -17,8 +17,8 @@ let playAttempt = 1;
 // 게임 시작 시 주요 이미지 사전 로딩 (버벅거림 100% 제거)
 (function preloadGameImages() {
     const imagesToPreload = [
-        'assets/병실사진.jpg',
-        'assets/fluid set 연결.jpg',
+        'assets/병실사진.png',
+        'assets/fluid set 연결.png',
         'assets/image_df7000.jpg',
         'assets/image_e23256.jpg',
         'assets/IV pole.jpeg',
