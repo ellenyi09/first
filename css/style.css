@@ -833,6 +833,7 @@ th {
     border: 1px solid #bbb !important; 
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important; 
     z-index: 10; 
+    pointer-events: none !important; 
     text-align: left; 
     display: none; 
 }
