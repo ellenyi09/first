@@ -1478,3 +1478,15 @@ th {
     border-color: #ffd700;
 }
 
+/* 터치/클릭 선택 시 노란색 하이라이트 글로우 효과 */
+.selected-item {
+    outline: 4px solid #ffd700 !important;
+    box-shadow: 0 0 20px #ffd700 !important;
+    animation: selectedPulse 1s infinite alternate;
+}
+
+@keyframes selectedPulse {
+    from { box-shadow: 0 0 10px #ffd700; }
+    to { box-shadow: 0 0 25px #ffeb3b; }
+}
+

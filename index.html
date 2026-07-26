@@ -268,17 +268,17 @@
         <button class="btn-next" onclick="goToConnection()">물품 준비 완료. 수액 세팅을 시작합니다.</button>
     </div>
 
-    <!-- Phase 6: 수액 연결 (드래그 앤 드롭) -->
+    <!-- Phase 6: 수액 연결 (드래그 앤 드롭 & 터치 선택 지원) -->
     <div id="phase-connect" class="scene">
-        <div id="prep-instruction">투약카드와 수액세트를 드래그하여 수액(N/S 1L)에 연결하세요.</div>
+        <div id="prep-instruction">투약카드와 수액세트를 드래그하거나 <strong>터치(클릭)</strong>하여 수액(N/S 1L)에 연결하세요.</div>
         
         <!-- 반응형 콘텐츠 배치용 래퍼 컨테이너 -->
         <div class="connect-wrap">
-            <div id="iv-pole" ondrop="dropOnPole(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"></div>
+            <div id="iv-pole" ondrop="dropOnPole(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" onclick="handlePoleClick()"></div>
             
             <div id="prep-table">
                 <!-- 투약 카드 -->
-                <div id="item-card" class="drag-item med-card" draggable="true" ondragstart="drag(event, 'card')">
+                <div id="item-card" class="drag-item med-card" draggable="true" ondragstart="drag(event, 'card')" onclick="selectConnectItem('card')">
                     <div class="card-header">
                         <div class="fake-qr"></div>
                         <div style="margin-left: 55px;">
@@ -296,10 +296,10 @@
                 </div>
                 
                 <!-- 조절기 -->
-                <div id="item-regulator" class="drag-item" draggable="true" ondragstart="drag(event, 'regulator')"></div>
+                <div id="item-regulator" class="drag-item" draggable="true" ondragstart="drag(event, 'regulator')" onclick="selectConnectItem('regulator')"></div>
                 
                 <!-- 수액통 -->
-                <div id="item-ns1l" ondrop="dropOnNS(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                <div id="item-ns1l" ondrop="dropOnNS(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" onclick="handleNSClick()">
                     <div id="attached-card" class="med-card">
                         <div class="card-header">
                             <div class="fake-qr"></div>

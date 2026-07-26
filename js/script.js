@@ -204,10 +204,11 @@ function showScene(sceneId, displayType = 'block') {
 // [2] Phase 1 & 2: 병실 인트로 및 EMR 처방 확인
 // -------------------------------------------------------------
 window.onload = function() {
-    // 터치 드래그앤드롭 폴리필 초기화 (모바일/태블릿 지원)
+    // 터치 드래그앤드롭 폴리필 초기화 (모바일/태블릿 즉시 반응)
     if (typeof MobileDragDrop !== 'undefined') {
         MobileDragDrop.polyfill({
-            holdToDrag: 100
+            holdToDrag: 0,
+            touchMoveScrollIfCancel: true
         });
     }
     
@@ -366,8 +367,62 @@ function goToConnection() {
 }
 
 // -------------------------------------------------------------
-// [5] Phase 6: 수액 및 세트 조립 (드래그 앤 드롭)
+// [5] Phase 6: 수액 및 세트 조립 (드래그 & 원터치 선택 지원)
 // -------------------------------------------------------------
+let selectedConnectType = null;
+
+// 원터치 클릭/터치 선택 기능 (드래그 미숙 태블릿/모바일 보장)
+function selectConnectItem(type) {
+    const cardEl = document.getElementById('item-card');
+    const regEl = document.getElementById('item-regulator');
+    const nsEl = document.getElementById('item-ns1l');
+    
+    if (cardEl) cardEl.classList.remove('selected-item');
+    if (regEl) regEl.classList.remove('selected-item');
+    if (nsEl) nsEl.classList.remove('selected-item');
+    
+    if (selectedConnectType === type) {
+        selectedConnectType = null;
+        return;
+    }
+    
+    selectedConnectType = type;
+    if (type === 'card' && cardEl) {
+        cardEl.classList.add('selected-item');
+    } else if (type === 'regulator' && regEl) {
+        regEl.classList.add('selected-item');
+    }
+}
+
+function handleNSClick() {
+    if (selectedConnectType === 'card' || selectedConnectType === 'regulator') {
+        processConnectItem(selectedConnectType);
+        selectedConnectType = null;
+        const cardEl = document.getElementById('item-card');
+        const regEl = document.getElementById('item-regulator');
+        if (cardEl) cardEl.classList.remove('selected-item');
+        if (regEl) regEl.classList.remove('selected-item');
+    } else if (prepState.card && prepState.regulator) {
+        const nsEl = document.getElementById('item-ns1l');
+        if (selectedConnectType === 'ready_fluid') {
+            selectedConnectType = null;
+            if (nsEl) nsEl.classList.remove('selected-item');
+        } else {
+            selectedConnectType = 'ready_fluid';
+            if (nsEl) nsEl.classList.add('selected-item');
+        }
+    }
+}
+
+function handlePoleClick() {
+    if (selectedConnectType === 'ready_fluid') {
+        processPoleConnect();
+        selectedConnectType = null;
+        const nsEl = document.getElementById('item-ns1l');
+        if (nsEl) nsEl.classList.remove('selected-item');
+    }
+}
+
 // 드래그 시작 데이터 설정
 function drag(ev, type) { 
     ev.dataTransfer.setData("itemType", type); 
@@ -389,28 +444,55 @@ function dragLeave(ev) {
     document.getElementById('iv-pole').classList.remove('highlight'); 
 }
 
-// 수액통 위에 투약카드 및 수액세트 조립
-function dropOnNS(ev) {
-    ev.preventDefault(); 
-    document.getElementById('item-ns1l').classList.remove('highlight');
-    let type = ev.dataTransfer.getData("itemType");
-    
+// 공통 연결 처리 함수 (순서 무관 보장)
+function processConnectItem(type) {
     if (type === 'card') { 
         document.getElementById('item-card').style.display = 'none'; 
         document.getElementById('attached-card').style.display = 'block'; 
         prepState.card = true; 
     } else if (type === 'regulator') { 
-        // Show OX Quiz 2b
         document.getElementById('quiz2b-modal').style.display = 'flex';
     }
     
-    // 카드와 세트(조절기)가 모두 결합되면 폴대에 걸 수 있도록 드래그 아이템으로 변경
+    // 순서와 상관없이 두 아이템(카드, 조절기)이 모두 결합되면 폴대에 걸 수 있도록 셋팅
     if (prepState.card && prepState.regulator) {
-        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요.";
+        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요 (드래그 또는 터치).";
         let ns1l = document.getElementById('item-ns1l'); 
         ns1l.classList.add('drag-item'); 
         ns1l.setAttribute('draggable', 'true'); 
         ns1l.setAttribute('ondragstart', "drag(event, 'ready_fluid')"); 
+    }
+}
+
+function processPoleConnect() {
+    let pole = document.getElementById('iv-pole');
+    pole.classList.remove('highlight');
+    let fluid = document.getElementById('item-ns1l');
+    pole.appendChild(fluid);
+    
+    // 폴대 내 위치 고정
+    fluid.style.position = 'absolute'; 
+    fluid.style.top = '5%'; 
+    fluid.style.left = '50%'; 
+    fluid.style.transform = 'translateX(-50%)';
+    fluid.setAttribute('draggable', 'false'); 
+    fluid.classList.remove('drag-item');
+    
+    document.getElementById('prep-instruction').innerHTML = "🎉 준비 완료! 병실로 이동합니다. 🎉";
+    
+    // 1.5초 후 병실 이동 연출 호출
+    setTimeout(() => {
+        startMovingToPatientRoom();
+    }, 1500);
+}
+
+// 수액통 위에 투약카드 및 수액세트 조립 (드래그 앤 드롭)
+function dropOnNS(ev) {
+    ev.preventDefault(); 
+    document.getElementById('item-ns1l').classList.remove('highlight');
+    let type = ev.dataTransfer.getData("itemType");
+    if (type) {
+        processConnectItem(type);
     }
 }
 
@@ -421,23 +503,7 @@ function dropOnPole(ev) {
     let type = ev.dataTransfer.getData("itemType");
     
     if (type === 'ready_fluid') {
-        let fluid = document.getElementById('item-ns1l');
-        pole.appendChild(fluid);
-        
-        // 폴대 내 위치 고정
-        fluid.style.position = 'absolute'; 
-        fluid.style.top = '5%'; 
-        fluid.style.left = '50%'; 
-        fluid.style.transform = 'translateX(-50%)';
-        fluid.setAttribute('draggable', 'false'); 
-        fluid.classList.remove('drag-item');
-        
-        document.getElementById('prep-instruction').innerHTML = "🎉 준비 완료! 병실로 이동합니다. 🎉";
-        
-        // 1.5초 후 병실 이동 연출 호출
-        setTimeout(() => {
-            startMovingToPatientRoom();
-        }, 1500);
+        processPoleConnect();
     } else {
         alert("먼저 투약카드와 수액세트를 수액에 모두 연결해야 걸 수 있습니다.");
     }
