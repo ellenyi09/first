@@ -423,9 +423,14 @@ function handlePoleClick() {
     }
 }
 
+let currentDraggedType = null;
+
 // 드래그 시작 데이터 설정
 function drag(ev, type) { 
-    ev.dataTransfer.setData("itemType", type); 
+    currentDraggedType = type;
+    if (ev.dataTransfer) {
+        ev.dataTransfer.setData("itemType", type); 
+    }
 }
 
 // 드래그 오버 시 영역 하이라이트 효과
@@ -490,9 +495,10 @@ function processPoleConnect() {
 function dropOnNS(ev) {
     ev.preventDefault(); 
     document.getElementById('item-ns1l').classList.remove('highlight');
-    let type = ev.dataTransfer.getData("itemType");
+    let type = (ev.dataTransfer && ev.dataTransfer.getData("itemType")) || currentDraggedType;
     if (type) {
         processConnectItem(type);
+        currentDraggedType = null;
     }
 }
 
@@ -500,10 +506,11 @@ function dropOnPole(ev) {
     ev.preventDefault(); 
     let pole = document.getElementById('iv-pole');
     pole.classList.remove('highlight');
-    let type = ev.dataTransfer.getData("itemType");
+    let type = (ev.dataTransfer && ev.dataTransfer.getData("itemType")) || currentDraggedType;
     
     if (type === 'ready_fluid') {
         processPoleConnect();
+        currentDraggedType = null;
     } else {
         alert("먼저 투약카드와 수액세트를 수액에 모두 연결해야 걸 수 있습니다.");
     }
