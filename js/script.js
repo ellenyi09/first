@@ -456,7 +456,7 @@ function processConnectItem(type) {
     
     // 순서와 상관없이 두 아이템(카드, 조절기)이 모두 결합되면 폴대에 걸 수 있도록 셋팅
     if (prepState.card && prepState.regulator) {
-        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요. (드래그 또는 클릭)";
+        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요.<br>(드래그 또는 클릭)";
         let ns1l = document.getElementById('item-ns1l'); 
         ns1l.classList.add('drag-item'); 
         ns1l.setAttribute('draggable', 'true'); 

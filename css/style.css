@@ -755,7 +755,17 @@ th {
     cursor: grab; 
     position: relative; 
     transition: transform 0.1s; 
-    touch-action: none;
+    touch-action: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.drag-item * {
+    pointer-events: none !important;
+    touch-action: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
 }
 
 .drag-item:active { 
