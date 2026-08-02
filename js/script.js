@@ -38,11 +38,11 @@ function submitLogin() {
     const nameInput = document.getElementById("student-name").value.trim();
     
     if (!idInput) {
-        showWrongModal("🚨 학번을 입력해 주세요.");
+        alert("🚨 학번을 입력해 주세요.");
         return;
     }
     if (!nameInput) {
-        showWrongModal("🚨 이름을 입력해 주세요.");
+        alert("🚨 이름을 입력해 주세요.");
         return;
     }
     
@@ -50,11 +50,11 @@ function submitLogin() {
     if (Object.keys(STUDENT_LIST).length > 0) {
         const registeredName = STUDENT_LIST[idInput];
         if (!registeredName) {
-            showWrongModal("🚨 등록되지 않은 학번입니다. 오타가 없는지 확인해 주세요.");
+            alert("🚨 등록되지 않은 학번입니다. 오타가 없는지 확인해 주세요.");
             return;
         }
         if (registeredName !== nameInput) {
-            showWrongModal("🚨 학번과 이름 정보가 일치하지 않습니다. 다시 확인해 주세요.");
+            alert("🚨 학번과 이름 정보가 일치하지 않습니다. 다시 확인해 주세요.");
             return;
         }
     }
@@ -80,7 +80,12 @@ function submitLogin() {
     }
     playAttempt = attemptCount;
     
-    // 로그인 화면 숨기고 게임 시작 (Phase 1 병실)
+    // 학번/이름 입력 후 튜토리얼(오리엔테이션) 팝업으로 이동
+    showScene("phase-tutorial", "flex");
+}
+
+function startRealGame() {
+    // 튜토리얼 확인 후 실습 시작 (Phase 1 병실)
     showScene("phase-room", "block");
     
     // 시나리오 인트로 노출
@@ -461,7 +466,7 @@ function processConnectItem(type) {
     
     // 순서와 상관없이 두 아이템(카드, 조절기)이 모두 결합되면 폴대에 걸 수 있도록 셋팅
     if (prepState.card && prepState.regulator) {
-        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 우측 IV 폴대에 걸어주세요.<br>(드래그 또는 클릭)";
+        document.getElementById('prep-instruction').innerHTML = "수액 준비 완료!<br>완성된 수액을 드래그하여 우측 IV 폴대에 걸어주세요.";
         let ns1l = document.getElementById('item-ns1l'); 
         ns1l.classList.add('drag-item'); 
         ns1l.setAttribute('draggable', 'true'); 

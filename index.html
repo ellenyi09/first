@@ -31,6 +31,43 @@
         </div>
     </div>
 
+    <!-- Phase 0.5: 시뮬레이션 튜토리얼 (오리엔테이션) -->
+    <div id="phase-tutorial" class="scene" style="display: none;">
+        <div class="tutorial-container">
+            <h2 class="tutorial-title">🎮 정맥수액주입 시뮬레이션 안내</h2>
+            <div class="tutorial-content">
+                <div class="tutorial-section">
+                    <h3>1. 시뮬레이션 내용</h3>
+                    <p>당신은 이브닝 담당 간호사입니다. 처방 확인부터 간호기록 작성까지 완수하세요.</p>
+                </div>
+                <div class="tutorial-section">
+                    <h3>2. 조작 및 진행 방식 안내</h3>
+                    <ul>
+                        <li><strong>투약카드 출력</strong>: 처방 화면에서 <u>마우스 우클릭</u> ➔ <code>투약카드 출력</code> 클릭</li>
+                        <li><strong>팝업 퀴즈</strong>: 퀴즈 창이 뜨면 객관식/OX/체크박스 보기를 클릭하여 선택</li>
+                        <li><strong>순서 맞추기</strong>: 화면 하단 버튼들을 순서에 맞게 차례대로 클릭</li>
+                        <li><strong>물품 옮기기</strong>: 수액 조립 및 쓰레기 정리는 마우스로 끌어서 놓기 (Drag & Drop)</li>
+                        <li><strong>주관식 입력</strong>: 대소문자 및 띄어쓰기 구분 없이 입력</li>
+                    </ul>
+                </div>
+                <div class="tutorial-section">
+                    <h3>3. 채점 방식</h3>
+                    <p>100점 만점 기준 (필수 문항 오답 시 <strong>-2점</strong>, 일반 문항 오답 시 <strong>-1점</strong> 차등 감점)</p>
+                    <p style="color: #bbb; font-size: 13px; margin-top: 3px;">※ 동일 문항은 반복 오답 시에도 <strong>최초 1회만 감점</strong></p>
+                </div>
+                <div class="tutorial-section alert-section">
+                    <h3>4. 합격 및 재시험 기준 ⚠️</h3>
+                    <p><strong>합격 (PASS)</strong>: 최종 점수 90점 이상 <u>AND</u> 필수 문항 오답 0개</p>
+                    <p><strong>재시험 (REPLAY)</strong>: ① 90점 미만 시 <u>OR</u> ② 필수 문항 오답 발생 시 과락</p>
+                    <div class="tutorial-warning">
+                        ※ 총점이 90점 이상이더라도, 필수 문항을 1개라도 틀리면 재시험 대상자가 됩니다.
+                    </div>
+                </div>
+            </div>
+            <button class="btn-submit" onclick="startRealGame()" style="width: 100%; margin-top: 20px; font-size: 16px; padding: 12px;">안내를 확인했습니다 (실습 시작)</button>
+        </div>
+    </div>
+
     <!-- =================================================================
          [1] Phase 1 ~ 2: 병실 입장 및 EMR 조회
     ================================================================== -->
@@ -73,23 +110,26 @@
                 <div class="info-value">여/55y</div>
                 <div class="info-value">113병동 07병실</div>
             </div>
-            <div class="table-container">
-                <table>
+            <!-- 처방내역 테이블 -->
+            <div style="flex: 1; padding: 15px; overflow-y: auto;">
+                <table class="emr-table">
                     <thead>
                         <tr>
-                            <th>타이틀</th>
-                            <th>처방구분</th>
+                            <th>구분</th>
+                            <th>처방일자</th>
+                            <th>처방코드</th>
                             <th>처방명</th>
-                            <th>투여량</th>
+                            <th>수량</th>
                             <th>단위</th>
-                            <th>방법</th>
+                            <th>용법</th>
                             <th>속도</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Routine Order</td>
-                            <td>약주사</td>
+                            <td>[추가]</td>
+                            <td>2026-07-09</td>
+                            <td>M-NS1000</td>
                             <td style="text-align:left;">Normal saline inj (JW) [1000ml]</td>
                             <td>1</td>
                             <td>BAG</td>
@@ -100,7 +140,7 @@
                 </table>
             </div>
             <div style="margin-top: 10px; font-size: 13px; color: #666; text-align: center;">
-                💡 <strong>안내:</strong> 마우스 우클릭 또는 화면을 <strong>1초간 길게 터치</strong>하시면 투약카드를 출력할 수 있습니다.
+                💡 <strong>안내:</strong> 마우스 우클릭 시 투약카드를 출력할 수 있습니다.
             </div>
         </div>
         <!-- 우클릭 / 롱터치 컨텍스트 메뉴 -->
@@ -109,9 +149,6 @@
         </div>
     </div>
 
-    <!-- =================================================================
-         [2] Phase 3 ~ 4: 투약카드 출력 & 수액장 수액 선택
-    ================================================================== -->
     <!-- Phase 3: 프린터 출력 화면 -->
     <div id="phase-printer" class="scene">
         <h2 style="color:white; margin-bottom: 20px;">바코드 프린터 기계</h2>
@@ -141,9 +178,12 @@
     <div id="quiz1-modal" class="quiz-modal-overlay">
         <div class="quiz-modal">
             <div class="quiz-title">📝 퀴즈 1</div>
-            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold;">투약의 기본 원칙인 5 Right에 해당하지 않는 것을 고르세요.</p>
-            <button class="quiz-option" onclick="checkQuiz1(1)">① 정확한 환자 (Right Patient)</button>
-            <button class="quiz-option" onclick="checkQuiz1(2)">② 정확한 약명 (Right Drug)</button>
+            <p style="margin-bottom: 15px; font-size: 18px; font-weight: bold; line-height: 1.6; word-break: keep-all;">
+                투약 지시 처방과 투약카드를 대조하여 5 Rights를 확인하려고 합니다.<br>
+                확인해야 할 5가지에 해당하지 <u>않는</u> 항목은 무엇입니까?
+            </p>
+            <button class="quiz-option" onclick="checkQuiz1(1)">① 정확한 대상자 (Right Patient)</button>
+            <button class="quiz-option" onclick="checkQuiz1(2)">② 정확한 약물 (Right Drug)</button>
             <button class="quiz-option" onclick="checkQuiz1(3)">③ 정확한 용량 (Right Dose)</button>
             <button class="quiz-option" onclick="checkQuiz1(4)">④ 정확한 투여경로 (Right Route)</button>
             <button class="quiz-option" onclick="checkQuiz1(5)">⑤ 정확한 시간 (Right Time)</button>
@@ -153,6 +193,9 @@
 
     <!-- Phase 4: 수액장 화면 -->
     <div id="phase-fluid" class="scene">
+        <div id="shelf-instruction" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: white; padding: 12px 30px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; z-index: 20; box-shadow: 0 5px 15px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 650px;">
+            5 Rights를 확인하고 올바른 수액을 선택해주세요.
+        </div>
         <div class="med-card fixed-med-card">
             <div class="card-header">
                 <div class="fake-qr"></div>
@@ -171,21 +214,20 @@
             </div>
         </div>
         <div class="shelf-container">
-            <!-- Row 1 (3 Baskets) -> top: 10%, height: 12% -->
-            <div class="hotspot-wrong" style="top: 10%; left: 20.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 10%; left: 39.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 10%; left: 58.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
+            <!-- Row 1 (3 Baskets) -> top: 12%, height: 11% -->
+            <div class="hotspot-wrong" style="top: 12%; left: 20.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 12%; left: 39.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 12%; left: 58.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
 
-            <!-- Row 2 (4 Baskets) -> top: 25%, height: 12% -->
-            <div class="hotspot-wrong" style="top: 25%; left: 20.5%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 34.75%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 49%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 25%; left: 63.25%; width: 14.25%; height: 12%;" onclick="wrongFluid()"></div>
+            <!-- Row 2 (3 Baskets) -> top: 26%, height: 11% -->
+            <div class="hotspot-wrong" style="top: 26%; left: 20.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 26%; left: 39.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 26%; left: 58.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
 
-            <!-- Row 3 (3 Baskets - Slot 3 is Correct N/S 1L) -> top: 40%, height: 12% -->
-            <div class="hotspot-wrong" style="top: 40%; left: 20.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-wrong" style="top: 40%; left: 39.5%; width: 19%; height: 12%;" onclick="wrongFluid()"></div>
-            <div class="hotspot-ns1l" onclick="showQuiz2()"></div>
+            <!-- Row 3 (3 Baskets) -> top: 40%, height: 11% (Row 3 Slot 3 is Correct N/S 1L) -->
+            <div class="hotspot-wrong" style="top: 40%; left: 20.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-wrong" style="top: 40%; left: 39.5%; width: 19%; height: 11%;" onclick="wrongFluid()"></div>
+            <div class="hotspot-ns1l hotspot-correct" style="top: 40%; left: 58.5%; width: 19%; height: 11%;" onclick="showQuiz2()"></div>
 
             <!-- Row 4 (6 Small Baskets) -> top: 54%, height: 11% -->
             <div class="hotspot-wrong" style="top: 54%; left: 20.5%; width: 9.5%; height: 11%;" onclick="wrongFluid()"></div>
@@ -270,7 +312,7 @@
 
     <!-- Phase 6: 수액 연결 (드래그 앤 드롭 & 터치 선택 지원) -->
     <div id="phase-connect" class="scene">
-        <div id="prep-instruction">투약카드와 수액세트를 수액에 연결하여 주입을 준비하세요.<br>(드래그 또는 클릭)</div>
+        <div id="prep-instruction">투약카드와 수액세트를 마우스로 드래그하여 수액에 연결하세요.</div>
         
         <!-- 반응형 콘텐츠 배치용 래퍼 컨테이너 -->
         <div class="connect-wrap">

@@ -734,11 +734,12 @@ th {
 
 #prep-table { 
     position: absolute; 
-    bottom: 40px; 
-    left: 5%; 
-    width: 60%; 
+    bottom: 25px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 85%; 
     max-width: 700px;
-    height: 220px; 
+    height: 200px; 
     background-color: rgba(255, 255, 255, 0.2); 
     backdrop-filter: blur(4px); 
     border: 1px solid rgba(255, 255, 255, 0.4); 
@@ -747,8 +748,8 @@ th {
     z-index: 5; 
     display: flex; 
     align-items: center; 
-    justify-content: space-around; 
-    padding: 10px; 
+    justify-content: space-evenly; 
+    padding: 0 20px; 
 }
 
 .drag-item { 
@@ -1499,5 +1500,97 @@ th {
 @keyframes selectedPulse {
     from { box-shadow: 0 0 10px #ffd700; }
     to { box-shadow: 0 0 25px #ffeb3b; }
+}
+
+/* =================================================================
+   시뮬레이션 튜토리얼 (오리엔테이션) 팝업 모달 스타일 (게임 일관성 테마)
+================================================================== */
+#phase-tutorial {
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 999;
+}
+
+.tutorial-container {
+    background: #222222;
+    border: none;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 680px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    color: #e0e0e0;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.tutorial-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffd700;
+    border-bottom: 2px solid #333333;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.tutorial-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tutorial-section {
+    background: #2d2d2d;
+    padding: 18px 22px;
+    border-radius: 8px;
+    border: none;
+    border-left: 4px solid #5b8c9a;
+}
+
+.tutorial-section h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffd700;
+    margin-bottom: 8px;
+}
+
+.tutorial-section p {
+    font-size: 14px;
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+.tutorial-section ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.tutorial-section li {
+    font-size: 14px;
+    color: #e0e0e0;
+    line-height: 1.7;
+    margin-bottom: 4px;
+}
+
+.tutorial-section.alert-section {
+    background: #34282a;
+    border: none;
+    border-left: 4px solid #e51937;
+    padding: 18px 22px;
+    border-radius: 8px;
+}
+
+.tutorial-section.alert-section h3 {
+    color: #ffd700;
+}
+
+.tutorial-warning {
+    font-size: 13px;
+    color: #ff6b6b;
+    margin-top: 8px;
+    font-weight: bold;
 }
 
