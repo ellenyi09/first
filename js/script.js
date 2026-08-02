@@ -1358,7 +1358,7 @@ function checkQuiz11() {
         document.getElementById("quiz11-modal").style.display = "none";
         showExplainModal(
             `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
-            "고정용 라벨에 삽입 날짜, 시간, 카테터 크기(규격)를<br>적어 부착합니다.<br><br>정맥주사 삽입이 완료되었습니다.<br>사용 물품 정리 및 기록 작성을 위해 이동합니다.",
+            "고정용 라벨에 삽입 날짜, 시간,<br>카테터 크기(규격)를 적어 부착합니다.<br><br>정맥주사 삽입이 완료되었습니다.<br>사용 물품 정리 및 기록 작성을 위해 이동합니다.",
             () => {
                 showScene("phase-document", "flex");
             }
@@ -1401,7 +1401,7 @@ function checkQuiz12(ans) {
         document.getElementById("quiz12-modal").style.display = "none";
         showExplainModal(
             `<strong style="color: #2ecc71; font-size: 22px;">🎉 정답입니다!</strong>`,
-            "물품 정리 직후에는 물과 비누로 깨끗이 손위생을<br>실시합니다.<br><br>간호기록지를 작성해 주세요.",
+            "물품 정리 직후에는 물과 비누로<br>깨끗이 손위생을 실시합니다.<br><br>간호기록지를 작성해 주세요.",
             () => {
                 document.querySelector(".waste-cleanup-box").style.display = "none";
                 document.getElementById("chart-area").style.display = "block";

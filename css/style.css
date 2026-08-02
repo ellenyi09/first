@@ -77,9 +77,9 @@ body {
 .quiz-modal { 
     background-color: var(--bg-light); 
     width: 100%;
-    max-width: 550px; 
-    border-radius: 10px; 
-    padding: 30px; 
+    max-width: 660px; 
+    border-radius: 12px; 
+    padding: 32px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
     max-height: 95vh;
     overflow-y: auto;
@@ -735,11 +735,11 @@ th {
 #prep-table { 
     position: absolute; 
     bottom: 25px; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    width: 85%; 
-    max-width: 700px;
-    height: 200px; 
+    left: 4%; 
+    transform: none; 
+    width: 68%; 
+    max-width: 660px;
+    height: 190px; 
     background-color: rgba(255, 255, 255, 0.2); 
     backdrop-filter: blur(4px); 
     border: 1px solid rgba(255, 255, 255, 0.4); 
@@ -749,7 +749,7 @@ th {
     display: flex; 
     align-items: center; 
     justify-content: space-evenly; 
-    padding: 0 20px; 
+    padding: 0 15px; 
 }
 
 .drag-item { 
@@ -776,17 +776,20 @@ th {
 
 /* 선반 위 미니어처 정밀 카드 세팅 */
 #item-card { 
-    width: 250px !important; 
-    height: 260px !important; 
-    padding: 15px !important; 
+    width: 230px !important; 
+    height: 250px !important; 
+    padding: 12px !important; 
     font-size: 13px !important; 
     background-color: #fcfcfc; 
     border: 1px solid var(--border-color); 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
     text-align: left; 
-    transform: scale(0.4); 
-    transform-origin: center; 
+    transform: scale(0.55) !important; 
+    transform-origin: center;
+    margin: -50px -40px !important;
     flex-shrink: 0; 
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 #item-card .fake-qr { 
@@ -796,18 +799,19 @@ th {
 }
 
 #item-regulator { 
-    width: 120px; 
-    height: 120px; 
+    width: 130px; 
+    height: 130px; 
     background-image: url('../assets/regulator.jpeg'); 
     background-size: contain; 
     background-repeat: no-repeat; 
     background-position: center; 
     filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3)); 
+    flex-shrink: 0;
 }
 
 #item-ns1l { 
-    width: 130px; 
-    height: 220px; 
+    width: 110px; 
+    height: 165px; 
     background-image: url('../assets/NS 1L.jpeg'); 
     background-size: contain; 
     background-repeat: no-repeat; 
@@ -815,6 +819,7 @@ th {
     position: relative; 
     transition: all 0.3s; 
     filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.3)); 
+    flex-shrink: 0;
 }
 
 #item-ns1l.highlight { 
