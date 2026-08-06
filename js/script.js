@@ -1,7 +1,7 @@
 // -------------------------------------------------------------
 // 구글 스프레드시트 연동 설정 (교수자 웹앱 URL)
 // -------------------------------------------------------------
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxLnYEd0F73D5Adlcpb7kuq2qoCCs8N0Dkuw0LXKAmkIu4yKArYIDLiOGk4huT1_ak_tg/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzC8YGgeyI9p50q_eZA1FtcUZZ5VHWgX5LDkXbSEWmCCwO3tgKIyX2CU9yo8EftB39v/exec";
 
 // -------------------------------------------------------------
 // 수강생 명단 등록 (오타 방지용 사전 매핑)
@@ -138,7 +138,7 @@ function sendDataToGoogleSheet(score, status, failReason, wrongList) {
         method: "POST",
         mode: "no-cors",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "text/plain;charset=utf-8"
         },
         body: JSON.stringify(payload)
     })
